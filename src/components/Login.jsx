@@ -8,10 +8,10 @@ import { toast } from "react-hot-toast";
 const Login = () => {
   const navigate = useNavigate();
   
-  const [formData, setFormData] = useState({
-    employeeId: "",
-    password: ""
-  });
+ const [formData, setFormData] = useState({
+  id: "",
+  password: ""
+});
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -22,9 +22,10 @@ const Login = () => {
     const newErrors = {};
 
     // Employee ID validation
-    if (!formData.employeeId.trim()) {
-      newErrors.employeeId = "Employee ID is required";
-    } else if (!/^[A-Z0-9]{4,10}$/i.test(formData.employeeId)) {
+    if (!formData.id) {
+  newErrors.id = "Employee ID is required";
+}
+ else if (!/^[A-Z0-9]{4,10}$/i.test(formData.employeeId)) {
       newErrors.employeeId = "Employee ID must be 4-10 alphanumeric characters";
     }
 
@@ -39,22 +40,22 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    
-    // For employeeId, convert to uppercase
-    const newValue = name === "employeeId" ? value.toUpperCase() : value;
-    
-    setFormData(prev => ({ ...prev, [name]: newValue }));
-    
-    // Clear errors
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: "" }));
-    }
-    if (apiError) {
-      setApiError("");
-    }
-  };
+ const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  setFormData(prev => ({
+    ...prev,
+    [name]: value
+  }));
+
+  if (errors[name]) {
+    setErrors(prev => ({ ...prev, [name]: "" }));
+  }
+
+  if (apiError) {
+    setApiError("");
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -134,17 +135,17 @@ const Login = () => {
             </label>
             <input
               type="text"
-              name="employeeId"
-              value={formData.employeeId}
+              name="id"
+              value={formData.id}
               onChange={handleChange}
               placeholder="Enter employee ID"
               className={`w-full mt-1 bg-gray-100 border ${
-                errors.employeeId ? "border-red-500" : "border-gray-200"
+                errors.id ? "border-red-500" : "border-gray-200"
               } rounded-lg px-4 py-2 focus:outline-none focus:border-black uppercase`}
               disabled={loading}
             />
-            {errors.employeeId && (
-              <p className="text-red-500 text-xs mt-1">{errors.employeeId}</p>
+            {errors.id && (
+              <p className="text-red-500 text-xs mt-1">{errors.id}</p>
             )}
           </div>
 

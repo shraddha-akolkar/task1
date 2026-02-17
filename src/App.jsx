@@ -4,6 +4,7 @@ import Login from "./components/Login";
 import Employees from "./components/Employees";
 import Dashboard from "./components/Dashboard";
 import RegisterEmployeeModal from "./components/RegisterEmployeeModal";
+import EmployeesPage from "./components/EmployeeDashboard";
 import {Toaster} from "react-hot-toast";
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -45,6 +46,8 @@ function App() {
       />
       
       <Route path="/register" element={<RegisterEmployeeModal />} />
+      <Route path="/employee-dashboard" element={<EmployeesPage />} />
+      
     </Routes>
     </>
   );
