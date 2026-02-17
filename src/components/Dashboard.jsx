@@ -174,39 +174,36 @@ export default function EmployeesPage() {
 
   /* ---------------- FETCH ---------------- */
 
-  const loadEmployees = useCallback(async () => {
-    setLoading(true);
-    try {
-      const url = new URL(`${API_BASE_URL}/employees`);
-      if (activeTab !== "All Employee") {
-        url.searchParams.set("type", activeTab);
-      }
+const loadEmployees = useCallback(async () => {
+  setLoading(true);
+  try {
+    const params = new URLSearchParams();
 
-      const res = await fetch(url);
-      const data = await res.json();
-      setEmployees(data.employees || []);
-    } catch (err) {
-      console.error("Error loading employees:", err);
-    } finally {
-      setLoading(false);
+    if (search.trim()) {
+      params.append("search", search.trim());
     }
-  }, [activeTab]);
+
+    if (activeTab !== "All Employee") {
+      params.append("type", activeTab);
+    }
+
+    const res = await fetch(`${API_BASE_URL}/employees?${params.toString()}`);
+    const data = await res.json();
+
+    setEmployees(data.employees || []);
+  } catch (err) {
+    console.error("Error loading employees:", err);
+  } finally {
+    setLoading(false);
+  }
+}, [activeTab, search]); // ✅ added search here
+
 
   useEffect(() => {
     loadEmployees();
   }, [loadEmployees]);
 
-  /* ---------------- CLIENT-SIDE SEARCH ---------------- */
 
-  const filtered = employees.filter((emp) => {
-    if (!search.trim()) return true;
-    const q = search.toLowerCase();
-    return (
-      emp.name?.toLowerCase().includes(q) ||
-      emp.designation?.toLowerCase().includes(q) ||
-      String(emp.id).includes(q)
-    );
-  });
 
   /* ---------------- DELETE ---------------- */
 
@@ -325,14 +322,14 @@ export default function EmployeesPage() {
                     Loading…
                   </td>
                 </tr>
-              ) : filtered.length === 0 ? (
+              ) : employees.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="p-8 text-center text-gray-400">
                     No employees found
                   </td>
                 </tr>
               ) : (
-                filtered.map((emp) => {
+                employees.map((emp) => {
                   const visaInfo = getVisaInfo(emp);
                   const idProofUrl = fileUrl(emp.idProof);
 
