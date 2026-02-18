@@ -2,27 +2,49 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Bell, Users, Building2 } from "lucide-react";
 import logo from "../assets/Logo.png";
 import user1 from "../assets/user1.png";
+import { Funnel, Album } from "lucide-react";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
 /* ---------------- ICONS ---------------- */
 
 const EditIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1976D2" strokeWidth="2">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#1976D2"
+    strokeWidth="2"
+  >
     <path d="M12 20h9" />
     <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
   </svg>
 );
 
 const DeleteIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" strokeWidth="2">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#D32F2F"
+    strokeWidth="2"
+  >
     <polyline points="3 6 5 6 21 6" />
     <path d="M19 6l-1 14H6L5 6m5 0V4h4v2" />
   </svg>
 );
 
 const EyeIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#555"
+    strokeWidth="2"
+  >
     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
     <circle cx="12" cy="12" r="3" />
   </svg>
@@ -57,7 +79,8 @@ function calcExperience(createdAt) {
   const parts = [];
   if (years > 0) parts.push(`${years} yr${years > 1 ? "s" : ""}`);
   if (months > 0) parts.push(`${months} mo${months > 1 ? "s" : ""}`);
-  if (years === 0 && months === 0) parts.push(`${days} day${days !== 1 ? "s" : ""}`);
+  if (years === 0 && months === 0)
+    parts.push(`${days} day${days !== 1 ? "s" : ""}`);
 
   return parts.join(" ") || "< 1 day";
 }
@@ -76,29 +99,33 @@ function formatDate(dateStr) {
  * Determine visa display info based on visaExpiringOn date.
  */
 function getVisaInfo(emp) {
-  const { visaStatus, visaExpiringOn } = emp;
+  const { visaExpiringOn } = emp;
 
   if (!visaExpiringOn) {
-    return { label: visaStatus || "—", colorClass: "text-gray-500" };
+    return { label: "—", colorClass: "text-gray-500" };
   }
 
   const expiry = new Date(visaExpiringOn);
   const now = new Date();
+
   const diffMs = expiry - now;
   const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffDays < 0) {
-    return { label: "Expired", colorClass: "text-red-500" };
-  }
-  if (diffDays <= 30) {
+  // Format date
+  const formattedDate = formatDate(visaExpiringOn);
+
+  if (diffDays <= 30 && diffDays >= 0) {
     return {
-      label: `Expiring in ${diffDays} day${diffDays !== 1 ? "s" : ""}`,
+      label: formattedDate,
+      subLabel: "Expiring Soon",
       colorClass: "text-orange-500",
     };
   }
+
   return {
-    label: `Valid till ${formatDate(visaExpiringOn)}`,
-    colorClass: "text-green-600",
+    label: formattedDate,
+    subLabel: null,
+    colorClass: "text-gray-700",
   };
 }
 
@@ -136,9 +163,9 @@ function InitialsAvatar({ name, hidden }) {
   );
 }
 
-/* ============================================================
+/* 
    AVATAR — shows picture; falls back to initials on error
-   ============================================================ */
+    */
 function EmployeeAvatar({ emp }) {
   const [imgFailed, setImgFailed] = useState(false);
   const picUrl = fileUrl(emp.employeePicture);
@@ -157,9 +184,9 @@ function EmployeeAvatar({ emp }) {
   );
 }
 
-/* ============================================================
+/* 
    MAIN COMPONENT
-   ============================================================ */
+    */
 
 export default function EmployeesPage() {
   const [activeTab, setActiveTab] = useState("All Employee");
@@ -174,41 +201,39 @@ export default function EmployeesPage() {
 
   /* ---------------- FETCH ---------------- */
 
-const loadEmployees = useCallback(async () => {
-  setLoading(true);
-  try {
-    const params = new URLSearchParams();
+  const loadEmployees = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
 
-    if (search.trim()) {
-      params.append("search", search.trim());
+      if (search.trim()) {
+        params.append("search", search.trim());
+      }
+
+      if (activeTab !== "All Employee") {
+        params.append("type", activeTab);
+      }
+
+      const res = await fetch(`${API_BASE_URL}/employees?${params.toString()}`);
+      const data = await res.json();
+
+      setEmployees(data.employees || []);
+    } catch (err) {
+      console.error("Error loading employees:", err);
+    } finally {
+      setLoading(false);
     }
-
-    if (activeTab !== "All Employee") {
-      params.append("type", activeTab);
-    }
-
-    const res = await fetch(`${API_BASE_URL}/employees?${params.toString()}`);
-    const data = await res.json();
-
-    setEmployees(data.employees || []);
-  } catch (err) {
-    console.error("Error loading employees:", err);
-  } finally {
-    setLoading(false);
-  }
-}, [activeTab, search]); // ✅ added search here
-
+  }, [activeTab, search]); // ✅ added search here
 
   useEffect(() => {
     loadEmployees();
   }, [loadEmployees]);
 
-
-
   /* ---------------- DELETE ---------------- */
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this employee?")) return;
+    if (!window.confirm("Are you sure you want to delete this employee?"))
+      return;
     await fetch(`${API_BASE_URL}/employees/${id}`, { method: "DELETE" });
     loadEmployees();
   };
@@ -243,25 +268,33 @@ const loadEmployees = useCallback(async () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
+      {/*  NAVBAR */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+        {/* Top Row (Logo + Right Section on Mobile) */}
+        <div className="flex items-center justify-between w-full lg:w-auto">
+          {/* Logo */}
+          <img src={logo} alt="logo" className="h-8" />
 
-      {/* 🔹 NAVBAR */}
-      <div className="flex items-center justify-between mb-6">
-
-        {/* Logo */}
-        <img src={logo} alt="logo" className="h-8" />
-
-        {/* Center Tabs */}
-        <div className="flex gap-6 bg-white rounded-full px-6 py-2 shadow-sm">
-          <button className="bg-black text-white px-4 py-1 rounded-full text-sm">
-            Portal
-          </button>
-          <button className="text-gray-500 text-sm">Project Management</button>
-          <button className="text-gray-500 text-sm">Sales</button>
-          <button className="text-gray-500 text-sm">Accounts</button>
+          {/* Right Side Icons (Mobile View) */}
+          <div className="flex items-center gap-4 lg:hidden">
+            <Bell size={18} className="text-gray-600 cursor-pointer" />
+            <Users size={18} className="text-gray-600 cursor-pointer" />
+            <Building2 size={18} className="text-gray-600 cursor-pointer" />
+          </div>
         </div>
 
-        {/* Right Side */}
-        <div className="flex items-center gap-4">
+        {/* Center Tabs */}
+        <div className="flex flex-wrap justify-center gap-4 bg-white rounded-full px-6 py-2 shadow-sm text-sm">
+          <button className="bg-black text-white px-4 py-1 rounded-full">
+            Portal
+          </button>
+          <button className="text-gray-500">Project Management</button>
+          <button className="text-gray-500">Sales</button>
+          <button className="text-gray-500">Accounts</button>
+        </div>
+
+        {/* Desktop Right Section */}
+        <div className="hidden lg:flex items-center gap-4">
           <Bell size={18} className="text-gray-600 cursor-pointer" />
           <Users size={18} className="text-gray-600 cursor-pointer" />
           <Building2 size={18} className="text-gray-600 cursor-pointer" />
@@ -273,12 +306,39 @@ const loadEmployees = useCallback(async () => {
         </div>
       </div>
 
-      {/* 🔹 TABLE CONTAINER */}
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      {/* HEADING BEFORE TABLE  */}
 
+      {/*  PAGE HEADER */}
+      <div className=" rounded-xl px-6 py-3 flex items-center justify-between mb-6">
+        {/* Left Title */}
+        <h1 className="text-xl font-bold text-black">Employees</h1>
+
+        {/* Right Section */}
+        <div className="flex items-center gap-3">
+          {/* Small Icon Buttons */}
+          <button className="p-2 rounded-lg bg-white hover:bg-gray-100 transition">
+            <Users size={16} className="text-gray-600" />
+          </button>
+
+          <button className="p-2 rounded-lg bg-white hover:bg-gray-100 transition">
+            <Building2 size={16} className="text-gray-600" />
+          </button>
+
+          {/* Active Black Employees Pill */}
+          <div className="flex items-center gap-2 bg-black text-white px-4 py-1.5 rounded-full text-sm">
+            <Users size={14} />
+            Employees
+          </div>
+        </div>
+      </div>
+
+      {/*  TABLE CONTAINER */}
+      <div className="bg-white rounded-xl shadow overflow-hidden">
         {/* Tabs + Search */}
-        <div className="flex items-center justify-between gap-2 p-4 border-b flex-wrap">
-          <div className="flex gap-2">
+        {/* Tabs + Search */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-4 border-b">
+          {/* Tabs */}
+          <div className="flex flex-wrap gap-2">
             {tabs.map((tab) => (
               <button
                 key={tab}
@@ -292,13 +352,27 @@ const loadEmployees = useCallback(async () => {
             ))}
           </div>
 
-          <input
-            type="text"
-            placeholder="Search by name, designation or ID…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-black/10 w-64"
-          />
+          {/* Search + Icons Right Side */}
+          <div className="flex items-center gap-3 w-full lg:w-auto">
+            <input
+              type="text"
+              placeholder="Search by name, designation or ID…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-black/10 w-full lg:w-64"
+            />
+
+            <div className="flex items-center gap-3">
+              <Funnel
+                className="text-gray-600 cursor-pointer hover:text-black"
+                size={18}
+              />
+              <Album
+                className="text-gray-600 cursor-pointer hover:text-black"
+                size={18}
+              />
+            </div>
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -334,15 +408,21 @@ const loadEmployees = useCallback(async () => {
                   const idProofUrl = fileUrl(emp.idProof);
 
                   return (
-                    <tr key={emp.id} className="border-t hover:bg-gray-50 transition-colors">
-
+                    <tr
+                      key={emp.id}
+                      className="border-t hover:bg-gray-50 transition-colors"
+                    >
                       {/* ── EMPLOYEE: avatar + name + id ── */}
                       <td className="p-4">
                         <div className="flex items-center gap-3">
                           <EmployeeAvatar emp={emp} />
                           <div>
-                            <div className="font-semibold text-gray-800">{emp.name}</div>
-                            <div className="text-xs text-gray-400">#{emp.id}</div>
+                            <div className="font-semibold text-gray-800">
+                              {emp.name}
+                            </div>
+                            <div className="text-xs text-gray-400">
+                              #{emp.id}
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -359,13 +439,16 @@ const loadEmployees = useCallback(async () => {
                       </td>
 
                       {/* ── VISA STATUS ── */}
+                      {/* ── VISA STATUS ── */}
                       <td className="p-4">
-                        <span className={`font-medium ${visaInfo.colorClass}`}>
+                        <div className={`font-medium ${visaInfo.colorClass}`}>
                           {visaInfo.label}
-                        </span>
-                        {/* Show visa type (H1B, L1, Green Card…) as subtitle if present */}
-                        {emp.visaStatus && !/^\d{4}-/.test(emp.visaStatus) && (
-                          <div className="text-xs text-gray-400">{emp.visaStatus}</div>
+                        </div>
+
+                        {visaInfo.subLabel && (
+                          <div className="text-xs text-orange-500 font-medium">
+                            {visaInfo.subLabel}
+                          </div>
                         )}
                       </td>
 
@@ -385,7 +468,9 @@ const loadEmployees = useCallback(async () => {
                             <EyeIcon />
                           </button>
                         ) : (
-                          <span className="text-red-500 text-xs font-medium">Missing</span>
+                          <span className="text-red-500 text-xs font-medium">
+                            Missing
+                          </span>
                         )}
                       </td>
 
@@ -408,7 +493,6 @@ const loadEmployees = useCallback(async () => {
                           </button>
                         </div>
                       </td>
-
                     </tr>
                   );
                 })
@@ -436,7 +520,9 @@ const loadEmployees = useCallback(async () => {
       {editEmployee && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-lg font-bold mb-4 text-gray-800">Edit Employee</h2>
+            <h2 className="text-lg font-bold mb-4 text-gray-800">
+              Edit Employee
+            </h2>
 
             <div className="flex flex-col gap-3">
               <div>
@@ -450,7 +536,9 @@ const loadEmployees = useCallback(async () => {
               </div>
 
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">Designation</label>
+                <label className="text-xs text-gray-500 mb-1 block">
+                  Designation
+                </label>
                 <input
                   name="designation"
                   value={formData.designation || ""}
@@ -474,7 +562,9 @@ const loadEmployees = useCallback(async () => {
               </div>
 
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">Visa Expiring On</label>
+                <label className="text-xs text-gray-500 mb-1 block">
+                  Visa Expiring On
+                </label>
                 <input
                   type="date"
                   name="visaExpiringOn"
