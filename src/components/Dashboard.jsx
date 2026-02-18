@@ -1,8 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Bell, Users, Building2 } from "lucide-react";
 import logo from "../assets/Logo.png";
 import user1 from "../assets/user1.png";
-import { Funnel, Album } from "lucide-react";
+import {
+    Funnel,
+  Album,
+  LayoutGrid,
+  UserCheck,
+  Users,
+  Bell,
+  CalendarDays,
+  Umbrella,
+  Building2
+} from "lucide-react";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -308,29 +317,56 @@ export default function EmployeesPage() {
 
       {/* HEADING BEFORE TABLE  */}
 
-      {/*  PAGE HEADER */}
-      <div className=" rounded-xl px-6 py-3 flex items-center justify-between mb-6">
-        {/* Left Title */}
-        <h1 className="text-xl font-bold text-black">Employees</h1>
+      {/*  TOP HEADER BAR */}
+<div className="w-full px-8 py-3 flex items-center justify-between">
 
-        {/* Right Section */}
-        <div className="flex items-center gap-3">
-          {/* Small Icon Buttons */}
-          <button className="p-2 rounded-lg bg-white hover:bg-gray-100 transition">
-            <Users size={16} className="text-gray-600" />
-          </button>
+  {/* Left Title */}
+  <h1 className="text-lg font-semibold text-gray-800">
+    Employees
+  </h1>
 
-          <button className="p-2 rounded-lg bg-white hover:bg-gray-100 transition">
-            <Building2 size={16} className="text-gray-600" />
-          </button>
+  {/* Right Icons Section */}
+  <div className="flex items-center gap-2">
 
-          {/* Active Black Employees Pill */}
-          <div className="flex items-center gap-2 bg-black text-white px-4 py-1.5 rounded-full text-sm">
-            <Users size={14} />
-            Employees
-          </div>
-        </div>
-      </div>
+    {/* Grid */}
+    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+      <LayoutGrid size={18} className="text-gray-600" />
+    </div>
+
+    {/* User Check */}
+    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+      <UserCheck size={18} className="text-gray-600" />
+    </div>
+
+    {/* Active Employees Pill */}
+    <div className="flex items-center gap-2 bg-black text-white px-5 py-2 rounded-full shadow-sm">
+      <Users size={16} />
+      <span className="text-sm font-medium">Employees</span>
+    </div>
+
+    {/* Bell */}
+    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+      <Bell size={18} className="text-gray-600" />
+    </div>
+
+    {/* Calendar */}
+    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+      <CalendarDays size={18} className="text-gray-600" />
+    </div>
+
+    {/* Umbrella */}
+    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+      <Umbrella size={18} className="text-gray-600" />
+    </div>
+
+    {/* Building */}
+    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+      <Building2 size={18} className="text-gray-600" />
+    </div>
+
+  </div>
+</div>
+
 
       {/*  TABLE CONTAINER */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
