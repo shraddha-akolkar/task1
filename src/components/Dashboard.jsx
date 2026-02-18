@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import logo from "../assets/Logo.png";
 import user1 from "../assets/user1.png";
 import {
-    Funnel,
+  Funnel,
   Album,
   LayoutGrid,
   UserCheck,
@@ -10,12 +10,12 @@ import {
   Bell,
   CalendarDays,
   Umbrella,
-  Building2
+  Building2,
 } from "lucide-react";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
-/* ---------------- ICONS ---------------- */
+/*  ICONS  */
 
 const EditIcon = () => (
   <svg
@@ -59,7 +59,7 @@ const EyeIcon = () => (
   </svg>
 );
 
-/* ---------------- HELPERS ---------------- */
+/*  HELPERS  */
 
 /**
  * Calculate total experience from createdAt (registration date) to today.
@@ -205,10 +205,13 @@ export default function EmployeesPage() {
   const [previewImage, setPreviewImage] = useState(null);
   const [editEmployee, setEditEmployee] = useState(null);
   const [formData, setFormData] = useState({});
+  const [showFilters, setShowFilters] = useState(false);
+    const [joiningDate, setJoiningDate] = useState("");
+const [expiryDate, setExpiryDate] = useState("");
 
   const tabs = ["All Employee", "Payroll", "Staff", "Contract"];
 
-  /* ---------------- FETCH ---------------- */
+  /*  FETCH  */ 
 
   const loadEmployees = useCallback(async () => {
     setLoading(true);
@@ -223,6 +226,15 @@ export default function EmployeesPage() {
         params.append("type", activeTab);
       }
 
+      if(joiningDate){
+        params.append("joiningDate", joiningDate);
+      }
+
+      if(expiryDate){
+        params.append("expiryDate", expiryDate);
+      }
+
+
       const res = await fetch(`${API_BASE_URL}/employees?${params.toString()}`);
       const data = await res.json();
 
@@ -232,13 +244,13 @@ export default function EmployeesPage() {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, search]); // ✅ added search here
+  }, [activeTab, search, joiningDate, expiryDate]); // ✅ added search here
 
   useEffect(() => {
     loadEmployees();
   }, [loadEmployees]);
 
-  /* ---------------- DELETE ---------------- */
+  /*  DELETE  */
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this employee?"))
@@ -247,7 +259,7 @@ export default function EmployeesPage() {
     loadEmployees();
   };
 
-  /* ---------------- EDIT ---------------- */
+  /*  EDIT  */
 
   const handleEdit = (emp) => {
     setEditEmployee(emp);
@@ -273,17 +285,23 @@ export default function EmployeesPage() {
     loadEmployees();
   };
 
-  /* ---------------- UI ---------------- */
+  /*  UI  */
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
+      
       {/*  NAVBAR */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+        
+       
         {/* Top Row (Logo + Right Section on Mobile) */}
         <div className="flex items-center justify-between w-full lg:w-auto">
+         
+         
           {/* Logo */}
           <img src={logo} alt="logo" className="h-8" />
 
+          
           {/* Right Side Icons (Mobile View) */}
           <div className="flex items-center gap-4 lg:hidden">
             <Bell size={18} className="text-gray-600 cursor-pointer" />
@@ -292,6 +310,7 @@ export default function EmployeesPage() {
           </div>
         </div>
 
+        
         {/* Center Tabs */}
         <div className="flex flex-wrap justify-center gap-4 bg-white rounded-full px-6 py-2 shadow-sm text-sm">
           <button className="bg-black text-white px-4 py-1 rounded-full">
@@ -302,6 +321,7 @@ export default function EmployeesPage() {
           <button className="text-gray-500">Accounts</button>
         </div>
 
+       
         {/* Desktop Right Section */}
         <div className="hidden lg:flex items-center gap-4">
           <Bell size={18} className="text-gray-600 cursor-pointer" />
@@ -315,64 +335,75 @@ export default function EmployeesPage() {
         </div>
       </div>
 
+      
       {/* HEADING BEFORE TABLE  */}
 
+      
       {/*  TOP HEADER BAR */}
-<div className="w-full px-8 py-3 flex items-center justify-between">
+      <div className="w-full px-8 py-3 flex items-center justify-between">
+        
+        
+        {/* Left Title */}
+        <h1 className="text-lg font-semibold text-gray-800">Employees</h1>
 
-  {/* Left Title */}
-  <h1 className="text-lg font-semibold text-gray-800">
-    Employees
-  </h1>
+        
+        
+        {/* Right Icons Section */}
+        <div className="flex items-center gap-2">
+          
+          
+          {/* Grid */}
+          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+            <LayoutGrid size={18} className="text-gray-600" />
+          </div>
 
-  {/* Right Icons Section */}
-  <div className="flex items-center gap-2">
+          
+          {/* User Check */}
+          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+            <UserCheck size={18} className="text-gray-600" />
+          </div>
 
-    {/* Grid */}
-    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
-      <LayoutGrid size={18} className="text-gray-600" />
-    </div>
+         
+         
+         {/* Active Employees Pill */}
+          <div className="flex items-center gap-2 bg-black text-white px-5 py-2 rounded-full shadow-sm">
+            <Users size={16} />
+            <span className="text-sm font-medium">Employees</span>
+          </div>
 
-    {/* User Check */}
-    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
-      <UserCheck size={18} className="text-gray-600" />
-    </div>
+          
+          {/* Bell */}
+          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+            <Bell size={18} className="text-gray-600" />
+          </div>
 
-    {/* Active Employees Pill */}
-    <div className="flex items-center gap-2 bg-black text-white px-5 py-2 rounded-full shadow-sm">
-      <Users size={16} />
-      <span className="text-sm font-medium">Employees</span>
-    </div>
+          
+          {/* Calendar */}
+          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+            <CalendarDays size={18} className="text-gray-600" />
+          </div>
 
-    {/* Bell */}
-    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
-      <Bell size={18} className="text-gray-600" />
-    </div>
+          
+          {/* Umbrella */}
+          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+            <Umbrella size={18} className="text-gray-600" />
+          </div>
 
-    {/* Calendar */}
-    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
-      <CalendarDays size={18} className="text-gray-600" />
-    </div>
+          
+          {/* Building */}
+          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
+            <Building2 size={18} className="text-gray-600" />
+          </div>
+        </div>
+      </div>
 
-    {/* Umbrella */}
-    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
-      <Umbrella size={18} className="text-gray-600" />
-    </div>
-
-    {/* Building */}
-    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
-      <Building2 size={18} className="text-gray-600" />
-    </div>
-
-  </div>
-</div>
-
-
+      
       {/*  TABLE CONTAINER */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
-        {/* Tabs + Search */}
+       
         {/* Tabs + Search */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-4 border-b">
+          
           {/* Tabs */}
           <div className="flex flex-wrap gap-2">
             {tabs.map((tab) => (
@@ -388,7 +419,8 @@ export default function EmployeesPage() {
             ))}
           </div>
 
-          {/* Search + Icons Right Side */}
+          
+          {/* Search + Icons */}
           <div className="flex items-center gap-3 w-full lg:w-auto">
             <input
               type="text"
@@ -402,6 +434,7 @@ export default function EmployeesPage() {
               <Funnel
                 className="text-gray-600 cursor-pointer hover:text-black"
                 size={18}
+                onClick={() => setShowFilters(!showFilters)}
               />
               <Album
                 className="text-gray-600 cursor-pointer hover:text-black"
@@ -411,11 +444,44 @@ export default function EmployeesPage() {
           </div>
         </div>
 
+
+        {/* FILTER USING FUNNEL */}
+        {showFilters && (
+  <div className="p-4 border-b bg-gray-50 flex flex-col lg:flex-row gap-4 transition-all duration-300">
+
+    {/* Joining Date */}
+    <div className="flex flex-col">
+      <label className="text-xs text-gray-500 mb-1">Joining Date</label>
+      <input
+        type="date"
+        value={joiningDate}
+        onChange={(e) => setJoiningDate(e.target.value)}
+        className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
+      />
+    </div>
+
+
+    {/* Expiry Date */}
+    <div className="flex flex-col">
+      <label className="text-xs text-gray-500 mb-1">Expiry Date</label>
+      <input
+        type="date"
+        value={expiryDate}
+        onChange={(e) => setExpiryDate(e.target.value)}
+        className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
+      />
+    </div>
+
+  </div>
+)}
+
+
+        {/* MAIN TABLE */}
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="text-xs text-gray-500 bg-gray-50">
               <tr>
-                <th className="p-4 text-left">EMPLOYEE</th>
+                <th className="p-4 text-left">EMPLOYEE </th>
                 <th className="p-4 text-left">DESIGNATION</th>
                 <th className="p-4 text-left">JOINING DATE</th>
                 <th className="p-4 text-left">VISA STATUS</th>
@@ -448,7 +514,8 @@ export default function EmployeesPage() {
                       key={emp.id}
                       className="border-t hover:bg-gray-50 transition-colors"
                     >
-                      {/* ── EMPLOYEE: avatar + name + id ── */}
+
+                      {/*  EMPLOYEE:*/}
                       <td className="p-4">
                         <div className="flex items-center gap-3">
                           <EmployeeAvatar emp={emp} />
@@ -463,19 +530,21 @@ export default function EmployeesPage() {
                         </div>
                       </td>
 
-                      {/* ── DESIGNATION + TYPE ── */}
+
+                      {/*  DESIGNATION  */}
                       <td className="p-4">
                         <div className="text-gray-800">{emp.designation}</div>
                         <div className="text-xs text-gray-400">{emp.type}</div>
                       </td>
 
-                      {/* ── JOINING DATE ── */}
+
+                      {/*  JOINING DATE  */}
                       <td className="p-4 text-gray-700">
                         {formatDate(emp.createdAt)}
                       </td>
 
-                      {/* ── VISA STATUS ── */}
-                      {/* ── VISA STATUS ── */}
+
+                      {/*  VISA STATUS  */}
                       <td className="p-4">
                         <div className={`font-medium ${visaInfo.colorClass}`}>
                           {visaInfo.label}
@@ -488,12 +557,14 @@ export default function EmployeesPage() {
                         )}
                       </td>
 
-                      {/* ── TOTAL EXPERIENCE (calculated from createdAt) ── */}
+
+                      {/* EXPERIENCE*/}
                       <td className="p-4 text-gray-700">
                         {calcExperience(emp.createdAt)}
                       </td>
 
-                      {/* ── ID PROOF ── */}
+
+                      {/* PROOF  */}
                       <td className="p-4 text-center">
                         {idProofUrl ? (
                           <button
@@ -510,7 +581,8 @@ export default function EmployeesPage() {
                         )}
                       </td>
 
-                      {/* ── ACTION ── */}
+
+                      {/*  ACTION  */}
                       <td className="p-4">
                         <div className="flex gap-3 items-center">
                           <button
@@ -538,7 +610,8 @@ export default function EmployeesPage() {
         </div>
       </div>
 
-      {/* ── IMAGE PREVIEW MODAL ── */}
+
+      {/*  IMAGE  */}
       {previewImage && (
         <div
           onClick={() => setPreviewImage(null)}
@@ -552,7 +625,8 @@ export default function EmployeesPage() {
         </div>
       )}
 
-      {/* ── EDIT MODAL ── */}
+
+      {/*  EDIT  */}
       {editEmployee && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">
