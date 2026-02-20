@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import logo from "../assets/Logo.png";
 import user1 from "../assets/user1.png";
 import {
@@ -12,6 +13,7 @@ import {
   Umbrella,
   Building2,
 } from "lucide-react";
+import Navbar from "./Navbar";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -59,12 +61,10 @@ const EyeIcon = () => (
   </svg>
 );
 
-/*  HELPERS  */
 
-/**
- * Calculate total experience from createdAt (registration date) to today.
- * Returns a human-readable string like "1 yr 3 mos" or "4 mos 12 days".
- */
+
+/** CALCULATION */
+
 function calcExperience(createdAt) {
   if (!createdAt) return "—";
 
@@ -94,9 +94,8 @@ function calcExperience(createdAt) {
   return parts.join(" ") || "< 1 day";
 }
 
-/**
- * Format a date string to DD/MM/YYYY.
- */
+/** Format a date DD/MM/YYYY */
+
 function formatDate(dateStr) {
   if (!dateStr) return "—";
   const d = new Date(dateStr);
@@ -104,9 +103,8 @@ function formatDate(dateStr) {
   return d.toLocaleDateString("en-GB");
 }
 
-/**
- * Determine visa display info based on visaExpiringOn date.
- */
+/** Determine visa display info based on visaExpiringOn date.*/
+
 function getVisaInfo(emp) {
   const { visaExpiringOn } = emp;
 
@@ -120,6 +118,7 @@ function getVisaInfo(emp) {
   const diffMs = expiry - now;
   const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
+  
   // Format date
   const formattedDate = formatDate(visaExpiringOn);
 
@@ -138,18 +137,16 @@ function getVisaInfo(emp) {
   };
 }
 
-/**
- * Build the URL for a file stored on the server (picture or id proof).
- */
+//  URL for a file stored
+
 function fileUrl(filename) {
   if (!filename) return null;
   if (filename.startsWith("http")) return filename;
   return `${API_BASE_URL.replace("/api", "")}/uploads/${filename}`;
 }
 
-/**
- * Fallback avatar with initials when no picture is available.
- */
+// avatar
+
 function InitialsAvatar({ name, hidden }) {
   const initials = name
     ? name
@@ -172,9 +169,9 @@ function InitialsAvatar({ name, hidden }) {
   );
 }
 
-/* 
-   AVATAR — shows picture; falls back to initials on error
-    */
+
+/* AVATAR — shows picture; falls back to initials on error */
+
 function EmployeeAvatar({ emp }) {
   const [imgFailed, setImgFailed] = useState(false);
   const picUrl = fileUrl(emp.employeePicture);
@@ -193,71 +190,61 @@ function EmployeeAvatar({ emp }) {
   );
 }
 
-/* 
-   MAIN COMPONENT
-    */
+// MAIN
+
 
 export default function EmployeesPage() {
   const [activeTab, setActiveTab] = useState("All Employee");
   const [search, setSearch] = useState("");
-  const [employees, setEmployees] = useState([]);
-  const [loading, setLoading] = useState(true);
+  //   const [employees, setEmployees] = useState([]);
+  //   const [isLoading
+  // , setLoading] = useState(true);
   const [previewImage, setPreviewImage] = useState(null);
   const [editEmployee, setEditEmployee] = useState(null);
   const [formData, setFormData] = useState({});
   const [showFilters, setShowFilters] = useState(false);
-    const [joiningDate, setJoiningDate] = useState("");
-const [expiryDate, setExpiryDate] = useState("");
+  const [joiningDate, setJoiningDate] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const queryClient = useQueryClient();
 
   const tabs = ["All Employee", "Payroll", "Staff", "Contract"];
 
-  /*  FETCH  */ 
-
-  const loadEmployees = useCallback(async () => {
-    setLoading(true);
-    try {
+  const { data, isLoading } = useQuery({
+    queryKey: ["employees", activeTab, search, joiningDate, expiryDate],
+    queryFn: async () => {
       const params = new URLSearchParams();
 
-      if (search.trim()) {
-        params.append("search", search.trim());
-      }
-
-      if (activeTab !== "All Employee") {
-        params.append("type", activeTab);
-      }
-
-      if(joiningDate){
-        params.append("joiningDate", joiningDate);
-      }
-
-      if(expiryDate){
-        params.append("expiryDate", expiryDate);
-      }
-
+      if (search.trim()) params.append("search", search.trim());
+      if (activeTab !== "All Employee") params.append("type", activeTab);
+      if (joiningDate) params.append("joiningDate", joiningDate);
+      if (expiryDate) params.append("expiryDate", expiryDate);
 
       const res = await fetch(`${API_BASE_URL}/employees?${params.toString()}`);
-      const data = await res.json();
+      const result = await res.json();
+      return result.employees || [];
+    },
+  });
 
-      setEmployees(data.employees || []);
-    } catch (err) {
-      console.error("Error loading employees:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [activeTab, search, joiningDate, expiryDate]); // ✅ added search here
+  /*  FETCH  */
 
-  useEffect(() => {
-    loadEmployees();
-  }, [loadEmployees]);
+  //  added search here
+
+  //   useEffect(() => {
+  //     loadEmployees();
+  //   }, [loadEmployees]);
 
   /*  DELETE  */
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this employee?"))
-      return;
-    await fetch(`${API_BASE_URL}/employees/${id}`, { method: "DELETE" });
-    loadEmployees();
-  };
+  const deleteMutation = useMutation({
+    mutationFn: async (id) => {
+      await fetch(`${API_BASE_URL}/employees/${id}`, {
+        method: "DELETE",
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["employees"] });
+    },
+  });
 
   /*  EDIT  */
 
@@ -275,79 +262,40 @@ const [expiryDate, setExpiryDate] = useState("");
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleUpdate = async () => {
-    await fetch(`${API_BASE_URL}/employees/${editEmployee.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    setEditEmployee(null);
-    loadEmployees();
-  };
+
+  // UPDATE
+  const updateMutation = useMutation({
+    mutationFn: async () => {
+      await fetch(`${API_BASE_URL}/employees/${editEmployee.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["employees"] });
+      setEditEmployee(null);
+    },
+  });
 
   /*  UI  */
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      
+    <div className="min-h-screen bg-gray-100 ">
       {/*  NAVBAR */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-        
-       
-        {/* Top Row (Logo + Right Section on Mobile) */}
-        <div className="flex items-center justify-between w-full lg:w-auto">
-         
-         
-          {/* Logo */}
-          <img src={logo} alt="logo" className="h-8" />
-
-          
-          {/* Right Side Icons (Mobile View) */}
-          <div className="flex items-center gap-4 lg:hidden">
-            <Bell size={18} className="text-gray-600 cursor-pointer" />
-            <Users size={18} className="text-gray-600 cursor-pointer" />
-            <Building2 size={18} className="text-gray-600 cursor-pointer" />
-          </div>
-        </div>
-
-        
-        {/* Center Tabs */}
-        <div className="flex flex-wrap justify-center gap-4 bg-white rounded-full px-6 py-2 shadow-sm text-sm">
-          <button className="bg-black text-white px-4 py-1 rounded-full">
-            Portal
-          </button>
-          <button className="text-gray-500">Project Management</button>
-          <button className="text-gray-500">Sales</button>
-          <button className="text-gray-500">Accounts</button>
-        </div>
-
-       
-        {/* Desktop Right Section */}
-        <div className="hidden lg:flex items-center gap-4">
-          <Bell size={18} className="text-gray-600 cursor-pointer" />
-          <Users size={18} className="text-gray-600 cursor-pointer" />
-          <Building2 size={18} className="text-gray-600 cursor-pointer" />
-
-          <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-full shadow-sm">
-            <img src={user1} className="w-8 h-8 rounded-full" alt="user" />
-            <span className="text-sm font-medium">Amina Al-Farouqi</span>
-          </div>
-        </div>
-      </div>
-
       
+        <Navbar />
       {/* HEADING BEFORE TABLE  */}
 
-      
-      {/*  TOP HEADER BAR */}
+      {/*  TOP HEADER */}
       <div className="w-full px-8 py-3 flex items-center justify-between">
         
         
-        {/* Left Title */}
+        {/* Left */}
         <h1 className="text-lg font-semibold text-gray-800">Employees</h1>
 
-        
-        
+       
+       
         {/* Right Icons Section */}
         <div className="flex items-center gap-2">
           
@@ -358,38 +306,35 @@ const [expiryDate, setExpiryDate] = useState("");
           </div>
 
           
-          {/* User Check */}
+          {/* User  */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
             <UserCheck size={18} className="text-gray-600" />
           </div>
 
          
-         
-         {/* Active Employees Pill */}
+          {/* Active Employees*/}
           <div className="flex items-center gap-2 bg-black text-white px-5 py-2 rounded-full shadow-sm">
             <Users size={16} />
             <span className="text-sm font-medium">Employees</span>
           </div>
 
-          
+         
           {/* Bell */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
             <Bell size={18} className="text-gray-600" />
           </div>
 
-          
           {/* Calendar */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
             <CalendarDays size={18} className="text-gray-600" />
           </div>
 
-          
+         
           {/* Umbrella */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
             <Umbrella size={18} className="text-gray-600" />
           </div>
 
-          
           {/* Building */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
             <Building2 size={18} className="text-gray-600" />
@@ -397,14 +342,14 @@ const [expiryDate, setExpiryDate] = useState("");
         </div>
       </div>
 
-      
-      {/*  TABLE CONTAINER */}
+
+
+
+      {/*  TABLE  */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
-       
-        {/* Tabs + Search */}
+        
+        {/* Tabs  */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-4 border-b">
-          
-          {/* Tabs */}
           <div className="flex flex-wrap gap-2">
             {tabs.map((tab) => (
               <button
@@ -419,8 +364,7 @@ const [expiryDate, setExpiryDate] = useState("");
             ))}
           </div>
 
-          
-          {/* Search + Icons */}
+          {/* Search  */}
           <div className="flex items-center gap-3 w-full lg:w-auto">
             <input
               type="text"
@@ -445,38 +389,36 @@ const [expiryDate, setExpiryDate] = useState("");
         </div>
 
 
-        {/* FILTER USING FUNNEL */}
+        {/* FILTER  */}
         {showFilters && (
-  <div className="p-4 border-b bg-gray-50 flex flex-col lg:flex-row gap-4 transition-all duration-300">
+          <div className="p-4 border-b bg-gray-50 flex flex-col lg:flex-row gap-4 transition-all duration-300">
+            {/* Joining  */}
+            <div className="flex flex-col">
+              <label className="text-xs text-gray-500 mb-1">Joining Date</label>
+              <input
+                type="date"
+                value={joiningDate}
+                onChange={(e) => setJoiningDate(e.target.value)}
+                className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
+              />
+            </div>
 
-    {/* Joining Date */}
-    <div className="flex flex-col">
-      <label className="text-xs text-gray-500 mb-1">Joining Date</label>
-      <input
-        type="date"
-        value={joiningDate}
-        onChange={(e) => setJoiningDate(e.target.value)}
-        className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
-      />
-    </div>
+          
+            {/* Expiry  */}
+            <div className="flex flex-col">
+              <label className="text-xs text-gray-500 mb-1">Expiry Date</label>
+              <input
+                type="date"
+                value={expiryDate}
+                onChange={(e) => setExpiryDate(e.target.value)}
+                className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
+              />
+            </div>
+          </div>
+        )}
 
-
-    {/* Expiry Date */}
-    <div className="flex flex-col">
-      <label className="text-xs text-gray-500 mb-1">Expiry Date</label>
-      <input
-        type="date"
-        value={expiryDate}
-        onChange={(e) => setExpiryDate(e.target.value)}
-        className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
-      />
-    </div>
-
-  </div>
-)}
-
-
-        {/* MAIN TABLE */}
+       
+        {/*  TABLE */}
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="text-xs text-gray-500 bg-gray-50">
@@ -492,28 +434,28 @@ const [expiryDate, setExpiryDate] = useState("");
             </thead>
 
             <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan={7} className="p-8 text-center text-gray-400">
-                    Loading…
-                  </td>
-                </tr>
-              ) : employees.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="p-8 text-center text-gray-400">
-                    No employees found
-                  </td>
-                </tr>
-              ) : (
-                employees.map((emp) => {
-                  const visaInfo = getVisaInfo(emp);
-                  const idProofUrl = fileUrl(emp.idProof);
+  {isLoading ? (
+    <tr>
+      <td colSpan={7} className="p-8 text-center text-gray-400">
+        Loading…
+      </td>
+    </tr>
+  ) : data?.length === 0 ? (
+    <tr>
+      <td colSpan={7} className="p-8 text-center text-gray-400">
+        No employees found
+      </td>
+    </tr>
+  ) : (
+    data?.map((emp) => {
+      const visaInfo = getVisaInfo(emp);
+      const idProofUrl = fileUrl(emp.idProof);
 
-                  return (
-                    <tr
-                      key={emp.id}
-                      className="border-t hover:bg-gray-50 transition-colors"
-                    >
+      return (
+        <tr
+          key={emp.id}
+          className="border-t hover:bg-gray-50 transition-colors"
+        >
 
                       {/*  EMPLOYEE:*/}
                       <td className="p-4">
@@ -530,20 +472,19 @@ const [expiryDate, setExpiryDate] = useState("");
                         </div>
                       </td>
 
-
                       {/*  DESIGNATION  */}
                       <td className="p-4">
                         <div className="text-gray-800">{emp.designation}</div>
                         <div className="text-xs text-gray-400">{emp.type}</div>
                       </td>
 
-
-                      {/*  JOINING DATE  */}
+                     
+                      {/*  JOINING   */}
                       <td className="p-4 text-gray-700">
                         {formatDate(emp.createdAt)}
                       </td>
 
-
+                      
                       {/*  VISA STATUS  */}
                       <td className="p-4">
                         <div className={`font-medium ${visaInfo.colorClass}`}>
@@ -557,13 +498,13 @@ const [expiryDate, setExpiryDate] = useState("");
                         )}
                       </td>
 
-
+                     
                       {/* EXPERIENCE*/}
                       <td className="p-4 text-gray-700">
                         {calcExperience(emp.createdAt)}
                       </td>
 
-
+                      
                       {/* PROOF  */}
                       <td className="p-4 text-center">
                         {idProofUrl ? (
@@ -581,7 +522,7 @@ const [expiryDate, setExpiryDate] = useState("");
                         )}
                       </td>
 
-
+                     
                       {/*  ACTION  */}
                       <td className="p-4">
                         <div className="flex gap-3 items-center">
@@ -593,7 +534,15 @@ const [expiryDate, setExpiryDate] = useState("");
                             <EditIcon />
                           </button>
                           <button
-                            onClick={() => handleDelete(emp.id)}
+                            onClick={() => {
+                              if (
+                                window.confirm(
+                                  "Are you sure you want to delete this employee?",
+                                )
+                              ) {
+                                deleteMutation.mutate(emp.id);
+                              }
+                            }}
                             title="Delete employee"
                             className="hover:opacity-70 transition-opacity"
                           >
@@ -610,7 +559,7 @@ const [expiryDate, setExpiryDate] = useState("");
         </div>
       </div>
 
-
+     
       {/*  IMAGE  */}
       {previewImage && (
         <div
@@ -625,7 +574,7 @@ const [expiryDate, setExpiryDate] = useState("");
         </div>
       )}
 
-
+     
       {/*  EDIT  */}
       {editEmployee && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -693,7 +642,7 @@ const [expiryDate, setExpiryDate] = useState("");
                 Cancel
               </button>
               <button
-                onClick={handleUpdate}
+                onClick={() => updateMutation.mutate()}
                 className="px-5 py-2 rounded-lg text-sm bg-black text-white hover:bg-gray-800"
               >
                 Save Changes

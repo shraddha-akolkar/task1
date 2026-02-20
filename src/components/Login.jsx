@@ -7,29 +7,31 @@ import { toast } from "react-hot-toast";
 
 const Login = () => {
   const navigate = useNavigate();
-  
- const [formData, setFormData] = useState({
-  id: "",
-  password: ""
-});
+
+  const [formData, setFormData] = useState({
+    id: "",
+    password: ""
+  });
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
 
-  // Client-side validation
+  // Validation
   const validateForm = () => {
     const newErrors = {};
 
-    // Employee ID validation
     if (!formData.id) {
-  newErrors.id = "Employee ID is required";
-}
- else if (!/^[A-Z0-9]{4,10}$/i.test(formData.employeeId)) {
-      newErrors.employeeId = "Employee ID must be 4-10 alphanumeric characters";
+      newErrors.id = "Employee ID is required";
+    } else if (!/^[A-Za-z0-9]+$/.test(formData.id)) {
+      newErrors.id = "Employee ID must be alphanumeric";
+    } else if (
+      !formData.id.toUpperCase().startsWith("ADM") &&
+      !formData.id.toUpperCase().startsWith("IN")
+    ) {
+      newErrors.id = "ID must start with ADM or IN";
     }
 
-    // Password validation
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
@@ -40,63 +42,54 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
- const handleChange = (e) => {
-  const { name, value } = e.target;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-  setFormData(prev => ({
-    ...prev,
-    [name]: value
-  }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
 
-  if (errors[name]) {
-    setErrors(prev => ({ ...prev, [name]: "" }));
-  }
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
 
-  if (apiError) {
-    setApiError("");
-  }
-};
+    if (apiError) {
+      setApiError("");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setApiError("");
 
-    // Validate form
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", formData);
-      
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        formData
+      );
+
       if (response.data.success) {
-        // Store token in localStorage
-        localStorage.setItem("token", response.data.data.token);
-        localStorage.setItem("employeeData", JSON.stringify(response.data.data));
-        
-        // Redirect to dashboard
-        toast.success("Login successful! Redirecting to dashboard...");
-        navigate("/dashboard");
+        localStorage.setItem("displayId", response.data.data.displayId);
+        localStorage.setItem("role", response.data.role);
+
+        toast.success("Login successful!");
+
+        if (response.data.role === "admin") {
+          navigate("/adminportal");
+        } else {
+          navigate("/dashboard");
+        }
       }
     } catch (error) {
-      toast.error("Login failed: " + (error.response?.data?.message || "Network error"));
-      if (error.response?.data?.errors) {
-        
-        // Backend validation errors
-        const backendErrors = {};
-        
-        error.response.data.errors.forEach(err => {
-          backendErrors[err.field] = err.message;
-        });
-        setErrors(backendErrors);
-      } else if (error.response?.data?.message) {
-        // Login error (wrong credentials, inactive account, etc.)
-        setApiError(error.response.data.message);
-      } else {
-        setApiError("Network error. Please try again.");
-      }
+      const message =
+        error.response?.data?.message || "Login failed";
+      setApiError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -107,10 +100,7 @@ const Login = () => {
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      {/* Card */}
       <div className="w-[420px] bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl p-10">
-
-        {/* Logo */}
         <div className="flex flex-col items-center mb-6">
           <img src={logo} alt="Logo" className="h-10 mb-2" />
           <h2 className="text-xl font-semibold text-gray-800">
@@ -118,17 +108,14 @@ const Login = () => {
           </h2>
         </div>
 
-        {/* API Error Message */}
         {apiError && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
             {apiError}
           </div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
 
-          {/* Employee ID */}
           <div>
             <label className="text-sm text-gray-700 font-medium">
               Employee ID*
@@ -138,7 +125,7 @@ const Login = () => {
               name="id"
               value={formData.id}
               onChange={handleChange}
-              placeholder="Enter employee ID"
+              placeholder="Enter ID (ADM1 / IN1)"
               className={`w-full mt-1 bg-gray-100 border ${
                 errors.id ? "border-red-500" : "border-gray-200"
               } rounded-lg px-4 py-2 focus:outline-none focus:border-black uppercase`}
@@ -149,7 +136,6 @@ const Login = () => {
             )}
           </div>
 
-          {/* Password */}
           <div>
             <label className="text-sm text-gray-700 font-medium">
               Password*
@@ -170,7 +156,6 @@ const Login = () => {
             )}
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full mt-4 bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
@@ -178,16 +163,7 @@ const Login = () => {
           >
             {loading ? "Logging in..." : "Submit"}
           </button>
-
         </form>
-
-        {/* Optional: Forgot Password Link */}
-        <div className="mt-4 text-center">
-          <a href="#" className="text-sm text-gray-600 hover:text-black transition">
-            Forgot Password?
-          </a>
-        </div>
-
       </div>
     </div>
   );

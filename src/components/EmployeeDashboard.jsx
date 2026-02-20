@@ -136,6 +136,8 @@ function InitialsAvatar({ name, hidden }) {
 
 /* ============================================================
    AVATAR — shows picture; falls back to initials on error
+   
+
    ============================================================ */
 function EmployeeAvatar({ emp }) {
   const [imgFailed, setImgFailed] = useState(false);
