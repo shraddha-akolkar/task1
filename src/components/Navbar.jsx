@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Bell, Users, Building2, Menu, X } from "lucide-react";
-import logo from "../assets/Logo.png";
+import logo from "../assets/lamac.png";
 import user1 from "../assets/user1.png";
 
 export default function Navbar() {
@@ -16,7 +16,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <img src={logo} alt="Logo" className="h-10 w-auto" />
+            <img src={logo} alt="Logo" className="h-6 w-auto" />
           </div>
 
           {/* Center Tabs — hidden on mobile */}
