@@ -44,51 +44,6 @@ const attendanceRows = [
     duration: { text: "11h 30m", highlight: false },
     types: ["On Site"],
   },
-  {
-    img: emp2, name: "Liam Carter",     id: "EM02",
-    date: "24 Sept 2025",
-    inTime:   { text: "09:47 AM", late: true,  edited: false },
-    outTime:  { text: "02:57 PM", edited: false },
-    ot:       { text: "NA",      hasActions: false },
-    duration: { text: "5h 10m",  highlight: true },
-    types: ["In Factory"],
-  },
-  {
-    img: emp3, name: "Alex Carter",     id: "CE54",
-    date: "24 Sept 2025",
-    inTime:   { text: "10:15 AM", late: false, edited: true },
-    outTime:  { text: "09:45 PM", edited: true },
-    ot:       { text: "4h 30m",  hasActions: false },
-    duration: { text: "13h 15m", highlight: false },
-    types: ["In Factory", "On Site"],
-  },
-  {
-    img: emp4, name: "Noah Brown",      id: "CE17",
-    date: "24 Sept 2025",
-    inTime:   { text: "11:20 AM", late: false, edited: false },
-    outTime:  { text: "08:20 PM", edited: false },
-    ot:       { text: "3h 0m",   hasActions: true },
-    duration: { text: "9h 0m",   highlight: false },
-    types: ["In Factory"],
-  },
-  {
-    img: emp5, name: "Olivia Martinez", id: "EM05",
-    date: "24 Sept 2025",
-    inTime:   { text: "08:45 AM", late: true,  edited: false },
-    outTime:  { text: "05:00 PM", edited: false },
-    ot:       { text: "NA",      hasActions: false },
-    duration: { text: "8h 15m",  highlight: true },
-    types: ["On Site"],
-  },
-  {
-    img: emp6, name: "Mason Johnson",   id: "CE18",
-    date: "24 Sept 2025",
-    inTime:   { text: "09:30 AM", late: false, edited: true },
-    outTime:  { text: "06:00 PM", edited: true },
-    ot:       { text: "0h 30m",  hasActions: true },
-    duration: { text: "8h 30m",  highlight: false },
-    types: ["On Site"],
-  },
 ];
 
 const typeStyle = {
@@ -98,8 +53,6 @@ const typeStyle = {
 
 const leaveData = [
   { img: leave1, name: "Khalid Al-Maamari", role: "Technician", period: "05 Jan - 15 Feb, 2025" },
-  { img: leave2, name: "Amina Al-Qasim",   role: "Helper",      period: "First Half" },
-  { img: leave3, name: "Amina Al-Farsi",   role: "Engineer",    period: "10 Mar - 20 Apr , 2026" },
 ];
 
 // ────────────────────────────────────────────────────────────────
