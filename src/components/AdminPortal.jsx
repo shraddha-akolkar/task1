@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar";
 import RegisterEmployeeModal from "./RegisterEmployeeModal";
+import { useNavigate } from "react-router-dom";
 
 import {
   Search,
@@ -62,7 +63,7 @@ const AdminPortal = () => {
   const [showModal, setShowModal] = useState(false);
 
   const leaveTabs = ["On Leave", "On Site", "In Factory", "New"];
-
+  const navigate = useNavigate();
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
@@ -75,17 +76,26 @@ const AdminPortal = () => {
         </button>
 
         <div className="flex items-center gap-3 text-gray-500">
-          <UserCog size={18} className="cursor-pointer hover:text-gray-800 transition-colors" />
+          <UserCog
+            size={18}
+            className="cursor-pointer hover:text-gray-800 transition-colors"
+            onClick={() => navigate("/attendance")}
+          />
 
-          {/* 🔥 OPEN MODAL HERE */}
           <UsersRound
             size={18}
             className="cursor-pointer hover:text-gray-800 transition-colors"
             onClick={() => setShowModal(true)}
           />
 
-          <User size={18} className="cursor-pointer hover:text-gray-800 transition-colors" />
-          <CalendarDays size={18} className="cursor-pointer hover:text-gray-800 transition-colors" />
+          <User
+            size={18}
+            className="cursor-pointer hover:text-gray-800 transition-colors"
+          />
+          <CalendarDays
+            size={18}
+            className="cursor-pointer hover:text-gray-800 transition-colors"
+          />
         </div>
 
         <span className="text-sm font-medium text-gray-700">Admin</span>
@@ -104,21 +114,40 @@ const AdminPortal = () => {
           </div>
 
           <div className="w-44 h-28">
-            <img src={graphImg} alt="Work Duration" className="w-full h-full object-contain" />
+            <img
+              src={graphImg}
+              alt="Work Duration"
+              className="w-full h-full object-contain"
+            />
           </div>
         </div>
 
         {/* Stat Cards */}
-        <DashboardCard icon={<Users size={22} />} title="Assigned Employee" value="25" />
-        <DashboardCard icon={<UserCheck size={22} />} title="Payroll Employee" value="18" />
-        <DashboardCard icon={<Briefcase size={22} />} title="Contract Employee" value="7" />
+        <DashboardCard
+          icon={<Users size={22} />}
+          title="Assigned Employee"
+          value="25"
+        />
+        <DashboardCard
+          icon={<UserCheck size={22} />}
+          title="Payroll Employee"
+          value="18"
+        />
+        <DashboardCard
+          icon={<Briefcase size={22} />}
+          title="Contract Employee"
+          value="7"
+        />
         <DashboardCard icon={<Home size={22} />} title="On Site" value="19" />
-        <DashboardCard icon={<Building2 size={22} />} title="In Factory" value="6" />
+        <DashboardCard
+          icon={<Building2 size={22} />}
+          title="In Factory"
+          value="6"
+        />
       </div>
 
       {/* MAIN SECTION */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 px-4 pb-6">
-
         {/* Attendance Table */}
         <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm p-5">
           <h2 className="text-base font-semibold mb-4">Attendance</h2>
@@ -142,7 +171,11 @@ const AdminPortal = () => {
                   <tr key={i} className="border-b hover:bg-gray-50">
                     <td className="p-3">
                       <div className="flex items-center gap-2">
-                        <img src={row.img} alt={row.name} className="w-8 h-8 rounded-full" />
+                        <img
+                          src={row.img}
+                          alt={row.name}
+                          className="w-8 h-8 rounded-full"
+                        />
                         <div>
                           <p className="font-semibold">{row.name}</p>
                           <p className="text-gray-400 text-[10px]">{row.id}</p>
@@ -156,7 +189,10 @@ const AdminPortal = () => {
                     <td className="p-3">{row.duration.text}</td>
                     <td className="p-3">
                       {row.types.map((t) => (
-                        <span key={t} className={`px-2 py-0.5 rounded-full text-[10px] ${typeStyle[t]}`}>
+                        <span
+                          key={t}
+                          className={`px-2 py-0.5 rounded-full text-[10px] ${typeStyle[t]}`}
+                        >
                           {t}
                         </span>
                       ))}
@@ -178,7 +214,11 @@ const AdminPortal = () => {
           {leaveData.map((p, i) => (
             <div key={i} className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <img src={p.img} alt={p.name} className="w-9 h-9 rounded-full" />
+                <img
+                  src={p.img}
+                  alt={p.name}
+                  className="w-9 h-9 rounded-full"
+                />
                 <div>
                   <p className="font-semibold text-sm">{p.name}</p>
                   <p className="text-xs text-gray-400">{p.role}</p>

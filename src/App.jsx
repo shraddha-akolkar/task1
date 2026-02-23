@@ -6,6 +6,7 @@ import Dashboard from "./components/Dashboard";
 import RegisterEmployeeModal from "./components/RegisterEmployeeModal";
 import EmployeesPage from "./components/EmployeeDashboard";
 import AdminPanel from "./components/AdminPortal";
+import Attendance from "./components/Attendance";
 import { Toaster } from "react-hot-toast";
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -51,6 +52,15 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminPanel />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/attendance"
+          element={
+            <ProtectedRoute>
+              <Attendance />
             </ProtectedRoute>
           }
         />
