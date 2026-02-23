@@ -81,35 +81,35 @@ const RegisterEmployeeModal = ({ onClose }) => {
     setFormData((prev) => ({ ...prev, [fieldName]: file }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+const handleSubmit = (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const data = new FormData();
-      Object.keys(formData).forEach((key) => {
-        data.append(key, formData[key]);
-      });
+  const data = new FormData();
+  Object.keys(formData).forEach((key) => {
+    data.append(key, formData[key]);
+  });
 
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        data
-      );
-
+  axios
+    .post("http://localhost:5000/api/auth/register", data)
+    .then((response) => {
       if (response.data.success) {
         toast.success("Employee registered successfully!");
-
-        onClose();               // close modal
-        navigate("/dashboard");  // ✅ REDIRECT HERE
+        onClose();
+        navigate("/dashboard");
       }
-    } catch (error) {
-      toast.error("Something went wrong");
-    } finally {
+    })
+    .catch((error) => {
+     const message =
+        error.response?.data?.message || "Something went wrong";
+      toast.error(message);
+    })
+    .finally(() => {
       setLoading(false);
-    }
-  };
+    });
+};
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
