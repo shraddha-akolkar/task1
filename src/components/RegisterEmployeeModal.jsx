@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { Eye, EyeOff, X } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";   // ✅ ADD THIS
 
 const RegisterEmployeeModal = ({ onClose }) => {
+  const navigate = useNavigate();   // ✅ ADD THIS
+
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -82,7 +85,9 @@ const RegisterEmployeeModal = ({ onClose }) => {
 
       if (response.data.success) {
         toast.success("Employee registered successfully!");
-        onClose();
+
+        onClose();               // close modal
+        navigate("/dashboard");  // ✅ REDIRECT HERE
       }
     } catch (error) {
       toast.error("Something went wrong");
@@ -156,7 +161,6 @@ const RegisterEmployeeModal = ({ onClose }) => {
 };
 
 export default RegisterEmployeeModal;
-
 /* Reusable Components */
 
 const Input = ({ label, name, value, onChange, error }) => (
