@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Eye, EyeOff, X } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";   // ✅ ADD THIS
+import { useNavigate } from "react-router-dom";   
 
 const RegisterEmployeeModal = ({ onClose }) => {
-  const navigate = useNavigate();   // ✅ ADD THIS
+  const navigate = useNavigate();   
 
   const [formData, setFormData] = useState({
     name: "",
@@ -37,6 +37,21 @@ const RegisterEmployeeModal = ({ onClose }) => {
         newErrors[key] = "This field is required";
     });
 
+    // DOB
+    if (formData.dob) {
+      const age = new Date().getFullYear() - new Date(formData.dob).getFullYear();
+     if (age < 18) newErrors.dob = "Employee must be at least 18 years old";
+    }
+
+    // PASSWORD
+    const passwordRegex =   /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+    if(!passwordRegex.test(formData.password)){
+      newErrors.password = "Minimum 8 characters, 1 Uppercase & 1 Special Character";
+    }
+    // if (formData.password && !passwordRegex.test(formData.password))
+    //   newErrors.password = "Minimum 8 characters, at least one letter and one number";
+
+    // MATCH
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
 
@@ -129,7 +144,7 @@ const RegisterEmployeeModal = ({ onClose }) => {
             <Input label="Designation*" name="designation" value={formData.designation} onChange={handleChange} error={errors.designation}/>
 
             <SelectField label="Visa Status*" name="visaStatus" value={formData.visaStatus} onChange={handleChange}
-              options={["Citizen", "Green Card", "H1B", "L1", "OPT", "Other"]} error={errors.visaStatus}/>
+              options={["Citizen", "Green Card", "H1B", "L1", "OPT",]} error={errors.visaStatus}/>
 
             <DateInput label="Visa Expiry" name="visaExpiringOn" value={formData.visaExpiringOn} onChange={handleChange}/>
 
