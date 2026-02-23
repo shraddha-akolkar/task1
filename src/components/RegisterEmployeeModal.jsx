@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, X } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const RegisterEmployeeModal = () => {
-  const navigate = useNavigate();
-
+const RegisterEmployeeModal = ({ onClose }) => {
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -20,7 +17,6 @@ const RegisterEmployeeModal = () => {
     visaExpiringOn: "",
     idProof: "",
     employeePicture: "",
-   
     password: "",
     confirmPassword: ""
   });
@@ -30,22 +26,14 @@ const RegisterEmployeeModal = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // VALIDATION 
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.name) newErrors.name = "Name is required";
-    if (!formData.mobile) newErrors.mobile = "Mobile is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.dob) newErrors.dob = "DOB is required";
-    if (!formData.address) newErrors.address = "Address is required";
-    if (!formData.zipCode) newErrors.zipCode = "Zip Code is required";
-    if (!formData.type) newErrors.type = "Type is required";
-    if (!formData.designation) newErrors.designation = "Designation is required";
-    if (!formData.visaStatus) newErrors.visaStatus = "Visa status is required";
-    if (!formData.idProof) newErrors.idProof = "ID proof is required";
-    if (!formData.employeePicture) newErrors.employeePicture = "Employee picture is required";
-    if (!formData.password) newErrors.password = "Password is required";
+    Object.keys(formData).forEach((key) => {
+      if (!formData[key] && key !== "visaExpiringOn")
+        newErrors[key] = "This field is required";
+    });
+
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
 
@@ -53,155 +41,115 @@ const RegisterEmployeeModal = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // INPUT  
   const handleChange = (e) => {
-  const { name, value } = e.target;
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
 
-  setFormData(prev => ({
-    ...prev,
-    [name]: value
-  }));
+  const handleFileChange = (e, fieldName) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  if (errors[name]) {
-    setErrors(prev => ({
-      ...prev,
-      [name]: ""
-    }));
-  }
-};
-
-
-  // FILE  
-const handleFileChange = (e, fieldName) => {
-  const file = e.target.files[0];
-
-  if (file) {
     const allowedTypes = ["image/jpeg", "image/png"];
-
     if (!allowedTypes.includes(file.type)) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [fieldName]: "Only JPG and PNG files are allowed"
+        [fieldName]: "Only JPG and PNG allowed"
       }));
       return;
     }
 
-    // ✅ STORE FILE OBJECT NOT FILE NAME
-    setFormData(prev => ({
-      ...prev,
-      [fieldName]: file
-    }));
+    setFormData((prev) => ({ ...prev, [fieldName]: file }));
+  };
 
-    if (errors[fieldName]) {
-      setErrors(prev => ({ ...prev, [fieldName]: "" }));
-    }
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
 
-  // SUBMIT 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!validateForm()) return;
+    setLoading(true);
 
-  setLoading(true);
-
-  try {
-    const data = new FormData();
-
-    Object.keys(formData).forEach(key => {
-      data.append(key, formData[key]);
-    });
-
-    const response = await axios.post(
-      "http://localhost:5000/api/auth/register",
-      data,
-      {
-        headers: { "Content-Type": "multipart/form-data" }
-      }
-    );
-
-    if (response.data.success) {
-  toast.success("Employee registered successfully!");
-
- 
-
-  navigate("/dashboard");
-}
-
-  } catch (error) {
-    if (error.response?.data?.errors) {
-      const backendErrors = {};
-      error.response.data.errors.forEach(err => {
-        backendErrors[err.field] = err.message;
+    try {
+      const data = new FormData();
+      Object.keys(formData).forEach((key) => {
+        data.append(key, formData[key]);
       });
-      setErrors(backendErrors);
-    } else {
+
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        data
+      );
+
+      if (response.data.success) {
+        toast.success("Employee registered successfully!");
+        onClose();
+      }
+    } catch (error) {
       toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white w-full max-w-4xl p-6 rounded-xl shadow-md">
-        <h2 className="text-xl font-semibold mb-4 text-center">
-          Register New Employee
-        </h2>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white w-full max-w-4xl rounded-xl shadow-lg relative max-h-[90vh] flex flex-col">
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 text-gray-500 hover:text-black"
+        >
+          <X size={20} />
+        </button>
 
-          <Input label="Name*" name="name" value={formData.name} onChange={handleChange} error={errors.name}/>
-          <Input label="Mobile*" name="mobile" value={formData.mobile} onChange={handleChange} error={errors.mobile}/>
-          <Input label="Email*" name="email" value={formData.email} onChange={handleChange} error={errors.email}/>
-          <DateInput label="DOB*" name="dob" value={formData.dob} onChange={handleChange} error={errors.dob}/>
-          <Input label="Address*" name="address" value={formData.address} onChange={handleChange} error={errors.address}/>
-          <Input label="Zip Code*" name="zipCode" value={formData.zipCode} onChange={handleChange} error={errors.zipCode}/>
+        <div className="p-6 pb-2 border-b">
+          <h2 className="text-xl font-semibold text-center">
+            Register New Employee
+          </h2>
+        </div>
 
-          <SelectField
-            label="Type*"
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            options={["Payroll", "staff", "Contract"]}
-            error={errors.type}
-          />
+        <div className="overflow-y-auto p-6 pt-4">
+          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
 
-          <Input label="Designation*" name="designation" value={formData.designation} onChange={handleChange} error={errors.designation}/>
+            <Input label="Name*" name="name" value={formData.name} onChange={handleChange} error={errors.name}/>
+            <Input label="Mobile*" name="mobile" value={formData.mobile} onChange={handleChange} error={errors.mobile}/>
+            <Input label="Email*" name="email" value={formData.email} onChange={handleChange} error={errors.email}/>
+            <DateInput label="DOB*" name="dob" value={formData.dob} onChange={handleChange} error={errors.dob}/>
+            <Input label="Address*" name="address" value={formData.address} onChange={handleChange} error={errors.address}/>
+            <Input label="Zip Code*" name="zipCode" value={formData.zipCode} onChange={handleChange} error={errors.zipCode}/>
 
-          <SelectField
-            label="Visa Status*"
-            name="visaStatus"
-            value={formData.visaStatus}
-            onChange={handleChange}
-            options={["Citizen", "Green Card", "H1B", "L1", "OPT", "Other"]}
-            error={errors.visaStatus}
-          />
+            <SelectField label="Type*" name="type" value={formData.type} onChange={handleChange}
+              options={["Payroll", "Staff", "Contract"]} error={errors.type}/>
 
-          <DateInput label="Visa Expiry" name="visaExpiringOn" value={formData.visaExpiringOn} onChange={handleChange} error={errors.visaExpiringOn}/>
+            <Input label="Designation*" name="designation" value={formData.designation} onChange={handleChange} error={errors.designation}/>
 
+            <SelectField label="Visa Status*" name="visaStatus" value={formData.visaStatus} onChange={handleChange}
+              options={["Citizen", "Green Card", "H1B", "L1", "OPT", "Other"]} error={errors.visaStatus}/>
 
-          <PasswordInput label="Password*" name="password" value={formData.password} onChange={handleChange}
-            showPassword={showPassword} setShowPassword={setShowPassword} error={errors.password}/>
+            <DateInput label="Visa Expiry" name="visaExpiringOn" value={formData.visaExpiringOn} onChange={handleChange}/>
 
-          <PasswordInput label="Confirm Password*" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}
-            showPassword={showConfirmPassword} setShowPassword={setShowConfirmPassword} error={errors.confirmPassword}/>
+            <PasswordInput label="Password*" name="password" value={formData.password}
+              onChange={handleChange} showPassword={showPassword}
+              setShowPassword={setShowPassword} error={errors.password}/>
 
-          <FileUpload label="ID Proof*" onChange={(e)=>handleFileChange(e,"idProof")} error={errors.idProof}/>
-          <FileUpload label="Employee Picture*" onChange={(e)=>handleFileChange(e,"employeePicture")} error={errors.employeePicture}/>
+            <PasswordInput label="Confirm Password*" name="confirmPassword"
+              value={formData.confirmPassword} onChange={handleChange}
+              showPassword={showConfirmPassword}
+              setShowPassword={setShowConfirmPassword}
+              error={errors.confirmPassword}/>
 
-          <div className="col-span-2 text-center mt-4">
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-8 py-2 bg-black text-white rounded-lg"
-            >
-              {loading ? "Submitting..." : "Submit"}
-            </button>
-          </div>
+            <FileUpload label="ID Proof*" onChange={(e)=>handleFileChange(e,"idProof")} error={errors.idProof}/>
+            <FileUpload label="Employee Picture*" onChange={(e)=>handleFileChange(e,"employeePicture")} error={errors.employeePicture}/>
 
-        </form>
+            <div className="col-span-2 text-center mt-4">
+              <button type="submit" disabled={loading}
+                className="px-8 py-2 bg-black text-white rounded-lg">
+                {loading ? "Submitting..." : "Submit"}
+              </button>
+            </div>
+
+          </form>
+        </div>
       </div>
     </div>
   );
@@ -209,15 +157,13 @@ const handleSubmit = async (e) => {
 
 export default RegisterEmployeeModal;
 
-
-// REUSABLE COMPONENTS 
+/* Reusable Components */
 
 const Input = ({ label, name, value, onChange, error }) => (
   <div>
     <label>{label}</label>
     <input name={name} value={value} onChange={onChange}
-      className={`w-full border rounded px-3 py-1.5 ${error ? "border-red-500" : ""}`}
-    />
+      className={`w-full border rounded px-3 py-1.5 ${error ? "border-red-500" : ""}`} />
     {error && <p className="text-red-500 text-xs">{error}</p>}
   </div>
 );
@@ -228,9 +174,7 @@ const SelectField = ({ label, name, value, onChange, options, error }) => (
     <select name={name} value={value} onChange={onChange}
       className={`w-full border rounded px-3 py-1.5 ${error ? "border-red-500" : ""}`}>
       <option value="">Select option</option>
-      {options.map(opt => (
-        <option key={opt} value={opt}>{opt}</option>
-      ))}
+      {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
     </select>
     {error && <p className="text-red-500 text-xs">{error}</p>}
   </div>
@@ -240,8 +184,7 @@ const DateInput = ({ label, name, value, onChange, error }) => (
   <div>
     <label>{label}</label>
     <input type="date" name={name} value={value} onChange={onChange}
-      className={`w-full border rounded px-3 py-1.5 ${error ? "border-red-500" : ""}`}
-    />
+      className={`w-full border rounded px-3 py-1.5 ${error ? "border-red-500" : ""}`} />
     {error && <p className="text-red-500 text-xs">{error}</p>}
   </div>
 );
@@ -250,9 +193,9 @@ const PasswordInput = ({ label, name, value, onChange, showPassword, setShowPass
   <div>
     <label>{label}</label>
     <div className="relative">
-      <input type={showPassword ? "text" : "password"} name={name} value={value} onChange={onChange}
-        className={`w-full border rounded px-3 py-1.5 ${error ? "border-red-500" : ""}`}
-      />
+      <input type={showPassword ? "text" : "password"} name={name} value={value}
+        onChange={onChange}
+        className={`w-full border rounded px-3 py-1.5 ${error ? "border-red-500" : ""}`} />
       <button type="button" onClick={() => setShowPassword(!showPassword)}
         className="absolute right-3 top-2">
         {showPassword ? <EyeOff size={16}/> : <Eye size={16}/>}
@@ -265,12 +208,9 @@ const PasswordInput = ({ label, name, value, onChange, showPassword, setShowPass
 const FileUpload = ({ label, onChange, error }) => (
   <div>
     <label>{label}</label>
-    <input
-      type="file"
-      accept=".jpg,.jpeg,.png"
+    <input type="file" accept=".jpg,.jpeg,.png"
       onChange={onChange}
-      className={`w-full border rounded px-3 py-1.5 ${error ? "border-red-500" : ""}`}
-    />
+      className={`w-full border rounded px-3 py-1.5 ${error ? "border-red-500" : ""}`} />
     {error && <p className="text-red-500 text-xs">{error}</p>}
   </div>
 );
