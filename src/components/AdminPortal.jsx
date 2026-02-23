@@ -85,7 +85,7 @@ const AdminPortal = () => {
           <UsersRound
             size={18}
             className="cursor-pointer hover:text-gray-800 transition-colors"
-            onClick={() => setShowModal(true)}
+             onClick={() => navigate("/dashboard")}
           />
 
           <User

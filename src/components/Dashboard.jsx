@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-
+import { useNavigate } from "react-router-dom";
+import RegisterEmployeeModal from "./RegisterEmployeeModal";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import logo from "../assets/Logo.png";
 import user1 from "../assets/user1.png";
@@ -13,6 +14,7 @@ import {
   CalendarDays,
   Umbrella,
   Building2,
+  Plus,
 } from "lucide-react";
 import Navbar from "./Navbar";
 
@@ -61,8 +63,6 @@ const EyeIcon = () => (
     <circle cx="12" cy="12" r="3" />
   </svg>
 );
-
-
 
 /** CALCULATION */
 
@@ -119,7 +119,6 @@ function getVisaInfo(emp) {
   const diffMs = expiry - now;
   const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-  
   // Format date
   const formattedDate = formatDate(visaExpiringOn);
 
@@ -170,7 +169,6 @@ function InitialsAvatar({ name, hidden }) {
   );
 }
 
-
 /* AVATAR — shows picture; falls back to initials on error */
 
 function EmployeeAvatar({ emp }) {
@@ -193,7 +191,6 @@ function EmployeeAvatar({ emp }) {
 
 // MAIN
 
-
 export default function EmployeesPage() {
   const [activeTab, setActiveTab] = useState("All Employee");
   const [search, setSearch] = useState("");
@@ -207,7 +204,8 @@ export default function EmployeesPage() {
   const [joiningDate, setJoiningDate] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const queryClient = useQueryClient();
-
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
   const tabs = ["All Employee", "Payroll", "Staff", "Contract"];
 
   const { data, isLoading } = useQuery({
@@ -263,7 +261,6 @@ export default function EmployeesPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-
   // UPDATE
   const updateMutation = useMutation({
     mutationFn: async () => {
@@ -284,42 +281,33 @@ export default function EmployeesPage() {
   return (
     <div className="min-h-screen bg-gray-100 ">
       {/*  NAVBAR */}
-      
-        <Navbar />
+
+      <Navbar />
       {/* HEADING BEFORE TABLE  */}
 
       {/*  TOP HEADER */}
       <div className="w-full px-8 py-3 flex items-center justify-between">
-        
-        
         {/* Left */}
         <h1 className="text-lg font-semibold text-gray-800">Employees</h1>
 
-       
-       
         {/* Right Icons Section */}
         <div className="flex items-center gap-2">
-          
-          
           {/* Grid */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
             <LayoutGrid size={18} className="text-gray-600" />
           </div>
 
-          
           {/* User  */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
             <UserCheck size={18} className="text-gray-600" />
           </div>
 
-         
           {/* Active Employees*/}
           <div className="flex items-center gap-2 bg-black text-white px-5 py-2 rounded-full shadow-sm">
             <Users size={16} />
             <span className="text-sm font-medium">Employees</span>
           </div>
 
-         
           {/* Bell */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
             <Bell size={18} className="text-gray-600" />
@@ -330,7 +318,6 @@ export default function EmployeesPage() {
             <CalendarDays size={18} className="text-gray-600" />
           </div>
 
-         
           {/* Umbrella */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
             <Umbrella size={18} className="text-gray-600" />
@@ -343,12 +330,8 @@ export default function EmployeesPage() {
         </div>
       </div>
 
-
-
-
       {/*  TABLE  */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
-        
         {/* Tabs  */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-4 border-b">
           <div className="flex flex-wrap gap-2">
@@ -385,10 +368,16 @@ export default function EmployeesPage() {
                 className="text-gray-600 cursor-pointer hover:text-black"
                 size={18}
               />
+              <button
+                onClick={() => setShowModal(true)}
+                className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800"
+              >
+                <Plus size={14} />
+                New
+              </button>
             </div>
           </div>
         </div>
-
 
         {/* FILTER  */}
         {showFilters && (
@@ -404,7 +393,6 @@ export default function EmployeesPage() {
               />
             </div>
 
-          
             {/* Expiry  */}
             <div className="flex flex-col">
               <label className="text-xs text-gray-500 mb-1">Expiry Date</label>
@@ -418,7 +406,6 @@ export default function EmployeesPage() {
           </div>
         )}
 
-       
         {/*  TABLE */}
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -435,29 +422,28 @@ export default function EmployeesPage() {
             </thead>
 
             <tbody>
-  {isLoading ? (
-    <tr>
-      <td colSpan={7} className="p-8 text-center text-gray-400">
-        Loading…
-      </td>
-    </tr>
-  ) : data?.length === 0 ? (
-    <tr>
-      <td colSpan={7} className="p-8 text-center text-gray-400">
-        No employees found
-      </td>
-    </tr>
-  ) : (
-    data?.map((emp) => {
-      const visaInfo = getVisaInfo(emp);
-      const idProofUrl = fileUrl(emp.idProof);
+              {isLoading ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-gray-400">
+                    Loading…
+                  </td>
+                </tr>
+              ) : data?.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-gray-400">
+                    No employees found
+                  </td>
+                </tr>
+              ) : (
+                data?.map((emp) => {
+                  const visaInfo = getVisaInfo(emp);
+                  const idProofUrl = fileUrl(emp.idProof);
 
-      return (
-        <tr
-          key={emp.id}
-          className="border-t hover:bg-gray-50 transition-colors"
-        >
-
+                  return (
+                    <tr
+                      key={emp.id}
+                      className="border-t hover:bg-gray-50 transition-colors"
+                    >
                       {/*  EMPLOYEE:*/}
                       <td className="p-4">
                         <div className="flex items-center gap-3">
@@ -479,13 +465,11 @@ export default function EmployeesPage() {
                         <div className="text-xs text-gray-400">{emp.type}</div>
                       </td>
 
-                     
                       {/*  JOINING   */}
                       <td className="p-4 text-gray-700">
                         {formatDate(emp.createdAt)}
                       </td>
 
-                      
                       {/*  VISA STATUS  */}
                       <td className="p-4">
                         <div className={`font-medium ${visaInfo.colorClass}`}>
@@ -499,13 +483,11 @@ export default function EmployeesPage() {
                         )}
                       </td>
 
-                     
                       {/* EXPERIENCE*/}
                       <td className="p-4 text-gray-700">
                         {calcExperience(emp.createdAt)}
                       </td>
 
-                      
                       {/* PROOF  */}
                       <td className="p-4 text-center">
                         {idProofUrl ? (
@@ -523,7 +505,6 @@ export default function EmployeesPage() {
                         )}
                       </td>
 
-                     
                       {/*  ACTION  */}
                       <td className="p-4">
                         <div className="flex gap-3 items-center">
@@ -560,7 +541,6 @@ export default function EmployeesPage() {
         </div>
       </div>
 
-     
       {/*  IMAGE  */}
       {previewImage && (
         <div
@@ -575,7 +555,6 @@ export default function EmployeesPage() {
         </div>
       )}
 
-     
       {/*  EDIT  */}
       {editEmployee && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -651,6 +630,11 @@ export default function EmployeesPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* REGISTER MODAL */}
+      {showModal && (
+        <RegisterEmployeeModal onClose={() => setShowModal(false)} />
       )}
     </div>
   );
