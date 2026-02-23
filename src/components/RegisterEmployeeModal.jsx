@@ -4,7 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";   
 
-const RegisterEmployeeModal = ({ onClose }) => {
+const RegisterEmployeeModal = ({ onClose, refresh }) => {
   const navigate = useNavigate();   
 
   const [formData, setFormData] = useState({
@@ -98,7 +98,7 @@ const handleSubmit = (e) => {
       if (response.data.success) {
         toast.success("Employee registered successfully!");
         onClose();
-        navigate("/dashboard");
+        refresh();
       }
     })
     .catch((error) => {

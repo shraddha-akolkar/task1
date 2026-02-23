@@ -634,7 +634,20 @@ export default function EmployeesPage() {
 
       {/* REGISTER MODAL */}
       {showModal && (
-        <RegisterEmployeeModal onClose={() => setShowModal(false)} />
+        <RegisterEmployeeModal
+          onClose={() => setShowModal(false)}
+          refresh={() =>
+            queryClient.invalidateQueries({
+              queryKey: [
+                "employees",
+                activeTab,
+                search,
+                joiningDate,
+                expiryDate,
+              ],
+            })
+          }
+        />
       )}
     </div>
   );
