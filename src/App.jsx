@@ -24,9 +24,9 @@ function App() {
       <Toaster position="top-right" reverseOrder={false} />
       <Routes>
         {/* Default route */}
-        <Route path="/" element={<RegisterEmployeeModal />} />
+        <Route path="/" element={<Login />} />
 
-        <Route path="/login" element={<Login />} />
+        <Route path="/RegisterEmployeeModal" element={<RegisterEmployeeModal />} />
 
         {/* <Route 
         path="/employees" 
@@ -56,8 +56,14 @@ function App() {
         />
 
         <Route path="/register" element={<RegisterEmployeeModal />} />
-        <Route path="/employee-dashboard" element={<EmployeesPage />} />
-      </Routes>
+<Route
+  path="/employee-dashboard"
+  element={
+    <ProtectedRoute>
+      <EmployeesPage />
+    </ProtectedRoute>
+  }
+/>      </Routes>
     </>
   );
 }

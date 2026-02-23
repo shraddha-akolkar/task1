@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import logo from "../assets/Logo.png";
+import Navbar from "./Navbar";
+
 
 const API_BASE_URL = "http://localhost:5000/api";
 
-/* ---------------- ICONS ---------------- */
+/*  ICONS  */
 
 const EditIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1976D2" strokeWidth="2">
@@ -26,12 +28,9 @@ const EyeIcon = () => (
   </svg>
 );
 
-/* ---------------- HELPERS ---------------- */
+/*  Calculate experience */
 
-/**
- * Calculate total experience from createdAt (registration date) to today.
- * Returns a human-readable string like "1 yr 3 mos" or "4 mos 12 days".
- */
+
 function calcExperience(createdAt) {
   if (!createdAt) return "—";
 
@@ -61,7 +60,7 @@ function calcExperience(createdAt) {
 }
 
 /**
- * Format a date string to DD/MM/YYYY.
+ * date string to DD/MM/YYYY.
  */
 function formatDate(dateStr) {
   if (!dateStr) return "—";
@@ -71,7 +70,7 @@ function formatDate(dateStr) {
 }
 
 /**
- * Determine visa display info based on visaExpiringOn date.
+ * visa display info based on visaExpiringOn date.
  */
 function getVisaInfo(emp) {
   const { visaStatus, visaExpiringOn } = emp;
@@ -134,11 +133,11 @@ function InitialsAvatar({ name, hidden }) {
   );
 }
 
-/* ============================================================
-   AVATAR — shows picture; falls back to initials on error
+/* 
+   AVATAR — 
    
 
-   ============================================================ */
+    */
 function EmployeeAvatar({ emp }) {
   const [imgFailed, setImgFailed] = useState(false);
   const picUrl = fileUrl(emp.employeePicture);
@@ -157,9 +156,9 @@ function EmployeeAvatar({ emp }) {
   );
 }
 
-/* ============================================================
+/* 
    MAIN COMPONENT
-   ============================================================ */
+    */
 
 export default function EmployeesPage() {
   const [activeTab, setActiveTab] = useState("All Employee");
@@ -172,7 +171,7 @@ export default function EmployeesPage() {
 
   const tabs = ["All Employee", "Payroll", "Staff", "Contract"];
 
-  /* ---------------- FETCH ---------------- */
+  /*  FETCH  */
 
   const loadEmployees = useCallback(async () => {
     setLoading(true);
@@ -196,7 +195,7 @@ export default function EmployeesPage() {
     loadEmployees();
   }, [loadEmployees]);
 
-  /* ---------------- CLIENT-SIDE SEARCH ---------------- */
+  /*  CLIENT-SIDE SEARCH  */
 
   const filtered = employees.filter((emp) => {
     if (!search.trim()) return true;
@@ -208,7 +207,7 @@ export default function EmployeesPage() {
     );
   });
 
-  /* ---------------- DELETE ---------------- */
+  /*  DELETE  */
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this employee?")) return;
@@ -216,7 +215,7 @@ export default function EmployeesPage() {
     loadEmployees();
   };
 
-  /* ---------------- EDIT ---------------- */
+  /*  EDIT  */
 
   const handleEdit = (emp) => {
     setEditEmployee(emp);
@@ -242,25 +241,13 @@ export default function EmployeesPage() {
     loadEmployees();
   };
 
-  /* ---------------- UI ---------------- */
+  /*  UI  */
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-100 ">
 
-      {/* 🔹 NAVBAR */}
-      <div className="flex items-center justify-between mb-6">
-        <img src={logo} alt="logo" className="h-8" />
-
-        <div className="flex gap-6 bg-white rounded-full px-6 py-2 shadow">
-          <button className="bg-black text-white px-4 py-1 rounded-full text-sm">
-            Portal
-          </button>
-          <button className="text-gray-600 text-sm">Project Management</button>
-          <button className="text-gray-600 text-sm">Sales</button>
-          <button className="text-gray-600 text-sm">Accounts</button>
-        </div>
-      </div>
-
+            <Navbar />
+      
       {/* 🔹 TABLE CONTAINER */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
 
@@ -324,7 +311,7 @@ export default function EmployeesPage() {
                   return (
                     <tr key={emp.id} className="border-t hover:bg-gray-50 transition-colors">
 
-                      {/* ── EMPLOYEE: avatar + name + id ── */}
+                      {/*  EMPLOYEE: avatar + name + id  */}
                       <td className="p-4">
                         <div className="flex items-center gap-3">
                           <EmployeeAvatar emp={emp} />
@@ -335,18 +322,18 @@ export default function EmployeesPage() {
                         </div>
                       </td>
 
-                      {/* ── DESIGNATION + TYPE ── */}
+                      {/*  DESIGNATION + TYPE  */}
                       <td className="p-4">
                         <div className="text-gray-800">{emp.designation}</div>
                         <div className="text-xs text-gray-400">{emp.type}</div>
                       </td>
 
-                      {/* ── JOINING DATE ── */}
+                      {/*  JOINING DATE  */}
                       <td className="p-4 text-gray-700">
                         {formatDate(emp.createdAt)}
                       </td>
 
-                      {/* ── VISA STATUS ── */}
+                      {/*  VISA STATUS  */}
                       <td className="p-4">
                         <span className={`font-medium ${visaInfo.colorClass}`}>
                           {visaInfo.label}
@@ -357,12 +344,12 @@ export default function EmployeesPage() {
                         )}
                       </td>
 
-                      {/* ── TOTAL EXPERIENCE (calculated from createdAt) ── */}
+                      {/*  TOTAL EXPERIENCE (calculated from createdAt)  */}
                       <td className="p-4 text-gray-700">
                         {calcExperience(emp.createdAt)}
                       </td>
 
-                      {/* ── ID PROOF ── */}
+                      {/*  ID PROOF  */}
                       <td className="p-4 text-center">
                         {idProofUrl ? (
                           <button
@@ -377,7 +364,7 @@ export default function EmployeesPage() {
                         )}
                       </td>
 
-                      {/* ── ACTION ── */}
+                      {/*  ACTION  */}
                       <td className="p-4">
                         <div className="flex gap-3 items-center">
                           <button
@@ -406,7 +393,7 @@ export default function EmployeesPage() {
         </div>
       </div>
 
-      {/* ── IMAGE PREVIEW MODAL ── */}
+      {/*  IMAGE PREVIEW MODAL  */}
       {previewImage && (
         <div
           onClick={() => setPreviewImage(null)}
@@ -420,7 +407,7 @@ export default function EmployeesPage() {
         </div>
       )}
 
-      {/* ── EDIT MODAL ── */}
+      {/*  EDIT MODAL  */}
       {editEmployee && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">

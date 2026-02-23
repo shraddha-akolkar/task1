@@ -30,7 +30,7 @@ const RegisterEmployeeModal = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // ================= VALIDATION =================
+  // VALIDATION 
   const validateForm = () => {
     const newErrors = {};
 
@@ -53,7 +53,7 @@ const RegisterEmployeeModal = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // ================= INPUT HANDLER =================
+  // INPUT  
   const handleChange = (e) => {
   const { name, value } = e.target;
 
@@ -71,7 +71,7 @@ const RegisterEmployeeModal = () => {
 };
 
 
-  // ================= FILE HANDLER =================
+  // FILE  
 const handleFileChange = (e, fieldName) => {
   const file = e.target.files[0];
 
@@ -98,7 +98,7 @@ const handleFileChange = (e, fieldName) => {
   }
 };
 
-  // ================= SUBMIT =================
+  // SUBMIT 
 const handleSubmit = async (e) => {
   e.preventDefault();
   if (!validateForm()) return;
@@ -121,9 +121,12 @@ const handleSubmit = async (e) => {
     );
 
     if (response.data.success) {
-      toast.success("Employee registered successfully!");
-      navigate("/login");
-    }
+  toast.success("Employee registered successfully!");
+
+ 
+
+  navigate("/dashboard");
+}
 
   } catch (error) {
     if (error.response?.data?.errors) {
@@ -207,7 +210,7 @@ const handleSubmit = async (e) => {
 export default RegisterEmployeeModal;
 
 
-// ================= REUSABLE COMPONENTS =================
+// REUSABLE COMPONENTS 
 
 const Input = ({ label, name, value, onChange, error }) => (
   <div>

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
+
 import {
   Search,
   Filter,
@@ -22,7 +24,7 @@ import {
 
 import graphImg from "../assets/time.png";
 
-// ── profile images ──────────────────────────────────────────────
+//  profile images 
 import emp1   from "../assets/user1.png";
 import emp2   from "../assets/user1.png";
 import emp3   from "../assets/user1.png";
@@ -33,7 +35,7 @@ import leave1 from "../assets/employees 1.png";
 import leave2 from "../assets/employees 1.png";
 import leave3 from "../assets/employees 1.png";
 
-// ── attendance data ─────────────────────────────────────────────
+//  attendance data 
 const attendanceRows = [
   {
     img: emp1, name: "Omar Al-Farsi",   id: "EM01",
@@ -55,16 +57,20 @@ const leaveData = [
   { img: leave1, name: "Khalid Al-Maamari", role: "Technician", period: "05 Jan - 15 Feb, 2025" },
 ];
 
-// ────────────────────────────────────────────────────────────────
+// 
 const AdminPortal = () => {
   const [activeLeaveTab, setActiveLeaveTab] = useState("On Leave");
   const leaveTabs = ["On Leave", "On Site", "In Factory", "New"];
+  const navigate = useNavigate();
+  const handleUserClick = () =>{
+  navigate("/RegisterEmployeeModal");
+  } 
 
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
 
-      {/* ── TOP HEADER BAR ── */}
+      {/*  TOP HEADER BAR  */}
       <div className="flex justify-end items-center gap-3 px-4 pt-4 pb-1">
         <button className="flex items-center gap-2 bg-black text-white px-4 py-1.5 rounded-full text-sm font-medium">
           <LayoutDashboard size={15} />
@@ -72,14 +78,15 @@ const AdminPortal = () => {
         </button>
         <div className="flex items-center gap-3 text-gray-500">
           <UserCog size={18} className="cursor-pointer hover:text-gray-800 transition-colors" />
-          <UsersRound size={18} className="cursor-pointer hover:text-gray-800 transition-colors" />
+          <UsersRound size={18} className="cursor-pointer hover:text-gray-800 transition-colors" 
+          onClick={() => handleUserClick()}/>
           <User size={18} className="cursor-pointer hover:text-gray-800 transition-colors" />
           <CalendarDays size={18} className="cursor-pointer hover:text-gray-800 transition-colors" />
         </div>
         <span className="text-sm font-medium text-gray-700">Admin</span>
       </div>
 
-      {/* ── DASHBOARD TOP ── */}
+      {/*  DASHBOARD TOP  */}
       <div className="flex gap-3 p-4 overflow-x-auto">
 
         {/* In-Time / Gauge card */}
@@ -108,7 +115,7 @@ const AdminPortal = () => {
         <DashboardCard icon={<Building2 size={22} />} title="In Factory"         value="6"  />
       </div>
 
-      {/* ── MAIN SECTION ── */}
+      {/*  MAIN SECTION  */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 px-4 pb-6">
 
         {/* Attendance table */}
@@ -283,7 +290,7 @@ const AdminPortal = () => {
   );
 };
 
-// ── Dashboard Card ──────────────────────────────────────────────
+//  Dashboard Card 
 const DashboardCard = ({ icon, title, value }) => (
   <div className="flex-1 bg-white rounded-2xl p-5 shadow-sm border border-gray-200 flex flex-col justify-between min-w-[110px]">
     <div className="text-gray-700 mb-5">{icon}</div>
