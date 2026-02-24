@@ -15,6 +15,7 @@ import {
   Umbrella,
   Building2,
   Plus,
+  UserCog,
 } from "lucide-react";
 import Navbar from "./Navbar";
 
@@ -95,7 +96,7 @@ function calcExperience(createdAt) {
   return parts.join(" ") || "< 1 day";
 }
 
-/** Format a date DD/MM/YYYY */
+/**date DD/MM/YYYY */
 
 function formatDate(dateStr) {
   if (!dateStr) return "—";
@@ -104,7 +105,7 @@ function formatDate(dateStr) {
   return d.toLocaleDateString("en-GB");
 }
 
-/** Determine visa display info based on visaExpiringOn date.*/
+/** visa display info based on visaExpiringOn date.*/
 
 function getVisaInfo(emp) {
   const { visaExpiringOn } = emp;
@@ -283,7 +284,6 @@ export default function EmployeesPage() {
       {/*  NAVBAR */}
 
       <Navbar />
-      {/* HEADING BEFORE TABLE  */}
 
       {/*  TOP HEADER */}
       <div className="w-full px-8 py-3 flex items-center justify-between">
@@ -294,14 +294,21 @@ export default function EmployeesPage() {
         <div className="flex items-center gap-2">
           {/* Grid */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
-            <LayoutGrid size={18} className="text-gray-600" />
+            <LayoutGrid
+              size={18}
+              className="text-gray-600"
+              onClick={() => navigate("/adminportal")}
+            />
           </div>
 
           {/* User  */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer hover:bg-white transition">
-            <UserCheck size={18} className="text-gray-600" />
+            <UserCog
+              size={18}
+              className="text-gray-600"
+              onClick={() => navigate("/attendance")}
+            />
           </div>
-
           {/* Active Employees*/}
           <div className="flex items-center gap-2 bg-black text-white px-5 py-2 rounded-full shadow-sm">
             <Users size={16} />

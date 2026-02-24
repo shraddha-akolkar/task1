@@ -22,10 +22,8 @@ const Attendance = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
-  
   const tabs = ["Portal", "Project Management", "Sales", "Accounts"];
 
- 
   const [activeTab, setActiveTab] = useState(tabs[0]);
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -46,9 +44,16 @@ const Attendance = () => {
             Attendance
           </div>
 
-          <UsersRound size={18} className="cursor-pointer hover:text-gray-800" />
+          <UsersRound
+            size={18}
+            className="cursor-pointer hover:text-gray-800"
+            onClick={() => navigate("/dashboard")}
+          />
           <User size={18} className="cursor-pointer hover:text-gray-800" />
-          <CalendarDays size={18} className="cursor-pointer hover:text-gray-800" />
+          <CalendarDays
+            size={18}
+            className="cursor-pointer hover:text-gray-800"
+          />
         </div>
 
         <span className="text-sm font-medium text-gray-700">Admin</span>
@@ -58,27 +63,24 @@ const Attendance = () => {
       <div className="px-6 mt-4">
         <div className="bg-white rounded-xl shadow p-3 overflow-x-auto">
           <div className="flex items-center justify-between min-w-[900px]">
-
-            
-<div className="flex items-center gap-2 text-sm">
-  {tabs.map((tab) => (
-    <button
-      key={tab}
-      onClick={() => setActiveTab(tab)}
-      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-        activeTab === tab
-          ? "bg-black text-white"
-          : "bg-gray-100 text-gray-600 hover:text-gray-800"
-      }`}
-    >
-      {tab}
-    </button>
-  ))}
-</div>
+            <div className="flex items-center gap-2 text-sm">
+              {tabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
+                    activeTab === tab
+                      ? "bg-black text-white"
+                      : "bg-gray-100 text-gray-600 hover:text-gray-800"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
 
             {/* RIGHT ACTIONS */}
             <div className="flex items-center gap-3">
-
               <button className="flex items-center gap-2 border px-3 py-1.5 rounded-lg text-sm hover:bg-gray-50">
                 Bulk Update
               </button>
@@ -104,7 +106,6 @@ const Attendance = () => {
                 <Plus size={14} />
                 New
               </button>
-
             </div>
           </div>
         </div>

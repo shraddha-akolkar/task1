@@ -10,7 +10,7 @@ const Login = () => {
 
   const [formData, setFormData] = useState({
     id: "",
-    password: ""
+    password: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -47,7 +47,7 @@ const Login = () => {
 
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     if (errors[name]) {
@@ -70,7 +70,7 @@ const Login = () => {
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/login",
-        formData
+        formData,
       );
 
       if (response.data.success) {
@@ -82,12 +82,11 @@ const Login = () => {
         if (response.data.role === "admin") {
           navigate("/adminportal");
         } else {
-          navigate("/dashboard");
+          navigate("/employee-dashboard");
         }
       }
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Login failed";
+      const message = error.response?.data?.message || "Login failed";
       setApiError(message);
       toast.error(message);
     } finally {
@@ -115,7 +114,6 @@ const Login = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-
           <div>
             <label className="text-sm text-gray-700 font-medium">
               Employee ID*

@@ -25,7 +25,7 @@ import {
 
 import graphImg from "../assets/time.png";
 
-// profile images
+// profile
 import emp1 from "../assets/user1.png";
 import leave1 from "../assets/employees 1.png";
 
@@ -68,7 +68,7 @@ const AdminPortal = () => {
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
 
-      {/* TOP HEADER BAR */}
+      {/* HEADER */}
       <div className="flex justify-end items-center gap-3 px-4 pt-4 pb-1">
         <button className="flex items-center gap-2 bg-black text-white px-4 py-1.5 rounded-full text-sm font-medium">
           <LayoutDashboard size={15} />
@@ -85,7 +85,7 @@ const AdminPortal = () => {
           <UsersRound
             size={18}
             className="cursor-pointer hover:text-gray-800 transition-colors"
-             onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/dashboard")}
           />
 
           <User
@@ -101,7 +101,7 @@ const AdminPortal = () => {
         <span className="text-sm font-medium text-gray-700">Admin</span>
       </div>
 
-      {/* DASHBOARD TOP */}
+      {/* DASHBOARD  */}
       <div className="flex gap-3 p-4 overflow-x-auto">
         {/* In-Time Card */}
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 flex items-center justify-between min-w-[260px]">
@@ -230,7 +230,7 @@ const AdminPortal = () => {
         </div>
       </div>
 
-      {/* 🔥 MODAL RENDER */}
+      {/*MODAL RENDER */}
       {showModal && (
         <RegisterEmployeeModal onClose={() => setShowModal(false)} />
       )}
