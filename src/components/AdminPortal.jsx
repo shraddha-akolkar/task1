@@ -103,7 +103,6 @@ const AdminPortal = () => {
 
       {/* DASHBOARD  */}
       <div className="flex gap-3 p-4 overflow-x-auto">
-        {/* In-Time Card */}
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 flex items-center justify-between min-w-[260px]">
           <div>
             <p className="text-gray-400 text-xs">In Time</p>
@@ -122,7 +121,6 @@ const AdminPortal = () => {
           </div>
         </div>
 
-        {/* Stat Cards */}
         <DashboardCard
           icon={<Users size={22} />}
           title="Assigned Employee"
@@ -148,7 +146,6 @@ const AdminPortal = () => {
 
       {/* MAIN SECTION */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 px-4 pb-6">
-        {/* Attendance Table */}
         <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm p-5">
           <h2 className="text-base font-semibold mb-4">Attendance</h2>
 
@@ -207,7 +204,7 @@ const AdminPortal = () => {
           </div>
         </div>
 
-        {/* Leave Panel */}
+        {/* Leave  */}
         <div className="bg-white rounded-2xl shadow-sm p-5">
           <h2 className="text-base font-semibold mb-4">On Leave</h2>
 

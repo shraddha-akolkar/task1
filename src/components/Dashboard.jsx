@@ -287,7 +287,6 @@ export default function EmployeesPage() {
 
       {/*  TOP HEADER */}
       <div className="w-full px-8 py-3 flex items-center justify-between">
-        {/* Left */}
         <h1 className="text-lg font-semibold text-gray-800">Employees</h1>
 
         {/* Right Icons Section */}
@@ -339,7 +338,6 @@ export default function EmployeesPage() {
 
       {/*  TABLE  */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
-        {/* Tabs  */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-4 border-b">
           <div className="flex flex-wrap gap-2">
             {tabs.map((tab) => (
@@ -389,7 +387,6 @@ export default function EmployeesPage() {
         {/* FILTER  */}
         {showFilters && (
           <div className="p-4 border-b bg-gray-50 flex flex-col lg:flex-row gap-4 transition-all duration-300">
-            {/* Joining  */}
             <div className="flex flex-col">
               <label className="text-xs text-gray-500 mb-1">Joining Date</label>
               <input
@@ -400,7 +397,6 @@ export default function EmployeesPage() {
               />
             </div>
 
-            {/* Expiry  */}
             <div className="flex flex-col">
               <label className="text-xs text-gray-500 mb-1">Expiry Date</label>
               <input
@@ -465,19 +461,14 @@ export default function EmployeesPage() {
                           </div>
                         </div>
                       </td>
-
                       {/*  DESIGNATION  */}
                       <td className="p-4">
                         <div className="text-gray-800">{emp.designation}</div>
                         <div className="text-xs text-gray-400">{emp.type}</div>
                       </td>
-
-                      {/*  JOINING   */}
                       <td className="p-4 text-gray-700">
                         {formatDate(emp.createdAt)}
                       </td>
-
-                      {/*  VISA STATUS  */}
                       <td className="p-4">
                         <div className={`font-medium ${visaInfo.colorClass}`}>
                           {visaInfo.label}
@@ -489,13 +480,10 @@ export default function EmployeesPage() {
                           </div>
                         )}
                       </td>
-
-                      {/* EXPERIENCE*/}
                       <td className="p-4 text-gray-700">
                         {calcExperience(emp.createdAt)}
                       </td>
-
-                      {/* PROOF  */}
+                      \{" "}
                       <td className="p-4 text-center">
                         {idProofUrl ? (
                           <button
@@ -511,7 +499,6 @@ export default function EmployeesPage() {
                           </span>
                         )}
                       </td>
-
                       {/*  ACTION  */}
                       <td className="p-4">
                         <div className="flex gap-3 items-center">
