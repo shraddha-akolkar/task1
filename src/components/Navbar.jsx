@@ -11,16 +11,33 @@ export default function Navbar() {
 
   return (
     <div>
-      <nav className="w-full bg-gray-100 border-b border-gray-100 px-4 md:px-6 py-3">
+      <nav className="w-full bg-gray-100 px-4 md:px-6 py-3">
         <div className="flex items-center justify-between">
-
           {/* Logo */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div
+            className="flex items-center gap-2 flex-shrink-0 
+                          border-b border-gray-200 
+                          shadow-[0_4px_6px_rgba(0,0,0,0.06)] pb-2"
+          >
             <img src={logo} alt="Logo" className="h-6 w-auto" />
           </div>
 
-          {/* Center Tabs — hidden on mobile */}
-          <div className="hidden md:flex items-center gap-1 bg-gray-100 rounded-full px-2 py-1">
+          {/* Left Empty Div - takes remaining space */}
+          <div
+            className="hidden md:block flex-1 h-10 mx-2
+                          bg-white 
+                          border border-gray-200 
+                          border-b-0 
+                          rounded-t-2xl 
+                          shadow-[0_-4px_10px_rgba(0,0,0,0.05)]"
+          ></div>
+
+          {/* Center Tabs */}
+          <div
+            className="hidden md:flex items-center gap-1 bg-gray-100 rounded-full px-2 py-1
+                          border-b border-gray-200 
+                          shadow-[0_4px_6px_rgba(0,0,0,0.06)] pb-2"
+          >
             {tabs.map((tab) => (
               <button
                 key={tab}
@@ -36,39 +53,46 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Right Section */}
-          <div className="flex items-center gap-3">
-            {/* Icons — hidden on small mobile */}
-            {/* <div className="hidden sm:flex items-center gap-3">
-              <Bell className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900 transition-colors" />
-              <Users className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900 transition-colors" />
-              <Building2 className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900 transition-colors" />
-            </div> */}
+          {/* Right Empty Div - takes remaining space */}
+          <div
+            className="hidden md:block flex-1 h-10 mx-2
+                          bg-white 
+                          border border-gray-200 
+                          border-b-0 
+                          rounded-t-2xl 
+                          shadow-[0_-4px_10px_rgba(0,0,0,0.05)]"
+          ></div>
 
-            {/* User — always visible */}
+          {/* Right Section */}
+          <div
+            className="flex items-center gap-3
+                          border-b border-gray-200 
+                          shadow-[0_4px_6px_rgba(0,0,0,0.06)] pb-2"
+          >
             <div className="flex items-center gap-2 cursor-pointer">
               <img
                 src={user1}
                 alt="User"
-                className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                className="w-8 h-8 rounded-full object-cover"
               />
               <span className="hidden sm:block text-sm font-medium text-gray-800 whitespace-nowrap">
                 Amina Al-Farouqi
               </span>
             </div>
 
-            {/* Hamburger — only on mobile */}
             <button
               className="md:hidden p-1 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
               onClick={() => setMobileMenuOpen((prev) => !prev)}
-              aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
           </div>
         </div>
-
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile Dropdown */}
         {mobileMenuOpen && (
           <div className="md:hidden mt-3 pb-2 border-t border-gray-100 pt-3 flex flex-col gap-1">
             {tabs.map((tab) => (
@@ -88,17 +112,27 @@ export default function Navbar() {
               </button>
             ))}
 
-            {/* Icons row on mobile */}
             <div className="sm:hidden flex items-center gap-4 px-4 pt-3 border-t border-gray-100 mt-2">
-              <Bell className="w-5 h-5 text-gray-600 cursor-pointer" />
-              <Users className="w-5 h-5 text-gray-600 cursor-pointer" />
-              <Building2 className="w-5 h-5 text-gray-600 cursor-pointer" />
-              <span className="text-sm font-medium text-gray-800 ml-1">Amina Al-Farouqi</span>
+              <Bell className="w-5 h-5 text-gray-600" />
+              <Users className="w-5 h-5 text-gray-600" />
+              <Building2 className="w-5 h-5 text-gray-600" />
+              <span className="text-sm font-medium text-gray-800 ml-1">
+                Amina Al-Farouqi
+              </span>
             </div>
           </div>
         )}
       </nav>
-
     </div>
   );
+}
+
+{
+  /* 
+  ek laypout page banav - nav takun deyuche ani har page as children pass hoyin 
+  page jikd deshin -parent div la border
+  
+  
+  
+  */
 }

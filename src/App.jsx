@@ -7,6 +7,7 @@ import RegisterEmployeeModal from "./components/RegisterEmployeeModal";
 import EmployeesPage from "./components/EmployeeDashboard";
 import AdminPanel from "./components/AdminPortal";
 import Attendance from "./components/Attendance";
+import Nav from "./components/Nav";
 import { Toaster } from "react-hot-toast";
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -26,9 +27,10 @@ function App() {
       <Routes>
         {/* Default route */}
         <Route path="/" element={<Login />} />
-
-        <Route path="/RegisterEmployeeModal" element={<RegisterEmployeeModal />} />
-
+        <Route
+          path="/RegisterEmployeeModal"
+          element={<RegisterEmployeeModal />}
+        />
         {/* <Route 
         path="/employees" 
         element={
@@ -37,7 +39,6 @@ function App() {
           </ProtectedRoute>
         } 
       /> */}
-
         <Route
           path="/dashboard"
           element={
@@ -46,7 +47,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="/nav"
+          element={
+            <ProtectedRoute>
+              <Nav />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/adminportal"
           element={
@@ -55,7 +63,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/attendance"
           element={
@@ -64,16 +71,16 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route path="/register" element={<RegisterEmployeeModal />} />
-<Route
-  path="/employee-dashboard"
-  element={
-    <ProtectedRoute>
-      <EmployeesPage />
-    </ProtectedRoute>
-  }
-/>      </Routes>
+        <Route
+          path="/employee-dashboard"
+          element={
+            <ProtectedRoute>
+              <EmployeesPage />
+            </ProtectedRoute>
+          }
+        />{" "}
+      </Routes>
     </>
   );
 }
