@@ -8,6 +8,7 @@ import EmployeesPage from "./components/EmployeeDashboard";
 import AdminPanel from "./components/AdminPortal";
 import Attendance from "./components/Attendance";
 import { Toaster } from "react-hot-toast";
+
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");

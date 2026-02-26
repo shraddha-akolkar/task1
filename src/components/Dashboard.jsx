@@ -283,390 +283,401 @@ export default function EmployeesPage() {
 
   return (
     <div className="border-lg">
-      <div className="min-h-screen bg-white rounded-[20px] mx-2">
+      <div className="min-h-screen bg-white rounded-[20px] mx-2 relative  z-14">
+        {" "}
         {/*  NAVBAR */}
-
         <Navbar />
-
         {/*  TOP HEADER */}
-        {/* <div className="w-full px-8 py-1 flex items-center justify-between py-2.5">
-          <h1 className="text-lg font-semibold text-gray-800">Employees</h1>
-          <div className="flex items-right">
-            <div className="w-10 h-10 rounded-full  flex items-center justify-center cursor-pointer hover:bg-white transition">
-              <LayoutGrid
-                size={18}
-                className="text-gray-600"
-                onClick={() => navigate("/adminportal")}
-              />
-            </div>
-
-            
-            <div className="w-10 h-10 rounded-full  flex items-center justify-center cursor-pointer hover:bg-white transition">
-              <UserCog
-                size={18}
-                className="text-gray-600"
-                onClick={() => navigate("/attendance")}
-              />
-            </div>
-            <div className="flex items-center gap-2 bg-black text-white px-5 py-2 rounded-full shadow-sm">
-              <Users size={16} />
-              <span className="text-sm font-medium">Employees</span>
-            </div>
-
-            <div className="w-10 h-10 rounded-full  flex items-center justify-center cursor-pointer hover:bg-white transition">
-              <Bell size={18} className="text-gray-600" />
-            </div>
-
-            <div className="w-10 h-10 rounded-full  flex items-center justify-center cursor-pointer hover:bg-white transition">
-              <CalendarDays size={18} className="text-gray-600" />
-            </div>
-
-        
-            <div className="w-10 h-10 rounded-full  flex items-center justify-center cursor-pointer hover:bg-white transition">
-              <Umbrella size={18} className="text-gray-600" />
-            </div>
-
-        
-            <div className="w-10 h-10 rounded-full  flex items-center justify-center cursor-pointer hover:bg-white transition">
-              <Building2 size={18} className="text-gray-600" />
-            </div>
-          </div>
-        </div> */}
-
-        {/*  TABLE  */}
-        <div
-          className="bg-white rounded-xl shadow overflow-hidden mx-4 
-           "
-        >
+        {/*  TOP HEADER CARD  */}
+        <div className="bg-white border border-gray-100 rounded-xl  pb-3 mb-2 -mt-[0.1rem] relative z-10">
           {" "}
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pt-2 pb-2 px-4">
-            {" "}
-            <div className="flex flex-wrap gap-2 ">
-              {tabs.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-1 rounded-md text-sm ${
-                    activeTab === tab ? "bg-black text-white" : "text-gray-600"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-            {/* Search  */}
-            <div className="flex items-center gap-1.5 w-full lg:w-auto">
-              {/* Search pill */}
-              <div className="flex items-center w-full lg:w-[340px]  border border-gray-200 rounded-full px-4 py-2">
-                <input
-                  type="text"
-                  placeholder="Search employee"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 bg-[#FAFAFA]"
-                />
+          <div className="mx-4 mt-4">
+            <div className="w-full px-8 py-3 flex items-center justify-between">
+              <h1 className="text-lg font-semibold text-gray-800">Employees</h1>
 
-                <div className="w-4 h-4 border-2 border-gray-500 rounded-full relative">
-                  <span className="absolute w-2 h-[2px] bg-gray-500 right-[-5px] bottom-[-3px] rotate-45"></span>
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <LayoutGrid
+                    size={18}
+                    className="text-gray-600"
+                    onClick={() => navigate("/adminportal")}
+                  />
+                </div>
+
+                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <UserCog
+                    size={18}
+                    className="text-gray-600"
+                    onClick={() => navigate("/attendance")}
+                  />
+                </div>
+
+                <div className="flex items-center gap-2 bg-black text-white px-5 py-2 rounded-full shadow-sm">
+                  <Users size={16} />
+                  <span className="text-sm font-medium">Employees</span>
+                </div>
+
+                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <Bell size={18} className="text-gray-600" />
+                </div>
+
+                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <CalendarDays size={18} className="text-gray-600" />
+                </div>
+
+                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <Umbrella size={18} className="text-gray-600" />
+                </div>
+
+                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <Building2 size={18} className="text-gray-600" />
                 </div>
               </div>
-
-              {/* Filter */}
-              <div
-                onClick={() => setShowFilters(!showFilters)}
-                className="w-10 h-10 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition"
-              >
-                <img src={filter} className="w-4 h-4" />
-              </div>
-
-              {/* File */}
-              <div className="w-10 h-10 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                <img src={file} className="w-4 h-4" />
-              </div>
-
-              {/* New button stays same */}
-              <button
-                onClick={() => setShowModal(true)}
-                className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800"
-              >
-                <Plus size={14} />
-                New
-              </button>
             </div>
           </div>
-          {/* FILTER  */}
-          {showFilters && (
-            <div className="p-4 border-b bg-gray-50 flex flex-col lg:flex-row gap-4 transition-all duration-300">
-              <div className="flex flex-col">
-                <label className="text-xs text-gray-500 mb-1">
-                  Joining Date
-                </label>
-                <input
-                  type="date"
-                  value={joiningDate}
-                  onChange={(e) => setJoiningDate(e.target.value)}
-                  className="border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
-                />
-              </div>
-
-              <div className="flex flex-col">
-                <label className="text-xs text-gray-500 mb-1">
-                  Expiry Date
-                </label>
-                <input
-                  type="date"
-                  value={expiryDate}
-                  onChange={(e) => setExpiryDate(e.target.value)}
-                  className="border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
-                />
-              </div>
-            </div>
-          )}
-          {/*  TABLE */}
-          <div className="overflow-x-auto bg-white px-[20px]">
-            <table
-              className="w-full text-[13px] border-separate"
-              style={{ borderSpacing: "0 5px" }}
-            >
-              <thead style={{ background: "#FAFAFA" }}>
-                <tr className=" text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
-                  <th className="font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
-                    EMPLOYEE NAME
-                  </th>
-                  <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
-                    DESIGNATION
-                  </th>
-                  <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
-                    JOINING DATE
-                  </th>
-                  <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
-                    VISA STATUS
-                  </th>
-                  <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
-                    TOTAL EXPERIENCE
-                  </th>
-                  <th className="font-medium px-3 py-[10px] text-center border border-gray-200">
-                    ID PROOF
-                  </th>
-                  <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
-                    ACTION
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {isLoading ? (
-                  <tr>
-                    <td colSpan={7} className="py-5 text-center text-gray-400">
-                      Loading…
-                    </td>
-                  </tr>
-                ) : data?.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="py-5 text-center text-gray-400">
-                      No employees found
-                    </td>
-                  </tr>
-                ) : (
-                  data?.map((emp) => {
-                    const visaInfo = getVisaInfo(emp);
-                    const idProofUrl = fileUrl(emp.idProof);
-
-                    return (
-                      <tr key={emp.id} className="bg-white">
-                        <td className="px-3 py-[4px] border border-[1px] border-gray-200 rounded-l-lg">
-                          <div className="flex items-center gap-1.5">
-                            <EmployeeAvatar emp={emp} />
-                            <div>
-                              <div className="font-medium text-gray-800 leading-tight">
-                                {emp.name}
-                              </div>
-                              <div className="text-[11px] text-gray-400 leading-tight">
-                                IN{emp.id}
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-
-                        <td className="px-3 py-[4px] border border-[1px] border-gray-200 leading-tight">
-                          <div>{emp.designation}</div>
-                          <div className="text-[11px] text-gray-400">
-                            {emp.type}
-                          </div>
-                        </td>
-
-                        <td className="px-3 py-[4px] border border-[1px] border-gray-200">
-                          {formatDate(emp.createdAt)}
-                        </td>
-
-                        <td className="px-3 py-[4px] border border-[1px] border-gray-200">
-                          <div
-                            className={`${visaInfo.colorClass} leading-tight`}
-                          >
-                            {visaInfo.label}
-                          </div>
-                          {visaInfo.subLabel && (
-                            <div className="text-[11px] text-orange-500 leading-tight">
-                              {visaInfo.subLabel}
-                            </div>
-                          )}
-                        </td>
-
-                        <td className="px-3 py-[4px] border border-[1px] border-gray-200">
-                          {calcExperience(emp.createdAt)}
-                        </td>
-
-                        <td className="px-3 py-[4px] text-center border border-[1px] border-gray-200">
-                          {idProofUrl ? (
-                            <button onClick={() => setPreviewImage(idProofUrl)}>
-                              <EyeIcon />
-                            </button>
-                          ) : (
-                            <span className="text-red-500 text-[11px]">
-                              Missing
-                            </span>
-                          )}
-                        </td>
-
-                        <td className="px-3 py-[4px] border border-[1px] border-gray-200 rounded-r-lg">
-                          <div className="flex gap-2">
-                            <button onClick={() => handleEdit(emp)}>
-                              <EditIcon />
-                            </button>
-                            <button
-                              onClick={() => {
-                                if (window.confirm("Delete this employee?")) {
-                                  deleteMutation.mutate(emp.id);
-                                }
-                              }}
-                            >
-                              <DeleteIcon />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/*  IMAGE  */}
-        {previewImage && (
+          {/*  TABLE  */}
           <div
-            onClick={() => setPreviewImage(null)}
-            className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+            className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2
+           "
           >
-            <img
-              src={previewImage}
-              alt="ID Proof"
-              className="max-h-[80%] max-w-[80%] rounded-lg shadow-2xl"
-            />
-          </div>
-        )}
-
-        {/*  EDIT  */}
-        {editEmployee && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-            <div
-              className="bg-white rounded-xl shadow overflow-hidden mx-1 p-4 
-            border-l-2 border-r-2 border-b-2 border-red-500 min-h-[calc(100vh-90px)]"
-            >
+            {" "}
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pt-2 pb-2 px-4">
               {" "}
-              <h2 className="text-lg font-bold mb-4 text-gray-800">
-                Edit Employee
-              </h2>
-              <div className="flex flex-col gap-3">
-                <div>
-                  <label className="text-xs text-gray-500 mb-1 block">
-                    Name
-                  </label>
-                  <input
-                    name="name"
-                    value={formData.name || ""}
-                    onChange={handleChange}
-                    className="w-full border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs text-gray-500 mb-1 block">
-                    Designation
-                  </label>
-                  <input
-                    name="designation"
-                    value={formData.designation || ""}
-                    onChange={handleChange}
-                    className="w-full border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs text-gray-500 mb-1 block">
-                    Type
-                  </label>
-                  <select
-                    name="type"
-                    value={formData.type || ""}
-                    onChange={handleChange}
-                    className="w-full border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
+              <div className="flex flex-wrap gap-2 ">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-4 py-1 rounded-md text-sm ${
+                      activeTab === tab
+                        ? "bg-black text-white"
+                        : "text-gray-600"
+                    }`}
                   >
-                    <option value="Payroll">Payroll</option>
-                    <option value="Staff">Staff</option>
-                    <option value="Contract">Contract</option>
-                  </select>
+                    {tab}
+                  </button>
+                ))}
+              </div>
+              {/* Search  */}
+              <div className="flex items-center gap-1.5 w-full lg:w-auto">
+                {/* Search pill */}
+                <div className="flex items-center w-full lg:w-[340px]  border border-gray-200 rounded-full px-4 py-2">
+                  <input
+                    type="text"
+                    placeholder="Search employee"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 bg-[#FAFAFA]"
+                  />
+
+                  <div className="w-4 h-4 border-2 border-gray-500 rounded-full relative">
+                    <span className="absolute w-2 h-[2px] bg-gray-500 right-[-5px] bottom-[-3px] rotate-45"></span>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="text-xs text-gray-500 mb-1 block">
-                    Visa Expiring On
+                {/* Filter */}
+                <div
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="w-10 h-10 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition"
+                >
+                  <img src={filter} className="w-4 h-4" />
+                </div>
+
+                {/* File */}
+                <div className="w-10 h-10 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <img src={file} className="w-4 h-4" />
+                </div>
+
+                {/* New button stays same */}
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800"
+                >
+                  <Plus size={14} />
+                  New
+                </button>
+              </div>
+            </div>
+            {/* FILTER  */}
+            {showFilters && (
+              <div className="p-4 border-b bg-gray-50 flex flex-col lg:flex-row gap-4 transition-all duration-300">
+                <div className="flex flex-col">
+                  <label className="text-xs text-gray-500 mb-1">
+                    Joining Date
                   </label>
                   <input
                     type="date"
-                    name="visaExpiringOn"
-                    value={formData.visaExpiringOn || ""}
-                    onChange={handleChange}
-                    className="w-full border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
+                    value={joiningDate}
+                    onChange={(e) => setJoiningDate(e.target.value)}
+                    className="border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="text-xs text-gray-500 mb-1">
+                    Expiry Date
+                  </label>
+                  <input
+                    type="date"
+                    value={expiryDate}
+                    onChange={(e) => setExpiryDate(e.target.value)}
+                    className="border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
                   />
                 </div>
               </div>
-              <div className="flex justify-end gap-3 mt-6">
-                <button
-                  onClick={() => setEditEmployee(null)}
-                  className="px-5 py-2 rounded-lg text-sm text-gray-600 border border-[1.5px] border-gray-200 hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => updateMutation.mutate()}
-                  className="px-5 py-2 rounded-lg text-sm bg-black text-white hover:bg-gray-800"
-                >
-                  Save Changes
-                </button>
-              </div>
+            )}
+            {/*  TABLE */}
+            <div className="overflow-x-auto bg-white px-[20px]">
+              <table
+                className="w-full text-[13px] border-separate"
+                style={{ borderSpacing: "0 5px" }}
+              >
+                <thead style={{ background: "#FAFAFA" }}>
+                  <tr className=" text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
+                    <th className="font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
+                      EMPLOYEE NAME
+                    </th>
+                    <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      DESIGNATION
+                    </th>
+                    <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      JOINING DATE
+                    </th>
+                    <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      VISA STATUS
+                    </th>
+                    <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      TOTAL EXPERIENCE
+                    </th>
+                    <th className="font-medium px-3 py-[10px] text-center border border-gray-200">
+                      ID PROOF
+                    </th>
+                    <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
+                      ACTION
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {isLoading ? (
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="py-5 text-center text-gray-400"
+                      >
+                        Loading…
+                      </td>
+                    </tr>
+                  ) : data?.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="py-5 text-center text-gray-400"
+                      >
+                        No employees found
+                      </td>
+                    </tr>
+                  ) : (
+                    data?.map((emp) => {
+                      const visaInfo = getVisaInfo(emp);
+                      const idProofUrl = fileUrl(emp.idProof);
+
+                      return (
+                        <tr key={emp.id} className="bg-white">
+                          <td className="px-3 py-[4px] border border-[1px] border-gray-200 rounded-l-lg">
+                            <div className="flex items-center gap-1.5">
+                              <EmployeeAvatar emp={emp} />
+                              <div>
+                                <div className="font-medium text-gray-800 leading-tight">
+                                  {emp.name}
+                                </div>
+                                <div className="text-[11px] text-gray-400 leading-tight">
+                                  IN{emp.id}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+
+                          <td className="px-3 py-[4px] border border-[1px] border-gray-200 leading-tight">
+                            <div>{emp.designation}</div>
+                            <div className="text-[11px] text-gray-400">
+                              {emp.type}
+                            </div>
+                          </td>
+
+                          <td className="px-3 py-[4px] border border-[1px] border-gray-200">
+                            {formatDate(emp.createdAt)}
+                          </td>
+
+                          <td className="px-3 py-[4px] border border-[1px] border-gray-200">
+                            <div
+                              className={`${visaInfo.colorClass} leading-tight`}
+                            >
+                              {visaInfo.label}
+                            </div>
+                            {visaInfo.subLabel && (
+                              <div className="text-[11px] text-orange-500 leading-tight">
+                                {visaInfo.subLabel}
+                              </div>
+                            )}
+                          </td>
+
+                          <td className="px-3 py-[4px] border border-[1px] border-gray-200">
+                            {calcExperience(emp.createdAt)}
+                          </td>
+
+                          <td className="px-3 py-[4px] text-center border border-[1px] border-gray-200">
+                            {idProofUrl ? (
+                              <button
+                                onClick={() => setPreviewImage(idProofUrl)}
+                              >
+                                <EyeIcon />
+                              </button>
+                            ) : (
+                              <span className="text-red-500 text-[11px]">
+                                Missing
+                              </span>
+                            )}
+                          </td>
+
+                          <td className="px-3 py-[4px] border border-[1px] border-gray-200 rounded-r-lg">
+                            <div className="flex gap-2">
+                              <button onClick={() => handleEdit(emp)}>
+                                <EditIcon />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (window.confirm("Delete this employee?")) {
+                                    deleteMutation.mutate(emp.id);
+                                  }
+                                }}
+                              >
+                                <DeleteIcon />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
-        )}
-        {/* REGISTER MODAL */}
-        {/* */}
-        {showModal && (
-          <RegisterEmployeeModal
-            onClose={() => setShowModal(false)}
-            refresh={() =>
-              queryClient.invalidateQueries({
-                queryKey: [
-                  "employees",
-                  activeTab,
-                  search,
-                  joiningDate,
-                  expiryDate,
-                ],
-              })
-            }
-          />
-        )}
+          {/*  IMAGE  */}
+          {previewImage && (
+            <div
+              onClick={() => setPreviewImage(null)}
+              className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+            >
+              <img
+                src={previewImage}
+                alt="ID Proof"
+                className="max-h-[80%] max-w-[80%] rounded-lg shadow-2xl"
+              />
+            </div>
+          )}
+          {/*  EDIT  */}
+          {editEmployee && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+              <div
+                className="bg-white rounded-xl shadow overflow-hidden mx-1 p-4 
+            border-l-2 border-r-2 border-b-2 border-red-500 min-h-[calc(100vh-90px)]"
+              >
+                {" "}
+                <h2 className="text-lg font-bold mb-4 text-gray-800">
+                  Edit Employee
+                </h2>
+                <div className="flex flex-col gap-3">
+                  <div>
+                    <label className="text-xs text-gray-500 mb-1 block">
+                      Name
+                    </label>
+                    <input
+                      name="name"
+                      value={formData.name || ""}
+                      onChange={handleChange}
+                      className="w-full border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-gray-500 mb-1 block">
+                      Designation
+                    </label>
+                    <input
+                      name="designation"
+                      value={formData.designation || ""}
+                      onChange={handleChange}
+                      className="w-full border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-gray-500 mb-1 block">
+                      Type
+                    </label>
+                    <select
+                      name="type"
+                      value={formData.type || ""}
+                      onChange={handleChange}
+                      className="w-full border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
+                    >
+                      <option value="Payroll">Payroll</option>
+                      <option value="Staff">Staff</option>
+                      <option value="Contract">Contract</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-gray-500 mb-1 block">
+                      Visa Expiring On
+                    </label>
+                    <input
+                      type="date"
+                      name="visaExpiringOn"
+                      value={formData.visaExpiringOn || ""}
+                      onChange={handleChange}
+                      className="w-full border border-[1.5px] border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/10"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-3 mt-6">
+                  <button
+                    onClick={() => setEditEmployee(null)}
+                    className="px-5 py-2 rounded-lg text-sm text-gray-600 border border-[1.5px] border-gray-200 hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => updateMutation.mutate()}
+                    className="px-5 py-2 rounded-lg text-sm bg-black text-white hover:bg-gray-800"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* REGISTER MODAL */}
+          {/* */}
+          {showModal && (
+            <RegisterEmployeeModal
+              onClose={() => setShowModal(false)}
+              refresh={() =>
+                queryClient.invalidateQueries({
+                  queryKey: [
+                    "employees",
+                    activeTab,
+                    search,
+                    joiningDate,
+                    expiryDate,
+                  ],
+                })
+              }
+            />
+          )}
+        </div>
       </div>
     </div>
   );
