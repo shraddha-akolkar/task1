@@ -297,14 +297,22 @@ export default function EmployeesPage() {
         {/*  TOP HEADER */}
         <div className="bg-white border-l border-r border-b border-gray-100 rounded-b-xl pb-3 mb-2 -mt-[0.1rem] relative z-10">
           <div className="mx-6 mt-2">
-            <div className=" flex items-center justify-between">
-              <h1 className="text-[20px] font-[500] text-gray-800 pb-1">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+              {/* Title */}
+              <h1 className="text-[20px] font-[500] text-gray-800 pb-2 lg:pb-1">
                 Employees
               </h1>
 
               {/* RIGHT SIDE ICONS */}
-              <div className="flex items-center gap-1.5 w-full lg:w-auto pt-2 pb-2">
-                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+              <div
+                className="
+        flex items-center gap-2
+        overflow-x-auto scrollbar-hide
+        pb-2
+        lg:pb-0
+      "
+              >
+                <div className=" lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={window}
                     className="w-4 h-4"
@@ -312,7 +320,7 @@ export default function EmployeesPage() {
                   />
                 </div>
 
-                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={person}
                     className="w-4 h-4"
@@ -320,24 +328,25 @@ export default function EmployeesPage() {
                   />
                 </div>
 
-                <div className="inline-flex items-center gap-2 bg-black text-white px-5 h-10 rounded-full cursor-pointer">
+                {/* Active Employees Button */}
+                <div className="inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
                   <img src={group} className="w-4 h-4" alt="user" />
-                  <span>Employees</span>
+                  <span className="text-sm">Employees</span>
                 </div>
 
-                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img src={user} className="w-4 h-4" />
                 </div>
 
-                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img src={calender} className="w-4 h-4" />
                 </div>
 
-                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img src={umbrella} className="w-4 h-4" />
                 </div>
 
-                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img src={building} className="w-4 h-4" />
                 </div>
               </div>
@@ -349,13 +358,13 @@ export default function EmployeesPage() {
             className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2
            "
           >
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pt-2 pb-2 px-4">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between pt-2 pb-2 px-4">
               <div className="flex flex-wrap gap-2 ">
                 {tabs.map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-4 py-1 rounded-md text-sm ${
+                    className={`px-4 py-1 rounded-md text-sm cursor-pointer  ${
                       activeTab === tab
                         ? "bg-black text-white"
                         : "text-gray-600"
@@ -365,11 +374,10 @@ export default function EmployeesPage() {
                   </button>
                 ))}
               </div>
-
               {/* RIGHT SIDE ICON  */}
-              <div className="flex items-center gap-1.5 w-full lg:w-auto pt-2">
+              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto pt-2">
                 {/* Search pill */}
-                <div className="flex items-center w-full lg:w-[340px]  border border-gray-200 rounded-full px-4 py-2">
+                <div className="flex items-center w-full sm:w-full md:w-full lg:w-[340px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
                   <input
                     type="text"
                     placeholder="Search employee"
@@ -377,12 +385,10 @@ export default function EmployeesPage() {
                     onChange={(e) => setSearch(e.target.value)}
                     className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 bg-[#FAFAFA]"
                   />
-
                   <div className="w-4 h-4 border-2 border-gray-500 rounded-full relative">
                     <span className="absolute w-2 h-[2px] bg-gray-500 right-[-5px] bottom-[-3px] rotate-45"></span>
                   </div>
                 </div>
-
                 {/* Filter */}
                 <div
                   onClick={() => setShowFilters(!showFilters)}
@@ -390,12 +396,10 @@ export default function EmployeesPage() {
                 >
                   <img src={filter} className="w-4 h-4" />
                 </div>
-
                 {/* File */}
                 <div className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
                   <img src={file} className="w-4 h-4" />
                 </div>
-
                 {/* New button stays same */}
                 <button
                   onClick={() => setShowModal(true)}
