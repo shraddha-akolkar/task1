@@ -289,13 +289,13 @@ export default function EmployeesPage() {
         <Navbar />
         {/*  TOP HEADER */}
         <div className="bg-white border-l border-r border-b border-gray-100 rounded-b-xl pb-3 mb-2 -mt-[0.1rem] relative z-10">
-          <div className="mx-6 mt-1">
+          <div className="mx-6 mt-2">
             <div className=" flex items-center justify-between">
-              <h1 className="text-[20px] font-[500] text-gray-800 pb-3">
+              <h1 className="text-[20px] font-[500] text-gray-800 pb-1">
                 Employees
               </h1>
 
-              <div className="flex items-center gap-2 pb-3">
+              <div className="flex items-center gap-2 pb-1 mt-2">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
                   <LayoutGrid
                     size={18}
