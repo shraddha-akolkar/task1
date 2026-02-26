@@ -369,7 +369,7 @@ export default function EmployeesPage() {
                     className={`px-4 py-1 rounded-md text-sm cursor-pointer  ${
                       activeTab === tab
                         ? "bg-black text-white"
-                        : "text-gray-600"
+                        : "text-gray-600 bg-[#FAFAFA]"
                     }`}
                   >
                     {tab}
@@ -379,7 +379,7 @@ export default function EmployeesPage() {
               {/* RIGHT SIDE ICON  */}
               <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto pt-2">
                 {/* Search pill */}
-                <div className="flex items-center w-full sm:w-full md:w-full lg:w-[340px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
+                <div className="flex items-center w-full sm:w-full md:w-full lg:w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
                   <input
                     type="text"
                     placeholder="Search employee"
