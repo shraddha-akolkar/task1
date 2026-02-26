@@ -13,6 +13,8 @@ import umbrella from "../assets/umbrella.png";
 import person from "../assets/person.png";
 import calender from "../assets/calendar1.png";
 import group from "../assets/group.png";
+import plus from "../assets/plus.png";
+
 import {
   Funnel,
   Album,
@@ -312,7 +314,7 @@ export default function EmployeesPage() {
         lg:pb-0
       "
               >
-                <div className=" lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={window}
                     className="w-4 h-4"
@@ -405,7 +407,7 @@ export default function EmployeesPage() {
                   onClick={() => setShowModal(true)}
                   className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800"
                 >
-                  <Plus size={14} />
+                  <img src={plus} className="w-4 h-4" />
                   New
                 </button>
               </div>
