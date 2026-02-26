@@ -11,7 +11,6 @@ export default function Navbar() {
 
   return (
     <div className="flex items-stretch mx-1 pt-2 relative z-15">
-      {" "}
       {/*  Logo */}
       <div className="pr-2 py-2 flex items-center border-b border-gray-50">
         <img src={logo} alt="Logo" className="h-6 w-auto" />

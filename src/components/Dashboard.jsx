@@ -284,13 +284,10 @@ export default function EmployeesPage() {
   return (
     <div className="border-lg">
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative  z-14">
-        {" "}
         {/*  NAVBAR */}
         <Navbar />
         {/*  TOP HEADER */}
-        {/*  TOP HEADER CARD  */}
         <div className="bg-white border border-gray-100 rounded-xl  pb-3 mb-2 -mt-[0.1rem] relative z-10">
-          {" "}
           <div className="mx-4 mt-4">
             <div className="w-full px-8 py-3 flex items-center justify-between">
               <h1 className="text-lg font-semibold text-gray-800">Employees</h1>
