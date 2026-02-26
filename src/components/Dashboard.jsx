@@ -6,6 +6,13 @@ import logo from "../assets/Logo.png";
 import user1 from "../assets/user1.png";
 import filter from "../assets/filter.png";
 import file from "../assets/file.png";
+import building from "../assets/building.png";
+import user from "../assets/user.png";
+import window from "../assets/window.png";
+import umbrella from "../assets/umbrella.png";
+import person from "../assets/person.png";
+import calender from "../assets/calendar1.png";
+import group from "../assets/group.png";
 import {
   Funnel,
   Album,
@@ -284,9 +291,9 @@ export default function EmployeesPage() {
   return (
     <div className="border-lg">
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
-        {" "}
         {/*  NAVBAR */}
         <Navbar />
+
         {/*  TOP HEADER */}
         <div className="bg-white border-l border-r border-b border-gray-100 rounded-b-xl pb-3 mb-2 -mt-[0.1rem] relative z-10">
           <div className="mx-6 mt-2">
@@ -295,46 +302,48 @@ export default function EmployeesPage() {
                 Employees
               </h1>
 
-              <div className="flex items-center gap-2 pb-1 mt-2">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                  <LayoutGrid
-                    size={18}
-                    className="text-gray-600"
+              {/* RIGHT SIDE ICONS */}
+              <div className="flex items-center gap-1.5 w-full lg:w-auto pt-2 pb-2">
+                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <img
+                    src={window}
+                    className="w-4 h-4"
                     onClick={() => navigate("/adminportal")}
                   />
                 </div>
 
-                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                  <UserCog
-                    size={18}
-                    className="text-gray-600"
+                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <img
+                    src={person}
+                    className="w-4 h-4"
                     onClick={() => navigate("/attendance")}
                   />
                 </div>
 
-                <div className="flex items-center gap-2 bg-black text-white px-5 py-2 rounded-full shadow-sm">
-                  <Users size={16} />
-                  <span className="text-sm font-medium">Employees</span>
+                <div className="inline-flex items-center gap-2 bg-black text-white px-5 h-10 rounded-full cursor-pointer">
+                  <img src={group} className="w-4 h-4" alt="user" />
+                  <span>Employees</span>
                 </div>
 
-                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                  <Bell size={18} className="text-gray-600" />
+                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <img src={user} className="w-4 h-4" />
                 </div>
 
-                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                  <CalendarDays size={18} className="text-gray-600" />
+                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <img src={calender} className="w-4 h-4" />
                 </div>
 
-                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                  <Umbrella size={18} className="text-gray-600" />
+                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <img src={umbrella} className="w-4 h-4" />
                 </div>
 
-                <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                  <Building2 size={18} className="text-gray-600" />
+                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <img src={building} className="w-4 h-4" />
                 </div>
               </div>
             </div>
           </div>
+
           {/*  TABLE  */}
           <div
             className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2
@@ -356,7 +365,8 @@ export default function EmployeesPage() {
                   </button>
                 ))}
               </div>
-              {/* Search  */}
+
+              {/* RIGHT SIDE ICON  */}
               <div className="flex items-center gap-1.5 w-full lg:w-auto pt-2">
                 {/* Search pill */}
                 <div className="flex items-center w-full lg:w-[340px]  border border-gray-200 rounded-full px-4 py-2">
@@ -376,13 +386,13 @@ export default function EmployeesPage() {
                 {/* Filter */}
                 <div
                   onClick={() => setShowFilters(!showFilters)}
-                  className="w-10 h-10 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition"
+                  className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition"
                 >
                   <img src={filter} className="w-4 h-4" />
                 </div>
 
                 {/* File */}
-                <div className="w-10 h-10 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                <div className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
                   <img src={file} className="w-4 h-4" />
                 </div>
 

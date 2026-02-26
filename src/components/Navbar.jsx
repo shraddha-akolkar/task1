@@ -11,7 +11,6 @@ export default function Navbar() {
 
   return (
     <div className="flex items-stretch mx-1 pt-2 relative">
-      {" "}
       {/*  Logo */}
       <div className="pr-2 py-2 flex items-center border-b border-gray-50">
         <img src={logo} alt="Logo" className="h-6 w-auto" />
@@ -67,41 +66,8 @@ export default function Navbar() {
         <button
           className="md:hidden p-1 rounded-md text-gray-600 hover:text-gray-900 transition-colors"
           onClick={() => setMobileMenuOpen((prev) => !prev)}
-        >
-          {mobileMenuOpen ? (
-            <X className="w-5 h-5" />
-          ) : (
-            <Menu className="w-5 h-5" />
-          )}
-        </button>
+        ></button>
       </div>
-      {/* Mobile Dropdown */}
-      {mobileMenuOpen && (
-        <div className="absolute top-16 left-4 right-4 md:hidden bg-white border border-gray-300 rounded-xl shadow-lg p-3 flex flex-col gap-1 z-50">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => {
-                setActiveTab(tab);
-                setMobileMenuOpen(false);
-              }}
-              className={`w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                activeTab === tab
-                  ? "bg-black text-white"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-
-          <div className="sm:hidden flex items-center gap-4 px-4 pt-3 border-t border-gray-300 mt-2">
-            <Bell className="w-5 h-5 text-gray-600" />
-            <Users className="w-5 h-5 text-gray-600" />
-            <Building2 className="w-5 h-5 text-gray-600" />
-          </div>
-        </div>
-      )}
     </div>
   );
 }
