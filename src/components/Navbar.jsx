@@ -17,7 +17,7 @@ export default function Navbar() {
           <img src={logo} alt="Logo" className="h-6 w-auto" />
         </div>
 
-        {/* Left Empty (Laptop + Tablet only) */}
+        {/* Left Empty */}
         <div
           className="hidden md:block flex-1
                      border-t border-l border-r border-gray-100
@@ -25,7 +25,7 @@ export default function Navbar() {
                      rounded-t-xl"
         ></div>
 
-        {/* Center Tabs (Laptop + Tablet only) */}
+        {/* Center Tabs*/}
         <div
           className="hidden md:flex px-4 py-3 items-center justify-center
                      border-b border-gray-50"
@@ -47,7 +47,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Right Empty (Laptop + Tablet only) */}
+        {/* Right Empty*/}
         <div
           className="hidden md:block flex-1
                      border-t border-l border-r border-gray-100
@@ -55,7 +55,6 @@ export default function Navbar() {
                      rounded-t-xl"
         ></div>
 
-        {/* Right Section */}
         {/* Right Section */}
         <div className="px-4 py-3 flex items-center gap-3 border-b border-gray-100 ml-auto">
           {/* User */}
@@ -70,7 +69,7 @@ export default function Navbar() {
             </span>
           </div>
 
-          {/* Hamburger (Mobile only) */}
+          {/* Hamburger  */}
           <button
             className="md:hidden ml-2 p-1 rounded-md text-gray-600 hover:text-gray-900 transition-colors"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
@@ -79,8 +78,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Dropdown Menu */}
-        {/* Mobile Right Drawer */}
+        {/* Dropdown */}
         <div
           className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 md:hidden ${
             mobileMenuOpen ? "translate-x-0" : "translate-x-full"

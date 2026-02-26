@@ -400,7 +400,7 @@ export default function EmployeesPage() {
                 <div className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
                   <img src={file} className="w-4 h-4" />
                 </div>
-                {/* New button stays same */}
+                {/* New button */}
                 <button
                   onClick={() => setShowModal(true)}
                   className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800"
