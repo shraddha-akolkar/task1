@@ -283,16 +283,19 @@ export default function EmployeesPage() {
 
   return (
     <div className="border-lg">
-      <div className="min-h-screen bg-white rounded-[20px] mx-2 relative  z-14">
+      <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
+        {" "}
         {/*  NAVBAR */}
         <Navbar />
         {/*  TOP HEADER */}
-        <div className="bg-white border border-gray-100 rounded-xl  pb-3 mb-2 -mt-[0.1rem] relative z-10">
-          <div className="mx-4 mt-4">
-            <div className="w-full px-8 py-3 flex items-center justify-between">
-              <h1 className="text-lg font-semibold text-gray-800">Employees</h1>
+        <div className="bg-white border-l border-r border-b border-gray-100 rounded-b-xl pb-3 mb-2 -mt-[0.1rem] relative z-10">
+          <div className="mx-6 mt-1">
+            <div className=" flex items-center justify-between">
+              <h1 className="text-[20px] font-[500] text-gray-800 pb-3">
+                Employees
+              </h1>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 pb-3">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
                   <LayoutGrid
                     size={18}
@@ -337,9 +340,7 @@ export default function EmployeesPage() {
             className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2
            "
           >
-            {" "}
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pt-2 pb-2 px-4">
-              {" "}
               <div className="flex flex-wrap gap-2 ">
                 {tabs.map((tab) => (
                   <button
@@ -356,7 +357,7 @@ export default function EmployeesPage() {
                 ))}
               </div>
               {/* Search  */}
-              <div className="flex items-center gap-1.5 w-full lg:w-auto">
+              <div className="flex items-center gap-1.5 w-full lg:w-auto pt-2">
                 {/* Search pill */}
                 <div className="flex items-center w-full lg:w-[340px]  border border-gray-200 rounded-full px-4 py-2">
                   <input
@@ -581,7 +582,6 @@ export default function EmployeesPage() {
                 className="bg-white rounded-xl shadow overflow-hidden mx-1 p-4 
             border-l-2 border-r-2 border-b-2 border-red-500 min-h-[calc(100vh-90px)]"
               >
-                {" "}
                 <h2 className="text-lg font-bold mb-4 text-gray-800">
                   Edit Employee
                 </h2>

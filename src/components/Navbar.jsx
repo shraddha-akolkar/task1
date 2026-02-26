@@ -10,7 +10,8 @@ export default function Navbar() {
   const tabs = ["Portal", "Project Management", "Sales", "Accounts"];
 
   return (
-    <div className="flex items-stretch mx-1 pt-2 relative z-15">
+    <div className="flex items-stretch mx-1 pt-2 relative">
+      {" "}
       {/*  Logo */}
       <div className="pr-2 py-2 flex items-center border-b border-gray-50">
         <img src={logo} alt="Logo" className="h-6 w-auto" />
@@ -19,7 +20,7 @@ export default function Navbar() {
       <div
         className="hidden md:block flex-1
                    border-t border-l border-r border-gray-100
-                   shadow-[0_1px_2px_rgba(0,0,0,0.04)]
+                   shadow-[0_-1px_2px_rgba(0,0,0,0.04)]
                    rounded-t-xl"
       ></div>
       {/* Center Tabs */}
@@ -47,7 +48,7 @@ export default function Navbar() {
       <div
         className="hidden md:block flex-1
                    border-t border-l border-r border-gray-100
-                   shadow-[0_1px_2px_rgba(0,0,0,0.04)]
+                   shadow-[0_-1px_2px_rgba(0,0,0,0.04)]
                    rounded-t-xl"
       ></div>
       {/* Right Section */}
