@@ -331,7 +331,7 @@ export default function EmployeesPage() {
                 </div>
 
                 {/* Active Employees Button */}
-                <div className="inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
+                <div className="lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
                   <img src={group} className="w-4 h-4" alt="user" />
                   <span className="text-sm">Employees</span>
                 </div>
