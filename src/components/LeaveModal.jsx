@@ -1,116 +1,114 @@
 import React from "react";
 import user from "../assets/user1.png";
+import { ChevronRight, Calendar } from "lucide-react";
 
 const LeaveModal = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center z-50">
-      <div className="bg-[#F9FAFB] w-[550px] h-[460px] rounded-2xl shadow-xl px-5 py-4 flex flex-col justify-between">
-        {/* TOP CONTENT */}
+      <div className="bg-[#F9FAFB] w-[770px] h-[365px] rounded-2xl shadow-xl px-6 py-5 flex flex-col justify-between">
+        {/* TOP SECTION */}
         <div>
-          {/* HEADER */}
-          <div className="flex items-center justify-between border border-gray-200 rounded-xl px-4 py-2 bg-white mb-[6px]">
-            <div className="flex items-center gap-2">
+          {/* HEADER ROW */}
+          <div className="flex items-center justify-between mb-6">
+            {/* EMPLOYEE CARD */}
+            <div className="flex items-center gap-3 border border-gray-200 bg-white rounded-xl px-4 py-2 w-[260px]">
               <img
                 src={user}
                 alt="avatar"
-                className="w-8 h-8 rounded-full object-cover"
+                className="w-9 h-9 rounded-full object-cover"
               />
-              <div>
+              <div className="flex-1">
                 <div className="text-sm font-medium text-gray-800">
                   Omar Al-Farsi
                 </div>
-                <div className="text-[10px] text-gray-400">EM01</div>
+                <div className="text-xs text-gray-400">EM01</div>
               </div>
+              <ChevronRight size={18} className="text-gray-400" />
             </div>
 
-            <div className="text-right">
-              <div className="text-sm text-gray-800">Interior Designer</div>
-              <div className="text-[10px] text-gray-400">Payroll</div>
-            </div>
-          </div>
-
-          {/* DATE */}
-          <div className="mb-[6px]">
-            <label className="block text-[10px] text-gray-500 mb-[2px]">
-              Date
-            </label>
-            <div className="bg-[#F1F3F5] rounded-lg px-3 py-[6px] text-sm text-gray-800">
-              Thu, 16 Oct 2025
-            </div>
-          </div>
-
-          {/* GRID */}
-          <div className="grid grid-cols-2 gap-x-5 gap-y-[6px]">
-            <Field label="In Time" value="09:32 AM" />
-            <Field label="Out Time" value="08:53 AM" />
-
-            <Field label="Overtime" value="02h 28mins" />
-            <Field label="Total Duration" value="11h 16mins" />
-
+            {/* DESIGNATION */}
             <div>
-              <label className="block text-[10px] text-gray-500 mb-[2px]">
-                Type
-              </label>
-              <div className="bg-[#F1F3F5] rounded-lg px-3 py-[6px] text-sm flex justify-between text-gray-800">
-                <span>On Site</span>
-                <span className="text-gray-400 text-[10px]">In Factory ✕</span>
+              <div className="text-sm text-gray-800">Interior Designer</div>
+              <div className="text-xs text-gray-400">Payroll</div>
+            </div>
+
+            {/* LEAVES TAKEN */}
+            <div className="text-center">
+              <div className="text-lg font-semibold text-gray-900">39</div>
+              <div className="text-xs text-gray-400">
+                Leaves taken this Year
               </div>
             </div>
 
-            <Field label="Half Day" value="NA" muted />
-
-            {/* <Field label="Reduction In Total Hours" value="01h 15mins" /> */}
-          </div>
-          <div className="mt-[6px]">
-            <label className="block text-[10px] text-gray-500 mb-[2px]">
-              Reduction In Total Hours
-            </label>
-            <div className="mb-2 bg-[#F1F3F5] rounded-lg px-3 py-[6px] text-sm ">
-              01h 15mins{" "}
+            {/* VISA */}
+            <div className="text-right">
+              <div className="text-sm font-medium text-green-600">
+                31 Oct 2026
+              </div>
+              <div className="text-xs text-gray-400">Visa Expiring On</div>
             </div>
           </div>
+
+          {/* DATE ROW */}
+          <div className="grid grid-cols-3 gap-6 mb-5">
+            {/* FROM DATE */}
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">
+                From Date
+              </label>
+              <div className="bg-[#F1F3F5] rounded-lg px-4 py-2 flex items-center justify-between text-sm text-gray-800">
+                20 Oct 2025
+                <Calendar size={16} className="text-gray-400" />
+              </div>
+            </div>
+
+            {/* TO DATE */}
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">
+                To Date
+              </label>
+              <div className="bg-[#F1F3F5] rounded-lg px-4 py-2 flex items-center justify-between text-sm text-gray-800">
+                24 Nov 2025
+                <Calendar size={16} className="text-gray-400" />
+              </div>
+            </div>
+
+            {/* TOTAL DAYS */}
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">
+                Total Days
+              </label>
+              <div className="bg-[#F1F3F5] rounded-lg px-4 py-2 text-sm text-gray-800">
+                34 Days
+              </div>
+            </div>
+          </div>
+
           {/* REMARK */}
-          <div className="mt-[6px]">
-            <label className="block text-[10px] text-gray-500 mb-[2px]">
-              Remark
-            </label>
-            <div className="mb-2 bg-[#F1F3F5] rounded-lg px-3 py-[6px] text-sm text-gray-400">
-              Enter remark
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">Remark*</label>
+            <div className="bg-[#F1F3F5] rounded-xl px-4 py-4 text-sm text-gray-400 h-[85px]">
+              Enter reason
             </div>
           </div>
         </div>
 
         {/* BUTTONS */}
-        <div className="">
-          <div className="mb-4  flex justify-center gap-3 pt-[6px]">
-            <button
-              onClick={onClose}
-              className=" px-7 py-1.5 border border-gray-300 rounded-xl text-sm text-gray-700 bg-white hover:bg-gray-50 transition"
-            >
-              Cancel
-            </button>
+        <div className="flex justify-center gap-6 pt-4">
+          <button
+            onClick={onClose}
+            className="px-10 py-2 border border-gray-300 rounded-xl text-sm bg-white hover:bg-gray-50 transition"
+          >
+            Cancel
+          </button>
 
-            <button className="px-9 py-1.5 bg-black text-white rounded-xl text-sm hover:bg-gray-800 transition">
-              Submit
-            </button>
-          </div>
+          <button className="px-14 py-2 bg-black text-white rounded-xl text-sm hover:bg-gray-800 transition">
+            Submit
+          </button>
         </div>
       </div>
     </div>
   );
 };
-
-const Field = ({ label, value, muted }) => (
-  <div>
-    <label className="block text-[10px] text-gray-500 mb-[2px]">{label}</label>
-    <div
-      className={`bg-[#F1F3F5] rounded-lg px-3 py-[6px] text-sm ${
-        muted ? "text-gray-400" : "text-gray-800"
-      }`}
-    >
-      {value}
-    </div>
-  </div>
-);
 
 export default LeaveModal;
