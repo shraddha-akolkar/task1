@@ -349,7 +349,11 @@ export default function EmployeesPage() {
                 </div>
 
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
-                  <img src={umbrella} className="w-4 h-4" />
+                  <img
+                    src={umbrella}
+                    className="w-4 h-4"
+                    onClick={() => navigate("/holidays")}
+                  />
                 </div>
 
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">

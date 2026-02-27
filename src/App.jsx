@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
 import Employees from "./components/Employees";
 import Dashboard from "./components/Dashboard";
+import Holidays from "./components/Holidays";
 import RegisterEmployeeModal from "./components/RegisterEmployeeModal";
 import EmployeesPage from "./components/EmployeeDashboard";
 import AdminPanel from "./components/AdminPortal";
@@ -36,10 +37,10 @@ function App() {
           element={<RegisterEmployeeModal />}
         />
         <Route
-          path="/demo"
+          path="/holidays"
           element={
             <ProtectedRoute>
-              <Demo />
+              <Holidays />
             </ProtectedRoute>
           }
         />
