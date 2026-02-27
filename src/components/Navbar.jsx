@@ -57,7 +57,6 @@ export default function Navbar() {
 
         {/* Right Section */}
         <div className="px-4 py-3 flex items-center gap-3 border-b border-gray-100 ml-auto">
-          {/* User */}
           <div className="flex items-center gap-2 cursor-pointer">
             <img
               src={user1}

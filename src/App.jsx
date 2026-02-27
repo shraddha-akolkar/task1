@@ -7,7 +7,10 @@ import RegisterEmployeeModal from "./components/RegisterEmployeeModal";
 import EmployeesPage from "./components/EmployeeDashboard";
 import AdminPanel from "./components/AdminPortal";
 import Attendance from "./components/Attendance";
+import AttendanceModal from "./components/AttendanceModal";
+import LeaveModal from "./components/LeaveModal";
 import Demo from "./components/Demo";
+import Leave from "./components/Leave";
 import { Toaster } from "react-hot-toast";
 
 // Protected Route Component
@@ -64,6 +67,10 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/" element={<Login />} />
+        <Route path="/AttendanceModal" element={<AttendanceModal />} />
+        <Route path="/LeaveModal" element={<LeaveModal />} />
+        <Route path="/Leave" element={<Leave />} />
         <Route path="/register" element={<RegisterEmployeeModal />} />
         <Route
           path="/employee-dashboard"

@@ -1,171 +1,324 @@
-import React, { useState } from "react";
-import Navbar from "./Navbar";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import RegisterEmployeeModal from "./RegisterEmployeeModal";
+import LeaveModal from "./LeaveModal";
+import filter from "../assets/filter.png";
+import file from "../assets/file.png";
+import building from "../assets/building.png";
+import user from "../assets/user.png";
+import window from "../assets/window.png";
+import umbrella from "../assets/umbrella.png";
+import employee from "../assets/employees 1.png";
+import leave from "../assets/leave.png";
+import person from "../assets/person.png";
+import plus from "../assets/plus.png";
+import pencil from "../assets/pencil.png";
+import user1 from "../assets/user1.png";
+import Navbar from "./Navbar";
 
-import {
-  LayoutDashboard,
-  UserCog,
-  UsersRound,
-  User,
-  CalendarDays,
-  Pencil,
-  Search,
-  SlidersHorizontal,
-  Download,
-  Plus,
-  Funnel,
-  Album,
-} from "lucide-react";
+import { Plus } from "lucide-react";
+const API_BASE_URL = "http://localhost:5000/api";
 
-const Attendance = () => {
+// MAIN
+
+export default function Leave() {
+  const [activeTab, setActiveTab] = useState("All Employee");
+  const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
+  const tabs = [
+    "Self",
+    "All Employee",
+    "InFactory",
+    "On Site",
+    "Payroll",
+    "Contract",
+  ];
 
-  
-  const tabs = ["Portal", "Project Management", "Sales", "Accounts"];
+  const data = [
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+  ];
 
- 
-  const [activeTab, setActiveTab] = useState(tabs[0]);
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <Navbar />
+    <div className="border-lg">
+      <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
+        {/*  NAVBAR */}
+        <Navbar />
 
-      {/* TOP HEADER BAR */}
-      <div className="flex justify-end items-center gap-3 px-4 pt-4 pb-1">
-        <button
-          className="cursor-pointer hover:text-gray-800 transition-colors"
-          onClick={() => navigate("/adminportal")}
-        >
-          <LayoutDashboard size={15} />
-        </button>
+        {/*  TOP HEADER */}
+        <div className="bg-white border-l border-r border-b border-gray-100 rounded-b-xl pb-3 mb-2 -mt-[0.1rem] relative z-10">
+          <div className="mx-6 mt-2">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+              <h1 className="text-[20px] font-[500] text-gray-800 pb-2 lg:pb-1">
+                Leave Tracker
+              </h1>
 
-        <div className="flex items-center gap-3 text-gray-500">
-          <div className="flex items-center gap-2 bg-black text-white px-4 py-1.5 rounded-full text-sm font-medium">
-            <UserCog size={18} />
-            Attendance
-          </div>
+              {/* RIGHT SIDE ICONS */}
+              <div
+                className="
+        flex items-center gap-2
+        overflow-x-auto scrollbar-hide
+        pb-2
+        lg:pb-0
+      "
+              >
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img
+                    src={window}
+                    className="w-4 h-4"
+                    onClick={() => navigate("/adminportal")}
+                  />
+                </div>
 
-          <UsersRound size={18} className="cursor-pointer hover:text-gray-800" />
-          <User size={18} className="cursor-pointer hover:text-gray-800" />
-          <CalendarDays size={18} className="cursor-pointer hover:text-gray-800" />
-        </div>
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img
+                    src={person}
+                    className="w-4 h-4"
+                    alt="user"
+                    onClick={() => navigate("/attendance")}
+                  />
+                </div>
 
-        <span className="text-sm font-medium text-gray-700">Admin</span>
-      </div>
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img
+                    src={employee}
+                    className="w-4 h-4"
+                    alt="user"
+                    onClick={() => navigate("/dashboard")}
+                  />
+                </div>
 
-      {/* FILTER + TAB SECTION */}
-      <div className="px-6 mt-4">
-        <div className="bg-white rounded-xl shadow p-3 overflow-x-auto">
-          <div className="flex items-center justify-between min-w-[900px]">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={user} className="w-4 h-4" />
+                </div>
 
-            
-<div className="flex items-center gap-2 text-sm">
-  {tabs.map((tab) => (
-    <button
-      key={tab}
-      onClick={() => setActiveTab(tab)}
-      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-        activeTab === tab
-          ? "bg-black text-white"
-          : "bg-gray-100 text-gray-600 hover:text-gray-800"
-      }`}
-    >
-      {tab}
-    </button>
-  ))}
-</div>
+                {/* Active  Button */}
 
-            {/* RIGHT ACTIONS */}
-            <div className="flex items-center gap-3">
+                <div className=" lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
+                  <img src={leave} className="w-4 h-4" />
+                  <span className="text-sm">Leave Traker</span>
+                </div>
 
-              <button className="flex items-center gap-2 border px-3 py-1.5 rounded-lg text-sm hover:bg-gray-50">
-                Bulk Update
-              </button>
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={umbrella} className="w-4 h-4" />
+                </div>
 
-              <div className="flex items-center border rounded-lg px-2 py-1.5 bg-gray-50">
-                <Search size={14} className="text-gray-400 mr-1" />
-                <input
-                  type="text"
-                  placeholder="Search employee"
-                  className="bg-transparent outline-none text-xs w-32"
-                />
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={building} className="w-4 h-4" />
+                </div>
               </div>
-
-              <button className="p-2 border rounded-lg hover:bg-gray-50">
-                <Funnel size={15} />
-              </button>
-
-              <button className="p-2 border rounded-lg hover:bg-gray-50">
-                <Album size={15} />
-              </button>
-
-              <button className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800">
-                <Plus size={14} />
-                New
-              </button>
-
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* TABLE */}
-      <div className="px-6 mt-4">
-        <div className="bg-white rounded-xl shadow overflow-x-auto">
-          <table className="w-full text-xs text-left min-w-[1000px]">
-            <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
-              <tr className="text-[11px]">
-                <th className="px-4 py-3">Employee Name</th>
-                <th className="px-4 py-3">Designation</th>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">In-Time</th>
-                <th className="px-4 py-3">Out-Time</th>
-                <th className="px-4 py-3">Overtime</th>
-                <th className="px-4 py-3">Reduction</th>
-                <th className="px-4 py-3">Duration</th>
-                <th className="px-4 py-3">Type</th>
-                <th className="px-4 py-3">Remark</th>
-                <th className="px-4 py-3 text-center">Action</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr className="hover:bg-gray-50 transition">
-                <td className="px-4 py-3 font-medium text-gray-800">
-                  <input type="checkbox" className="mr-2" />
-                  Shraddha Akolkar
-                </td>
-                <td className="px-4 py-3 text-gray-600">Software Developer</td>
-                <td className="px-4 py-3 text-gray-600">23 Feb 2026</td>
-                <td className="px-4 py-3 text-gray-600">09:30 AM</td>
-                <td className="px-4 py-3 text-gray-600">06:30 PM</td>
-                <td className="px-4 py-3 text-green-600 font-medium">1h 00m</td>
-                <td className="px-4 py-3 text-red-500">0h</td>
-                <td className="px-4 py-3 text-gray-700 font-medium">9h 00m</td>
-                <td className="px-4 py-3">
-                  <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-xs font-medium">
-                    In Factory
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-gray-500">Present</td>
-                <td className="px-4 py-3 text-center">
-                  <Pencil
-                    size={16}
-                    className="cursor-pointer text-gray-500 hover:text-black"
+          {/*  TABLE  */}
+          <div
+            className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2
+           "
+          >
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between pt-2 pb-2 px-4">
+              <div className="flex flex-wrap gap-2 ">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-4 py-1 rounded-md text-sm cursor-pointer  ${
+                      activeTab === tab
+                        ? "bg-black text-white"
+                        : "text-gray-600 bg-[#FAFAFA]"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+              {/* RIGHT SIDE ICON  */}
+              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto pt-2">
+                {/* Search pill */}
+                <div className="flex items-center w-full sm:w-full md:w-full lg:w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
+                  <input
+                    type="text"
+                    placeholder="Search employee"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 bg-[#FAFAFA]"
                   />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <div className="w-4 h-4 border-2 border-gray-500 rounded-full relative">
+                    <span className="absolute w-2 h-[2px] bg-gray-500 right-[-5px] bottom-[-3px] rotate-45"></span>
+                  </div>
+                </div>
+                {/* Filter */}
+                <div
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition"
+                >
+                  <img src={filter} className="w-4 h-4" />
+                </div>
+                {/* File */}
+                <div className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <img src={file} className="w-4 h-4" />
+                </div>
+                {/* New button */}
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="  flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800 cursor-pointer"
+                >
+                  <img src={plus} className="w-4 h-4" />
+                  New
+                </button>
+              </div>
+            </div>
+            <div className="p-4 rounded-xl">
+              <div className="overflow-x-auto">
+                <table
+                  className="w-full text-[13px] border-separate"
+                  style={{ borderSpacing: "0 8px" }}
+                >
+                  <thead style={{ background: "#FAFAFA" }}>
+                    <tr className="text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
+                      <th className="font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
+                        APPLIED DATE
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        EMPLOYEE NAME
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        DESIGNATION
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        VISA STATUS
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        FROM DATE
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        TO DATE
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        TOTAL DAYS
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        REMARK
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        STATUS
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
+                        ACTION
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {data.map((item) => (
+                      <tr key={item.id} className="bg-white">
+                        <td className="px-3 py-[6px] border border-gray-200 rounded-l-lg">
+                          {item.appliedDate}
+                        </td>
+
+                        {/* EMPLOYEE NAME COLUMN */}
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          <div className="flex items-center gap-2">
+                            <img
+                              src={user1}
+                              alt="User"
+                              className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                            />
+
+                            <div>
+                              <div className="font-medium text-gray-800">
+                                {item.name}
+                              </div>
+                              <div className="text-[11px] text-gray-400">
+                                {item.empId}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          <div>{item.designation}</div>
+                          <div className="text-[11px] text-gray-400">
+                            Payroll
+                          </div>
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.visaStatus}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.from}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.to}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.days}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.remark}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.status === "Approved" && (
+                            <span className="bg-green-500 text-white text-xs px-3 py-1 rounded-md">
+                              Approved
+                            </span>
+                          )}
+                          {item.status === "Rejected" && (
+                            <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-md">
+                              Rejected
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200 rounded-r-lg">
+                          <img
+                            src={pencil}
+                            alt="Edit"
+                            className="w-4 h-4 cursor-pointer"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/*   MODAL */}
+            {showModal && <LeaveModal onClose={() => setShowModal(false)} />}
+          </div>
         </div>
       </div>
-
-      {showModal && (
-        <RegisterEmployeeModal onClose={() => setShowModal(false)} />
-      )}
     </div>
   );
-};
-
-export default Leave;
+}
