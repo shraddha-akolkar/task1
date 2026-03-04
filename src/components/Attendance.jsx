@@ -9,7 +9,8 @@ import window from "../assets/window.png";
 import umbrella from "../assets/umbrella.png";
 import employee from "../assets/employees 1.png";
 import leave from "../assets/leave.png";
-import person from "../assets/person.png";
+// import person from "../assets/person.png";
+import attendence from "../assets/attendance.png";
 import plus from "../assets/plus.png";
 import pencil from "../assets/pencil.png";
 import user1 from "../assets/user1.png";
@@ -38,151 +39,36 @@ export default function Leave() {
   const data = [
     {
       id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
       name: "Omar Al-Farsi",
       empId: "EM01",
       designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
+      category: "Payroll",
+      date: "16 Oct 2025",
+      inTime: "09:42 AM",
+      outTime: "07:51 PM",
+      overtime: "2h 30m",
+      reduction: "2h",
+      duration: "11h 30m",
+      type: "In Factory",
+      remark: "Remark",
     },
     {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
+      id: 2,
+      name: "Liam Carter",
+      empId: "EM02",
+      designation: "Home Consultant",
+      category: "Payroll",
+      date: "16 Oct 2025",
+      inTime: "09:44 AM",
+      outTime: "02:43 PM",
+      overtime: "NA",
+      reduction: "2h",
+      duration: "05h 2m",
+      type: "Staff",
+      remark: "Half Day",
     },
   ];
-
+  const [selectedRow, setSelectedRow] = useState(null);
   return (
     <div className="border-lg">
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
@@ -194,7 +80,7 @@ export default function Leave() {
           <div className="mx-6 mt-2">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <h1 className="text-[20px] font-[500] text-gray-800 pb-2 lg:pb-1">
-                Leave Tracker
+                Employee Attendance
               </h1>
 
               {/* RIGHT SIDE ICONS */}
@@ -213,14 +99,10 @@ export default function Leave() {
                     onClick={() => navigate("/adminportal")}
                   />
                 </div>
-
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
-                  <img
-                    src={person}
-                    className="w-4 h-4"
-                    alt="user"
-                    onClick={() => navigate("/attendance")}
-                  />
+                {/* Active  Button */}
+                <div className=" lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
+                  <img src={leave} className="w-4 h-4" />
+                  <span className="text-sm">Attendance</span>
                 </div>
 
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
@@ -236,15 +118,12 @@ export default function Leave() {
                   <img src={user} className="w-4 h-4" />
                 </div>
 
-                {/* Active  Button */}
-
-                <div className=" lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
-                  <img src={leave} className="w-4 h-4" />
-                  <span className="text-sm">Leave Traker</span>
-                </div>
-
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
-                  <img src={umbrella} className="w-4 h-4" />
+                  <img
+                    src={umbrella}
+                    className="w-4 h-4"
+                    onClick={() => navigate("/holidays")}
+                  />
                 </div>
 
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
@@ -256,10 +135,11 @@ export default function Leave() {
 
           {/*  TABLE  */}
           <div
-            className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2
+            className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2 pt-2
            "
           >
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between pt-2 pb-2 px-4">
+            <div className="flex items-center justify-between gap-3 pt-2 pb-2 px-4 flex-nowrap">
+              {" "}
               <div className="flex flex-wrap gap-2 ">
                 {tabs.map((tab) => (
                   <button
@@ -276,7 +156,8 @@ export default function Leave() {
                 ))}
               </div>
               {/* RIGHT SIDE ICON  */}
-              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto pt-2">
+              <div className="flex items-center gap-2 whitespace-nowrap">
+                {" "}
                 {/* Search pill */}
                 <div className="flex items-center w-full sm:w-full md:w-full lg:w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
                   <input
@@ -311,7 +192,7 @@ export default function Leave() {
                 </button>
               </div>
             </div>
-            <div className="p-4 rounded-xl">
+            <div className="pb-4 px-4 rounded-xl">
               <div className="overflow-x-auto">
                 <table
                   className="w-full text-[13px] border-separate"
@@ -320,31 +201,34 @@ export default function Leave() {
                   <thead style={{ background: "#FAFAFA" }}>
                     <tr className="text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
                       <th className="font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
-                        APPLIED DATE
-                      </th>
-                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         EMPLOYEE NAME
                       </th>
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         DESIGNATION
                       </th>
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
-                        VISA STATUS
+                        DATE
                       </th>
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
-                        FROM DATE
+                        IN-TIME
                       </th>
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
-                        TO DATE
+                        OUT-TIME
                       </th>
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
-                        TOTAL DAYS
+                        OVERTIME
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        REDUCTION
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        DURATION
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        TYPE
                       </th>
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         REMARK
-                      </th>
-                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
-                        STATUS
                       </th>
                       <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
                         ACTION
@@ -355,18 +239,20 @@ export default function Leave() {
                   <tbody>
                     {data.map((item) => (
                       <tr key={item.id} className="bg-white">
-                        <td className="px-3 py-[6px] border border-gray-200 rounded-l-lg">
-                          {item.appliedDate}
-                        </td>
-
-                        {/* EMPLOYEE NAME COLUMN */}
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          <div className="flex items-center gap-2">
-                            <img
-                              src={user1}
-                              alt="User"
-                              className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                        <td className="px-3 py-[10px] border border-gray-200 rounded-l-lg">
+                          <div className="flex items-center gap-3">
+                            <input
+                              type="checkbox"
+                              checked={selectedRow === item.id}
+                              onChange={() =>
+                                setSelectedRow(
+                                  selectedRow === item.id ? null : item.id,
+                                )
+                              }
+                              className="w-4 h-4 accent-black cursor-pointer"
                             />
+
+                            <img src={user1} className="w-8 h-8 rounded-full" />
 
                             <div>
                               <div className="font-medium text-gray-800">
@@ -379,50 +265,45 @@ export default function Leave() {
                           </div>
                         </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200">
+                        <td className="px-3 py-[10px] border border-gray-200">
                           <div>{item.designation}</div>
                           <div className="text-[11px] text-gray-400">
-                            Payroll
+                            {item.category}
                           </div>
                         </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.visaStatus}
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {item.date}
+                        </td>
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {item.inTime}
+                        </td>
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {item.outTime}
+                        </td>
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {item.overtime}
+                        </td>
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {item.reduction}
+                        </td>
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {item.duration}
                         </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.from}
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded-md text-xs">
+                            {item.type}
+                          </span>
                         </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.to}
-                        </td>
-
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.days}
-                        </td>
-
-                        <td className="px-3 py-[6px] border border-gray-200">
+                        <td className="px-3 py-[10px] border border-gray-200">
                           {item.remark}
                         </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.status === "Approved" && (
-                            <span className="bg-green-500 text-white text-xs px-3 py-1 rounded-md">
-                              Approved
-                            </span>
-                          )}
-                          {item.status === "Rejected" && (
-                            <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-md">
-                              Rejected
-                            </span>
-                          )}
-                        </td>
-
-                        <td className="px-3 py-[6px] border border-gray-200 rounded-r-lg">
+                        <td className="px-3 py-[10px] border border-gray-200 rounded-r-lg">
                           <img
                             src={pencil}
-                            alt="Edit"
                             className="w-4 h-4 cursor-pointer"
                           />
                         </td>
