@@ -9,10 +9,13 @@ import window from "../assets/window.png";
 import umbrella from "../assets/umbrella.png";
 import employee from "../assets/employees 1.png";
 import leave from "../assets/leave.png";
+import calender from "../assets/calendar1.png";
 import person from "../assets/person.png";
 import plus from "../assets/plus.png";
+import holiday from "../assets/holiday.png";
 import pencil from "../assets/pencil.png";
 import user1 from "../assets/user1.png";
+import festiv from "../assets/holiday-assest.png";
 import Navbar from "./Navbar";
 
 import { Plus } from "lucide-react";
@@ -33,154 +36,6 @@ export default function Leave() {
     "On Site",
     "Payroll",
     "Contract",
-  ];
-
-  const data = [
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
   ];
 
   return (
@@ -236,15 +91,18 @@ export default function Leave() {
                   <img src={user} className="w-4 h-4" />
                 </div>
 
-                {/* Active  Button */}
-
-                <div className=" lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
-                  <img src={leave} className="w-4 h-4" />
-                  <span className="text-sm">Leave Traker</span>
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img
+                    src={calender}
+                    className="w-4 h-4"
+                    onClick={() => navigate("/leave")}
+                  />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
-                  <img src={umbrella} className="w-4 h-4" />
+                {/* Active  Button */}
+                <div className=" lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
+                  <img src={holiday} className="w-4 h-4" />
+                  <span className="text-sm">Holidays</span>
                 </div>
 
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
@@ -311,10 +169,121 @@ export default function Leave() {
                 </button>
               </div>
             </div>
-            <div className="p-4 rounded-xl"></div>
+            <div className="p-4 rounded-xl">
+              {/* Month Tabs */}
+              <div className="flex gap-2 mb-4  overflow-x-auto">
+                {[
+                  "All",
+                  "Jan",
+                  "Feb",
+                  "Mar",
+                  "Apr",
+                  "May",
+                  "Jun",
+                  "Jul",
+                  "Aug",
+                  "Sep",
+                  "Oct",
+                  "Nov",
+                  "Dec",
+                ].map((m) => (
+                  <button
+                    key={m}
+                    className="px-3 py-1 text-xs rounded-md bg-[#FAFAFA] hover:bg-black hover:text-white"
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
 
-            {/*   MODAL */}
-            {showModal && <LeaveModal onClose={() => setShowModal(false)} />}
+              {/* Holiday Cards */}
+
+              <div className=" rounded-2xl">
+                {/* Cards Grid */}
+                <div className="grid grid-cols-4 gap-6">
+                  {/* Card 1 */}
+                  <div className="bg-[#FAFAFA] rounded-2xl overflow-hidden">
+                    <div className="w-full h-[180px]">
+                      <img
+                        src={festiv}
+                        alt="holiday"
+                        className="w-[370px] h-full  p-1.5"
+                      />
+                    </div>
+
+                    <div className="px-4 py-3">
+                      <div className="text-[16px] font-semibold text-gray-900">
+                        New Year's Day
+                      </div>
+                      <div className="text-[13px] text-gray-500 mt-1">
+                        1 Jan 2026 <span className="mx-1">•</span> Thursday
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card 2 */}
+                  <div className="bg-[#FAFAFA] rounded-2xl overflow-hidden">
+                    <div className="w-full h-[180px]">
+                      <img
+                        src={festiv}
+                        alt="holiday"
+                        className="w-[360px] h-full  p-1.5"
+                      />
+                    </div>
+
+                    <div className="px-4 py-3">
+                      <div className="text-[16px] font-semibold text-gray-900">
+                        Eid al-Fitr
+                      </div>
+                      <div className="text-[13px] text-gray-500 mt-1">
+                        30 Mar 2026 <span className="mx-1">•</span> Tuesday
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card 1 */}
+                  <div className="bg-[#FAFAFA] rounded-2xl overflow-hidden">
+                    <div className="w-full h-[180px]">
+                      <img
+                        src={festiv}
+                        alt="holiday"
+                        className="w-[370px] h-full  p-1.5"
+                      />
+                    </div>
+
+                    <div className="px-4 py-3">
+                      <div className="text-[16px] font-semibold text-gray-900">
+                        New Year's Day
+                      </div>
+                      <div className="text-[13px] text-gray-500 mt-1">
+                        1 Jan 2026 <span className="mx-1">•</span> Thursday
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card 3 */}
+                  <div className="bg-[#FAFAFA] rounded-2xl overflow-hidden">
+                    <div className="w-full h-[180px]">
+                      <img
+                        src={festiv}
+                        alt="holiday"
+                        className="w-[360px] h-full  p-1.5"
+                      />
+                    </div>
+
+                    <div className="px-4 py-3">
+                      <div className="text-[16px] font-semibold text-gray-900">
+                        Eid al-Adha
+                      </div>
+                      <div className="text-[13px] text-gray-500 mt-1">
+                        4 Jul 2026 <span className="mx-1">•</span> Tuesday
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="p-4 rounded-xl"></div>
           </div>
         </div>
       </div>
