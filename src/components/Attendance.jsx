@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import LeaveModal from "./LeaveModal";
+import AttendanceModal from "./AttendanceModal";
 import filter from "../assets/filter.png";
 import file from "../assets/file.png";
 import building from "../assets/building.png";
@@ -315,7 +315,9 @@ export default function Leave() {
             </div>
 
             {/*   MODAL */}
-            {showModal && <LeaveModal onClose={() => setShowModal(false)} />}
+            {showModal && (
+              <AttendanceModal onClose={() => setShowModal(false)} />
+            )}
           </div>
         </div>
       </div>
