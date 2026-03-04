@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import LeaveModal from "./LeaveModal";
+import HolidaysModal from "./HolidaysModal";
 import filter from "../assets/filter.png";
 import file from "../assets/file.png";
 import building from "../assets/building.png";
@@ -106,7 +106,11 @@ export default function Leave() {
                 </div>
 
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
-                  <img src={building} className="w-4 h-4" />
+                  <img
+                    src={building}
+                    className="w-4 h-4"
+                    onClick={() => navigate("/meeting")}
+                  />
                 </div>
               </div>
             </div>
@@ -284,6 +288,7 @@ export default function Leave() {
               </div>
             </div>
             <div className="p-4 rounded-xl"></div>
+            {showModal && <HolidaysModal onClose={() => setShowModal(false)} />}
           </div>
         </div>
       </div>

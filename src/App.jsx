@@ -10,6 +10,8 @@ import AdminPanel from "./components/AdminPortal";
 import Attendance from "./components/Attendance";
 import AttendanceModal from "./components/AttendanceModal";
 import LeaveModal from "./components/LeaveModal";
+import HolidaysModal from "./components/HolidaysModal";
+import Meeting from "./components/Meeting";
 import Demo from "./components/Demo";
 import Leave from "./components/Leave";
 import { Toaster } from "react-hot-toast";
@@ -68,9 +70,18 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/meeting"
+          element={
+            <ProtectedRoute>
+              <Meeting />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/" element={<Login />} />
         <Route path="/AttendanceModal" element={<AttendanceModal />} />
         <Route path="/LeaveModal" element={<LeaveModal />} />
+        <Route path="/HolidayModal" element={<HolidaysModal />} />
         <Route path="/Leave" element={<Leave />} />
         <Route path="/register" element={<RegisterEmployeeModal />} />
         <Route
