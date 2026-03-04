@@ -9,7 +9,9 @@ import window from "../assets/window.png";
 import umbrella from "../assets/umbrella.png";
 import employee from "../assets/employees 1.png";
 import leave from "../assets/leave.png";
-// import person from "../assets/person.png";
+import person from "../assets/person.png";
+import calender from "../assets/calendar1.png";
+
 import attendence from "../assets/attendance.png";
 import plus from "../assets/plus.png";
 import pencil from "../assets/pencil.png";
@@ -99,9 +101,8 @@ export default function Leave() {
                     onClick={() => navigate("/adminportal")}
                   />
                 </div>
-                {/* Active  Button */}
                 <div className=" lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
-                  <img src={leave} className="w-4 h-4" />
+                  <img src={attendence} className="w-4 h-4" />
                   <span className="text-sm">Attendance</span>
                 </div>
 
@@ -115,8 +116,17 @@ export default function Leave() {
                 </div>
 
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
-                  <img src={user} className="w-4 h-4" />
+                  <img
+                    src={calender}
+                    className="w-4 h-4"
+                    onClick={() => navigate("/leave")}
+                  />
                 </div>
+
+                {/* 
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={user} className="w-4 h-4" />
+                </div> */}
 
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img

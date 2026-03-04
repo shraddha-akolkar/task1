@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import MeetingModal from "./MeetingModal";
 import filter from "../assets/filter.png";
 import file from "../assets/file.png";
-import building from "../assets/building.png";
+import meeting from "../assets/meeting.png";
 import user from "../assets/user.png";
 import window from "../assets/window.png";
 import umbrella from "../assets/umbrella.png";
 import employee from "../assets/employees 1.png";
-import leave from "../assets/leave.png";
+import calender from "../assets/calendar1.png";
 import person from "../assets/person.png";
 import plus from "../assets/plus.png";
 import pencil from "../assets/pencil.png";
@@ -73,10 +73,10 @@ export default function Meeting() {
 
         <div className="bg-white border-l border-r border-b border-gray-100 rounded-b-xl pb-3 mb-2 -mt-[0.1rem] relative z-10">
           {/* HEADER */}
-          <div className="mx-6 mt-2 pb-2">
+          <div className="mx-6 mt-2 pb-5">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <h1 className="text-[20px] font-[500] text-gray-800 pb-2 lg:pb-1">
-                Leave Tracker
+                Meeting
               </h1>
 
               {/* RIGHT ICONS */}
@@ -102,13 +102,15 @@ export default function Meeting() {
                   <img src={employee} className="w-4 h-4" />
                 </div>
 
-                <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center">
+                {/* <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center">
                   <img src={user} className="w-4 h-4" />
-                </div>
+                </div> */}
 
-                <div className="inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full">
-                  <img src={leave} className="w-4 h-4" />
-                  <span className="text-sm">Leave Traker</span>
+                <div
+                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100"
+                  onClick={() => navigate("/leave")}
+                >
+                  <img src={calender} className="w-4 h-4" />
                 </div>
 
                 <div
@@ -118,11 +120,9 @@ export default function Meeting() {
                   <img src={umbrella} className="w-4 h-4" />
                 </div>
 
-                <div
-                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
-                  onClick={() => navigate("/meeting")}
-                >
-                  <img src={building} className="w-4 h-4" />
+                <div className="inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full">
+                  <img src={meeting} className="w-4 h-4" />
+                  <span className="text-sm">Meeting</span>
                 </div>
               </div>
             </div>
