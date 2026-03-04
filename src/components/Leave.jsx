@@ -256,10 +256,11 @@ export default function Leave() {
 
           {/*  TABLE  */}
           <div
-            className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2
+            className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2 pt-2
            "
           >
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between pt-2 pb-2 px-4">
+            <div className="flex items-center justify-between gap-3 pt-2 pb-2 px-4 flex-nowrap">
+              {" "}
               <div className="flex flex-wrap gap-2 ">
                 {tabs.map((tab) => (
                   <button
@@ -276,7 +277,8 @@ export default function Leave() {
                 ))}
               </div>
               {/* RIGHT SIDE ICON  */}
-              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto pt-2">
+              <div className="flex items-center gap-2 whitespace-nowrap">
+                {" "}
                 {/* Search pill */}
                 <div className="flex items-center w-full sm:w-full md:w-full lg:w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
                   <input
@@ -311,7 +313,7 @@ export default function Leave() {
                 </button>
               </div>
             </div>
-            <div className="p-4 rounded-xl">
+            <div className="pb-4 px-4 rounded-xl">
               <div className="overflow-x-auto">
                 <table
                   className="w-full text-[13px] border-separate"

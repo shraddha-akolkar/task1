@@ -1,116 +1,443 @@
-import React from "react";
-import user from "../assets/user1.png";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import LeaveModal from "./LeaveModal";
+import filter from "../assets/filter.png";
+import file from "../assets/file.png";
+import building from "../assets/building.png";
+import user from "../assets/user.png";
+import window from "../assets/window.png";
+import umbrella from "../assets/umbrella.png";
+import employee from "../assets/employees 1.png";
+import leave from "../assets/leave.png";
+import person from "../assets/person.png";
+import plus from "../assets/plus.png";
+import pencil from "../assets/pencil.png";
+import user1 from "../assets/user1.png";
+import Navbar from "./Navbar";
 
-const AttendanceModal = ({ onClose }) => {
+import { Plus } from "lucide-react";
+const API_BASE_URL = "http://localhost:5000/api";
+
+// MAIN
+
+export default function Leave() {
+  const [activeTab, setActiveTab] = useState("All Employee");
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const navigate = useNavigate();
+  const tabs = [
+    "Self",
+    "All Employee",
+    "InFactory",
+    "On Site",
+    "Payroll",
+    "Contract",
+  ];
+
+  const data = [
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+
+    {
+      id: 1,
+      appliedDate: "16 Oct 2025 | 11:11AM",
+      name: "Omar Al-Farsi",
+      empId: "EM01",
+      designation: "Interior Designer",
+      visaStatus: "31 Dec 2026",
+      from: "20 Oct 2025",
+      to: "24 Nov 2025",
+      days: "34",
+      remark: "For Diwali",
+      status: "Approved",
+    },
+  ];
+
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center z-50">
-      <div className="bg-[#F9FAFB] w-[550px] h-[460px] rounded-2xl shadow-xl px-5 py-4 flex flex-col justify-between">
-        {/* TOP CONTENT */}
-        <div>
-          {/* HEADER */}
-          <div className="flex items-center justify-between border border-gray-200 rounded-xl px-4 py-2 bg-white mb-[6px]">
-            <div className="flex items-center gap-2">
-              <img
-                src={user}
-                alt="avatar"
-                className="w-8 h-8 rounded-full object-cover"
-              />
-              <div>
-                <div className="text-sm font-medium text-gray-800">
-                  Omar Al-Farsi
+    <div className="border-lg">
+      <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
+        {/*  NAVBAR */}
+        <Navbar />
+
+        {/*  TOP HEADER */}
+        <div className="bg-white border-l border-r border-b border-gray-100 rounded-b-xl pb-3 mb-2 -mt-[0.1rem] relative z-10">
+          <div className="mx-6 mt-2">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+              <h1 className="text-[20px] font-[500] text-gray-800 pb-2 lg:pb-1">
+                Leave Tracker
+              </h1>
+
+              {/* RIGHT SIDE ICONS */}
+              <div
+                className="
+        flex items-center gap-2
+        overflow-x-auto scrollbar-hide
+        pb-2
+        lg:pb-0
+      "
+              >
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img
+                    src={window}
+                    className="w-4 h-4"
+                    onClick={() => navigate("/adminportal")}
+                  />
                 </div>
-                <div className="text-[10px] text-gray-400">EM01</div>
+
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img
+                    src={person}
+                    className="w-4 h-4"
+                    alt="user"
+                    onClick={() => navigate("/attendance")}
+                  />
+                </div>
+
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img
+                    src={employee}
+                    className="w-4 h-4"
+                    alt="user"
+                    onClick={() => navigate("/dashboard")}
+                  />
+                </div>
+
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={user} className="w-4 h-4" />
+                </div>
+
+                {/* Active  Button */}
+
+                <div className=" lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
+                  <img src={leave} className="w-4 h-4" />
+                  <span className="text-sm">Leave Traker</span>
+                </div>
+
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={umbrella} className="w-4 h-4" />
+                </div>
+
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={building} className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/*  TABLE  */}
+          <div
+            className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2
+           "
+          >
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between pt-2 pb-2 px-4">
+              <div className="flex flex-wrap gap-2 ">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-4 py-1 rounded-md text-sm cursor-pointer  ${
+                      activeTab === tab
+                        ? "bg-black text-white"
+                        : "text-gray-600 bg-[#FAFAFA]"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+              {/* RIGHT SIDE ICON  */}
+              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto pt-2">
+                {/* Search pill */}
+                <div className="flex items-center w-full sm:w-full md:w-full lg:w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
+                  <input
+                    type="text"
+                    placeholder="Search employee"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 bg-[#FAFAFA]"
+                  />
+                  <div className="w-4 h-4 border-2 border-gray-500 rounded-full relative">
+                    <span className="absolute w-2 h-[2px] bg-gray-500 right-[-5px] bottom-[-3px] rotate-45"></span>
+                  </div>
+                </div>
+                {/* Filter */}
+                <div
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition"
+                >
+                  <img src={filter} className="w-4 h-4" />
+                </div>
+                {/* File */}
+                <div className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <img src={file} className="w-4 h-4" />
+                </div>
+                {/* New button */}
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="  flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800 cursor-pointer"
+                >
+                  <img src={plus} className="w-4 h-4" />
+                  New
+                </button>
+              </div>
+            </div>
+            <div className="p-4 rounded-xl">
+              <div className="overflow-x-auto">
+                <table
+                  className="w-full text-[13px] border-separate"
+                  style={{ borderSpacing: "0 8px" }}
+                >
+                  <thead style={{ background: "#FAFAFA" }}>
+                    <tr className="text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
+                      <th className="font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
+                        APPLIED DATE
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        EMPLOYEE NAME
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        DESIGNATION
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        VISA STATUS
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        FROM DATE
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        TO DATE
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        TOTAL DAYS
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        REMARK
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        STATUS
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
+                        ACTION
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {data.map((item) => (
+                      <tr key={item.id} className="bg-white">
+                        <td className="px-3 py-[6px] border border-gray-200 rounded-l-lg">
+                          {item.appliedDate}
+                        </td>
+
+                        {/* EMPLOYEE NAME COLUMN */}
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          <div className="flex items-center gap-2">
+                            <img
+                              src={user1}
+                              alt="User"
+                              className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                            />
+
+                            <div>
+                              <div className="font-medium text-gray-800">
+                                {item.name}
+                              </div>
+                              <div className="text-[11px] text-gray-400">
+                                {item.empId}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          <div>{item.designation}</div>
+                          <div className="text-[11px] text-gray-400">
+                            Payroll
+                          </div>
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.visaStatus}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.from}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.to}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.days}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.remark}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.status === "Approved" && (
+                            <span className="bg-green-500 text-white text-xs px-3 py-1 rounded-md">
+                              Approved
+                            </span>
+                          )}
+                          {item.status === "Rejected" && (
+                            <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-md">
+                              Rejected
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200 rounded-r-lg">
+                          <img
+                            src={pencil}
+                            alt="Edit"
+                            className="w-4 h-4 cursor-pointer"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
 
-            <div className="text-right">
-              <div className="text-sm text-gray-800">Interior Designer</div>
-              <div className="text-[10px] text-gray-400">Payroll</div>
-            </div>
-          </div>
-
-          {/* DATE */}
-          <div className="mb-[6px]">
-            <label className="block text-[10px] text-gray-500 mb-[2px]">
-              Date
-            </label>
-            <div className="bg-[#F1F3F5] rounded-lg px-3 py-[6px] text-sm text-gray-800">
-              Thu, 16 Oct 2025
-            </div>
-          </div>
-
-          {/* GRID */}
-          <div className="grid grid-cols-2 gap-x-5 gap-y-[6px]">
-            <Field label="In Time" value="09:32 AM" />
-            <Field label="Out Time" value="08:53 AM" />
-
-            <Field label="Overtime" value="02h 28mins" />
-            <Field label="Total Duration" value="11h 16mins" />
-
-            <div>
-              <label className="block text-[10px] text-gray-500 mb-[2px]">
-                Type
-              </label>
-              <div className="bg-[#F1F3F5] rounded-lg px-3 py-[6px] text-sm flex justify-between text-gray-800">
-                <span>On Site</span>
-                <span className="text-gray-400 text-[10px]">In Factory ✕</span>
-              </div>
-            </div>
-
-            <Field label="Half Day" value="NA" muted />
-
-            {/* <Field label="Reduction In Total Hours" value="01h 15mins" /> */}
-          </div>
-          <div className="mt-[6px]">
-            <label className="block text-[10px] text-gray-500 mb-[2px]">
-              Reduction In Total Hours
-            </label>
-            <div className="mb-2 bg-[#F1F3F5] rounded-lg px-3 py-[6px] text-sm ">
-              01h 15mins{" "}
-            </div>
-          </div>
-          {/* REMARK */}
-          <div className="mt-[6px]">
-            <label className="block text-[10px] text-gray-500 mb-[2px]">
-              Remark
-            </label>
-            <div className="mb-2 bg-[#F1F3F5] rounded-lg px-3 py-[6px] text-sm text-gray-400">
-              Enter remark
-            </div>
-          </div>
-        </div>
-
-        {/* BUTTONS */}
-        <div className="">
-          <div className="mb-4  flex justify-center gap-3 pt-[6px]">
-            <button
-              onClick={onClose}
-              className=" px-7 py-1.5 border border-gray-300 rounded-xl text-sm text-gray-700 bg-white hover:bg-gray-50 transition"
-            >
-              Cancel
-            </button>
-
-            <button className="px-9 py-1.5 bg-black text-white rounded-xl text-sm hover:bg-gray-800 transition">
-              Submit
-            </button>
+            {/*   MODAL */}
+            {showModal && <LeaveModal onClose={() => setShowModal(false)} />}
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-const Field = ({ label, value, muted }) => (
-  <div>
-    <label className="block text-[10px] text-gray-500 mb-[2px]">{label}</label>
-    <div
-      className={`bg-[#F1F3F5] rounded-lg px-3 py-[6px] text-sm ${
-        muted ? "text-gray-400" : "text-gray-800"
-      }`}
-    >
-      {value}
-    </div>
-  </div>
-);
-
-export default AttendanceModal;
+}
