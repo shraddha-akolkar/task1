@@ -53,14 +53,7 @@ export default function Leave() {
               </h1>
 
               {/* RIGHT SIDE ICONS */}
-              <div
-                className="
-        flex items-center gap-2
-        overflow-x-auto scrollbar-hide
-        pb-2
-        lg:pb-0
-      "
-              >
+              <div className=" flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 lg:pb-0">
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={window}

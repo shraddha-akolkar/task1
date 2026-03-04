@@ -171,7 +171,6 @@ export default function Leave() {
               </div>
               {/* RIGHT SIDE ICON  */}
               <div className="flex items-center gap-2 whitespace-nowrap">
-                {" "}
                 {/* Search pill */}
                 <div className="flex items-center w-full sm:w-full md:w-full lg:w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
                   <input

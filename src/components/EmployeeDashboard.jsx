@@ -1,170 +1,87 @@
 import React, { useState } from "react";
-import { Menu, X } from "lucide-react";
-import logo from "../assets/lamac.png";
+import { useNavigate } from "react-router-dom";
+import AttendanceModal from "./AttendanceModal";
+import filter from "../assets/filter.png";
+import file from "../assets/file.png";
+import building from "../assets/building.png";
+import user from "../assets/user.png";
+import dashboard from "../assets/dashboard.png";
+import umbrella from "../assets/umbrella.png";
+import employee from "../assets/employees 1.png";
+import leave from "../assets/leave.png";
+import person from "../assets/person.png";
+import calender from "../assets/calendar1.png";
+import graphImg from "../assets/time.png";
+import attendence from "../assets/attendance.png";
+import plus from "../assets/plus.png";
+import pencil from "../assets/pencil.png";
 import user1 from "../assets/user1.png";
-import {
-  Users,
-  Bell,
-  CalendarDays,
-  Umbrella,
-  Building2,
-  LayoutDashboard,
-  UserCog,
-  UsersRound,
-  User,
-} from "lucide-react";
+import Navbar from "./Navbar";
+import admin1 from "../assets/admin1.png";
+import admin2 from "../assets/admin2.png";
+import admin3 from "../assets/admin3.png";
+import admin4 from "../assets/admin4.png";
 
-export default function EmployeeDashboard() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const API_BASE_URL = "http://localhost:5000/api";
+
+export default function Leave() {
+  const [activeTab, setActiveTab] = useState("All Employee");
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const navigate = useNavigate();
+
+  const tabs = [
+    "Self",
+    "All Employee",
+    "InFactory",
+    "On Site",
+    "Payroll",
+    "Contract",
+  ];
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      {/* NAVBAR */}
-      <nav className="bg-white  px-6 py-3 flex items-center justify-between">
-        <img src={logo} className="h-7" />
+    <div>
+      <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
+        {/* NAVBAR */}
+        <Navbar />
 
-        <button className="bg-black text-white px-6 py-1.5 rounded-full text-sm">
-          Portal
-        </button>
+        {/* TOP HEADER */}
+        <div className="bg-white border-l border-r border-b border-gray-100 rounded-b-xl pb-3 mb-2 -mt-[0.1rem] relative z-10">
+          <div className="mx-6 mt-2">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+              <h1 className="text-[20px] font-[500] text-gray-800 pb-2 lg:pb-1">
+                Employee
+              </h1>
 
-        <div className="flex items-center gap-3">
-          <img src={user1} className="w-9 h-9 rounded-full" />
-          <span className="text-sm font-medium">lamac labor</span>
+              {/* RIGHT ICONS */}
+              <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 lg:pb-0">
+                <div className="lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
+                  <img src={dashboard} className="w-4 h-4" />
+                  <span className="text-sm">Dashboard</span>
+                </div>
 
-          <button
-            className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-      </nav>
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={person} className="w-4 h-4" />
+                </div>
 
-      {/* ICONS */}
-      <div className="flex justify-end items-center gap-3 px-4 pt-4 pb-1">
-        <button className="flex items-center gap-2 bg-black text-white px-4 py-1.5 rounded-full text-sm font-medium">
-          <LayoutDashboard size={15} />
-          Dashboard
-        </button>
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={employee} className="w-4 h-4" />
+                </div>
 
-        <div className="flex items-center gap-3 text-gray-500">
-          <UserCog
-            size={18}
-            className="cursor-pointer hover:text-gray-800 transition-colors"
-          />
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={calender} className="w-4 h-4" />
+                </div>
 
-          <CalendarDays
-            size={18}
-            className="cursor-pointer hover:text-gray-800 transition-colors"
-          />
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={umbrella} className="w-4 h-4" />
+                </div>
 
-          <Umbrella
-            size={18}
-            className="cursor-pointer hover:text-gray-800 transition-colors"
-          />
-
-          <Building2
-            size={18}
-            className="cursor-pointer hover:text-gray-800 transition-colors"
-          />
-        </div>
-      </div>
-
-      <div className="p-6 grid grid-cols-12 gap-6">
-        <div className="col-span-9 space-y-6">
-          <div className="grid grid-cols-4 gap-6">
-            <div className="bg-white rounded-xl p-5 shadow">
-              <p className="text-gray-500 text-sm">In Time</p>
-              <p className="text-lg font-semibold">-</p>
-
-              <div className="mt-4 text-center text-2xl font-bold">0h 0m</div>
-
-              <button className="mt-4 bg-black text-white px-4 py-2 rounded-lg text-sm w-full">
-                Scan In
-              </button>
-            </div>
-
-            <div className="bg-white rounded-xl p-5 shadow flex flex-col justify-center">
-              <p className="text-gray-500">Payroll Employee</p>
-              <p className="text-3xl font-bold">8</p>
-            </div>
-
-            <div className="bg-white rounded-xl p-5 shadow flex flex-col justify-center">
-              <p className="text-gray-500">Contract Employee</p>
-              <p className="text-3xl font-bold">5</p>
-            </div>
-
-            <div className="bg-white rounded-xl p-5 shadow flex flex-col justify-center">
-              <p className="text-gray-500">On Site</p>
-              <p className="text-3xl font-bold">0</p>
-            </div>
-          </div>
-
-          {/* TABLE */}
-          <div className="bg-white rounded-xl shadow p-4">
-            <div className="grid grid-cols-9 font-semibold text-sm border-b pb-3 text-gray-600">
-              <div>EMPLOYEE NAME</div>
-              <div>DESIGNATION</div>
-              <div>DATE</div>
-              <div>IN-TIME</div>
-              <div>OUT-TIME</div>
-              <div>OVERTIME</div>
-              <div>DURATION</div>
-              <div>TYPE</div>
-              <div>REMARK</div>
-            </div>
-
-            {/* ROW */}
-            <div className="grid grid-cols-9 items-center py-4 border-b text-sm">
-              <div className="flex items-center gap-3">
-                <img src={user1} className="w-8 h-8 rounded-full" />
-                <div>
-                  <p className="font-medium">lamac labor</p>
-                  <p className="text-xs text-gray-400">LM4</p>
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                  <img src={building} className="w-4 h-4" />
                 </div>
               </div>
-              <div>Labour</div>
-              <div>23 Feb 2026</div>
-              <div>09:56 AM</div>
-              <div>-</div>
-              <div>NA</div>
-              <div>0m</div>
-              <div>
-                <span className="bg-lime-100  px-3 py-1 rounded-full text-xs">
-                  Staff
-                </span>
-              </div>
-              <div className="text-gray-400">Remark</div>
             </div>
-          </div>
-        </div>
-
-        {/*PROFILE  */}
-        <div className="col-span-3 bg-white rounded-xl shadow p-5">
-          <h3 className="font-semibold mb-4">Profile</h3>
-
-          <div className="flex flex-col items-center text-center">
-            <img src={user1} className="w-24 h-24 rounded-full " />
-
-            <h4 className="mt-3 font-semibold">Mustafa Chechatwala</h4>
-
-            <p className="text-gray-500 text-sm">
-              Associate - Frontend Developer in IT
-            </p>
-
-            <p className="text-xs text-gray-400 mt-1">1 Yrs 9 Min Hats-Off</p>
-          </div>
-
-          <div className="mt-6 space-y-3 text-sm">
-            <p className="flex justify-between">
-              05 Dec 25 <span className="text-green-600">Approved</span>
-            </p>
-            <p className="flex justify-between">
-              07 Dec 25 <span className="text-red-600">Rejected</span>
-            </p>
-            <p className="flex justify-between">
-              09 Dec 25 <span className="text-green-600">Approved</span>
-            </p>
           </div>
         </div>
       </div>
