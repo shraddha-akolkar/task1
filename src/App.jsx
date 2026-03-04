@@ -12,6 +12,7 @@ import AttendanceModal from "./components/AttendanceModal";
 import LeaveModal from "./components/LeaveModal";
 import HolidaysModal from "./components/HolidaysModal";
 import Meeting from "./components/Meeting";
+import MeetingModal from "./components/MeetingModal";
 import Demo from "./components/Demo";
 import Leave from "./components/Leave";
 import { Toaster } from "react-hot-toast";
@@ -82,6 +83,7 @@ function App() {
         <Route path="/AttendanceModal" element={<AttendanceModal />} />
         <Route path="/LeaveModal" element={<LeaveModal />} />
         <Route path="/HolidayModal" element={<HolidaysModal />} />
+        <Route path="/MeetingModal" element={<MeetingModal />} />
         <Route path="/Leave" element={<Leave />} />
         <Route path="/register" element={<RegisterEmployeeModal />} />
         <Route
