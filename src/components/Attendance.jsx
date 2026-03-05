@@ -29,14 +29,7 @@ export default function Leave() {
   const [showModal, setShowModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
-  const tabs = [
-    "Self",
-    "All Employee",
-    "InFactory",
-    "On Site",
-    "Payroll",
-    "Contract",
-  ];
+  const tabs = ["All Employee", "Payroll", "Contract", "Staff"];
 
   const data = [
     {
@@ -237,9 +230,9 @@ export default function Leave() {
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         DURATION
                       </th>
-                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         TYPE
-                      </th>
+                      </th> */}
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         REMARK
                       </th>
@@ -304,11 +297,11 @@ export default function Leave() {
                           {item.duration}
                         </td>
 
-                        <td className="px-3 py-[10px] border border-gray-200">
+                        {/* <td className="px-3 py-[10px] border border-gray-200">
                           <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded-md text-xs">
                             {item.type}
                           </span>
-                        </td>
+                        </td> */}
 
                         <td className="px-3 py-[10px] border border-gray-200">
                           {item.remark}

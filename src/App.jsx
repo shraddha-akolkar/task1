@@ -22,7 +22,7 @@ const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return children;
@@ -93,7 +93,7 @@ function App() {
               <EmployeesPage />
             </ProtectedRoute>
           }
-        />{" "}
+        />
       </Routes>
     </>
   );

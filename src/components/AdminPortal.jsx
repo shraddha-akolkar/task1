@@ -42,6 +42,32 @@ export default function Leave() {
 
   const leaveTabs = ["On Leave", "On Site", "In Factory", "New"];
 
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  /* ---------------- SCAN FUNCTION ---------------- */
+
+  const handleScan = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/attendance/scan`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          employeeId: 14,
+        }),
+      });
+
+      const data = await res.json();
+
+      alert(data.message);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+      alert("Scan failed");
+    }
+  };
+
   const data = [
     {
       id: 1,
@@ -96,15 +122,11 @@ export default function Leave() {
     },
   ];
 
-  const [selectedRow, setSelectedRow] = useState(null);
-
   return (
     <div>
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
-        {/* NAVBAR */}
         <Navbar />
 
-        {/* TOP HEADER */}
         <div className="bg-white border-l border-r border-b border-gray-100 rounded-b-xl pb-3 mb-2 -mt-[0.1rem] relative z-10">
           <div className="mx-6 mt-2">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
@@ -112,7 +134,6 @@ export default function Leave() {
                 Admin
               </h1>
 
-              {/* RIGHT ICONS */}
               <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 lg:pb-0">
                 <div className="lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
                   <img src={dashboard} className="w-4 h-4" />
@@ -162,14 +183,21 @@ export default function Leave() {
             </div>
           </div>
 
-          {/* DASHBOARD CARDS */}
+          {/* DASHBOARD CARD */}
+
           <div className="grid grid-cols-1 lg:grid-cols-7 gap-4 px-4 py-4">
             <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 px-6 py-5 flex items-center justify-between">
               <div>
                 <p className="text-gray-400 text-xs">In Time</p>
+
                 <h2 className="text-3xl font-bold mt-1">09:43 AM</h2>
 
-                <button className="mt-6 bg-black text-white px-6 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 transition">
+                {/* SCAN BUTTON */}
+
+                <button
+                  onClick={handleScan}
+                  className="mt-6 bg-black text-white px-6 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 transition"
+                >
                   Scan Out
                 </button>
               </div>

@@ -76,7 +76,7 @@ const Login = () => {
       if (response.data.success) {
         localStorage.setItem("displayId", response.data.data.displayId);
         localStorage.setItem("role", response.data.role);
-
+        localStorage.setItem("token", response.data.token);
         toast.success("Login successful!");
 
         if (response.data.role === "admin") {

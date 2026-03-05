@@ -279,6 +279,23 @@ export default function EmployeesPage() {
     },
   });
 
+  const scanMutation = useMutation({
+    mutationFn: async (employeeId) => {
+      const res = await fetch(`${API_BASE_URL}/attendance/scan`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ employeeId }),
+      });
+
+      return res.json();
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(["attendance"]);
+    },
+  });
   /*  UI  */
 
   return (

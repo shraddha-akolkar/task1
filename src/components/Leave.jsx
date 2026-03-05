@@ -26,14 +26,7 @@ export default function Leave() {
   const [showModal, setShowModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
-  const tabs = [
-    "Self",
-    "All Employee",
-    "InFactory",
-    "On Site",
-    "Payroll",
-    "Contract",
-  ];
+  const tabs = ["All Employee", "Payroll", "Contract", "Staff"];
 
   const data = [
     {
