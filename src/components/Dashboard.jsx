@@ -14,20 +14,9 @@ import person from "../assets/person.png";
 import calender from "../assets/calendar1.png";
 import group from "../assets/group.png";
 import plus from "../assets/plus.png";
+import edit from "../assets/edit.png";
+import del from "../assets/delete.png";
 
-import {
-  Funnel,
-  Album,
-  LayoutGrid,
-  UserCheck,
-  Users,
-  Bell,
-  CalendarDays,
-  Umbrella,
-  Building2,
-  Plus,
-  UserCog,
-} from "lucide-react";
 import Navbar from "./Navbar";
 
 const API_BASE_URL = "http://localhost:5000/api";
@@ -261,25 +250,27 @@ export default function EmployeesPage() {
 
   const handleEdit = (emp) => {
     setEditEmployee(emp);
+
     setFormData({
       name: emp.name,
       designation: emp.designation,
       type: emp.type,
-      visaExpiringOn: emp.visaExpiringOn || "",
+      visaExpiringOn: emp.visaExpiringOn,
     });
-  };
 
+    setShowModal(true);
+  };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   // UPDATE
   const updateMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (data) => {
       await fetch(`${API_BASE_URL}/employees/${editEmployee.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
     },
     onSuccess: () => {
@@ -569,16 +560,22 @@ export default function EmployeesPage() {
                           <td className="px-3 py-[4px] border border-[1px] border-gray-200 rounded-r-lg">
                             <div className="flex gap-2">
                               <button onClick={() => handleEdit(emp)}>
-                                <EditIcon />
+                                <img
+                                  src={edit}
+                                  className="w-4 h-4 cursor-pointer"
+                                />
                               </button>
                               <button
                                 onClick={() => {
-                                  if (window.confirm("Delete this employee?")) {
+                                  if (confirm("Delete this employee?")) {
                                     deleteMutation.mutate(emp.id);
                                   }
                                 }}
                               >
-                                <DeleteIcon />
+                                <img
+                                  src={del}
+                                  className="w-4 h-4 cursor-pointer"
+                                />{" "}
                               </button>
                             </div>
                           </td>
@@ -604,7 +601,7 @@ export default function EmployeesPage() {
             </div>
           )}
           {/*  EDIT  */}
-          {editEmployee && (
+          {/* {editEmployee && (
             <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
               <div
                 className="bg-white rounded-xl shadow overflow-hidden mx-1 p-4 
@@ -683,12 +680,16 @@ export default function EmployeesPage() {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
           {/* REGISTER MODAL */}
           {/* */}
           {showModal && (
             <RegisterEmployeeModal
-              onClose={() => setShowModal(false)}
+              onClose={() => {
+                setShowModal(false);
+                setEditEmployee(null);
+              }}
+              employeeData={editEmployee}
               refresh={() =>
                 queryClient.invalidateQueries({
                   queryKey: [

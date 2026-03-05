@@ -1,11 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import calender from "../assets/calendar.png";
 import inbox from "../assets/inbox.png";
 
-const RegisterEmployeeModal = ({ onClose, refresh }) => {
+const RegisterEmployeeModal = ({ onClose, refresh, employeeData }) => {
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -22,6 +22,25 @@ const RegisterEmployeeModal = ({ onClose, refresh }) => {
     password: "",
     confirmPassword: "",
   });
+  useEffect(() => {
+    if (employeeData) {
+      setFormData((prev) => ({
+        ...prev,
+        name: employeeData.name || "",
+        mobile: employeeData.mobile || "",
+        email: employeeData.email || "",
+        dob: employeeData.dob || "",
+        address: employeeData.address || "",
+        zipCode: employeeData.zipCode || "",
+        type: employeeData.type || "",
+        designation: employeeData.designation || "",
+        visaStatus: employeeData.visaStatus || "",
+        visaExpiringOn: employeeData.visaExpiringOn || "",
+        password: "",
+        confirmPassword: "",
+      }));
+    }
+  }, [employeeData]);
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -32,8 +51,19 @@ const RegisterEmployeeModal = ({ onClose, refresh }) => {
     const newErrors = {};
 
     Object.keys(formData).forEach((key) => {
-      if (!formData[key] && key !== "visaExpiringOn")
+      if (!formData[key] && key !== "visaExpiringOn") {
+        // Skip file validation during edit
+        if (employeeData && (key === "idProof" || key === "employeePicture")) {
+          return;
+        }
+
+        // Skip password during edit
+        if (employeeData && (key === "password" || key === "confirmPassword")) {
+          return;
+        }
+
         newErrors[key] = "This field is required";
+      }
     });
 
     if (formData.dob) {
@@ -42,14 +72,18 @@ const RegisterEmployeeModal = ({ onClose, refresh }) => {
       if (age < 18) newErrors.dob = "Employee must be at least 18 years old";
     }
 
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
-    if (!passwordRegex.test(formData.password)) {
-      newErrors.password =
-        "Minimum 8 characters, 1 Uppercase & 1 Special Character";
-    }
+    if (!employeeData) {
+      const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
-    if (formData.password !== formData.confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
+      if (!passwordRegex.test(formData.password)) {
+        newErrors.password =
+          "Minimum 8 characters, 1 Uppercase & 1 Special Character";
+      }
+
+      if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = "Passwords do not match";
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -77,31 +111,63 @@ const RegisterEmployeeModal = ({ onClose, refresh }) => {
     setFormData((prev) => ({ ...prev, [fieldName]: file }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setLoading(true);
 
-    const data = new FormData();
-    Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
-    });
+    try {
+      const data = new FormData();
 
-    axios
-      .post("http://localhost:5000/api/auth/register", data)
-      .then((response) => {
-        if (response.data.success) {
-          toast.success("Employee registered successfully!");
-          onClose();
-          refresh();
-        }
-      })
-      .catch((error) => {
-        const message = error.response?.data?.message || "Something went wrong";
-        toast.error(message);
-      })
-      .finally(() => setLoading(false));
+      data.append("name", formData.name);
+      data.append("mobile", formData.mobile);
+      data.append("email", formData.email);
+      data.append("dob", formData.dob);
+      data.append("address", formData.address);
+      data.append("zipCode", formData.zipCode);
+      data.append("type", formData.type);
+      data.append("designation", formData.designation);
+      data.append("visaStatus", formData.visaStatus);
+      data.append("visaExpiringOn", formData.visaExpiringOn);
+
+      if (formData.idProof instanceof File) {
+        data.append("idProof", formData.idProof);
+      }
+
+      if (formData.employeePicture instanceof File) {
+        data.append("employeePicture", formData.employeePicture);
+      }
+
+      if (employeeData) {
+        await axios.put(
+          `http://localhost:5000/api/employees/${employeeData.id}`,
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        );
+
+        toast.success("Employee updated successfully!");
+      } else {
+        data.append("password", formData.password);
+
+        await axios.post("http://localhost:5000/api/auth/register", data);
+
+        toast.success("Employee registered successfully!");
+      }
+
+      onClose();
+      refresh();
+    } catch (error) {
+      const message = error.response?.data?.message || "Something went wrong";
+
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -205,26 +271,29 @@ const RegisterEmployeeModal = ({ onClose, refresh }) => {
             </div>
 
             {/* PASSWORD */}
-            <div className="grid grid-cols-2 gap-2">
-              <PasswordInput
-                label="Password*"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                show={showPassword}
-                setShow={setShowPassword}
-                error={errors.password}
-              />
-              <PasswordInput
-                label="Confirm Password*"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                show={showConfirmPassword}
-                setShow={setShowConfirmPassword}
-                error={errors.confirmPassword}
-              />
-            </div>
+            {/* PASSWORD (only for new employee) */}
+            {!employeeData && (
+              <div className="grid grid-cols-2 gap-2">
+                <PasswordInput
+                  label="Password*"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  show={showPassword}
+                  setShow={setShowPassword}
+                  error={errors.password}
+                />
+                <PasswordInput
+                  label="Confirm Password*"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  show={showConfirmPassword}
+                  setShow={setShowConfirmPassword}
+                  error={errors.confirmPassword}
+                />
+              </div>
+            )}
 
             {/* FILES */}
             <div className="grid grid-cols-2 gap-2">
