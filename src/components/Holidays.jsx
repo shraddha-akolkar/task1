@@ -4,31 +4,29 @@ import HolidaysModal from "./HolidaysModal";
 import filter from "../assets/filter.png";
 import file from "../assets/file.png";
 import building from "../assets/building.png";
-import user from "../assets/user.png";
-import window from "../assets/window.png";
-import umbrella from "../assets/umbrella.png";
+import windowIcon from "../assets/window.png";
 import employee from "../assets/employees 1.png";
-import leave from "../assets/leave.png";
 import calender from "../assets/calendar1.png";
 import person from "../assets/person.png";
 import plus from "../assets/plus.png";
 import holiday from "../assets/holiday.png";
-import pencil from "../assets/pencil.png";
-import user1 from "../assets/user1.png";
 import festiv from "../assets/holiday-assest.png";
 import Navbar from "./Navbar";
-
+import edit from "../assets/edit.png";
+import del from "../assets/delete.png";
 import { Plus } from "lucide-react";
 const API_BASE_URL = "http://localhost:5000/api";
 
 // MAIN
 
-export default function Leave() {
+export default function Holiday() {
   const [activeTab, setActiveTab] = useState("All Employee");
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
+  const [holidays, setHolidays] = useState([]);
+  const [selectedHoliday, setSelectedHoliday] = useState(null);
   const tabs = [
     "Self",
     "All Employee",
@@ -38,6 +36,42 @@ export default function Leave() {
     "Contract",
   ];
 
+  const fetchHolidays = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/holidays`);
+      const data = await res.json();
+      setHolidays(data.holidays);
+    } catch (err) {
+      console.log("Fetch error:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchHolidays();
+  }, [fetchHolidays]);
+  const handleEdit = (holiday) => {
+    setSelectedHoliday(holiday);
+    setShowModal(true);
+  };
+
+  const handleDelete = async (id) => {
+    console.log("Delete clicked:", id);
+
+    if (!window.confirm("Delete this holiday?")) return;
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/holidays/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+      console.log(data);
+
+      fetchHolidays();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="border-lg">
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
@@ -56,7 +90,7 @@ export default function Leave() {
               <div className=" flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 lg:pb-0">
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
-                    src={window}
+                    src={windowIcon}
                     className="w-4 h-4"
                     onClick={() => navigate("/adminportal")}
                   />
@@ -130,6 +164,7 @@ export default function Leave() {
                   </button>
                 ))}
               </div>
+
               {/* RIGHT SIDE ICON  */}
               <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto pt-2">
                 {/* Search pill */}
@@ -145,6 +180,7 @@ export default function Leave() {
                     <span className="absolute w-2 h-[2px] bg-gray-500 right-[-5px] bottom-[-3px] rotate-45"></span>
                   </div>
                 </div>
+
                 {/* Filter */}
                 <div
                   onClick={() => setShowFilters(!showFilters)}
@@ -152,10 +188,12 @@ export default function Leave() {
                 >
                   <img src={filter} className="w-4 h-4" />
                 </div>
+
                 {/* File */}
                 <div className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
                   <img src={file} className="w-4 h-4" />
                 </div>
+
                 {/* New button */}
                 <button
                   onClick={() => setShowModal(true)}
@@ -198,90 +236,74 @@ export default function Leave() {
               <div className=" rounded-2xl">
                 {/* Cards Grid */}
                 <div className="grid grid-cols-4 gap-6">
-                  {/* Card 1 */}
-                  <div className="bg-[#FAFAFA] rounded-2xl overflow-hidden">
-                    <div className="w-full h-[180px]">
-                      <img
-                        src={festiv}
-                        alt="holiday"
-                        className="w-[370px] h-full  p-1.5"
-                      />
-                    </div>
+                  {holidays.map((h) => (
+                    <div
+                      key={h.id}
+                      className="bg-[#FAFAFA] rounded-2xl overflow-hidden relative"
+                    >
+                      <div className="w-full h-[180px] pointer-events-none">
+                        <img
+                          src={
+                            h.image
+                              ? `http://localhost:5000/uploads/${h.image}`
+                              : festiv
+                          }
+                          alt="holiday"
+                          className="w-full h-full p-1.5 object-cover rounded-2xl"
+                        />
+                      </div>
 
-                    <div className="px-4 py-3">
-                      <div className="text-[16px] font-semibold text-gray-900">
-                        New Year's Day
-                      </div>
-                      <div className="text-[13px] text-gray-500 mt-1">
-                        1 Jan 2026 <span className="mx-1">•</span> Thursday
-                      </div>
-                    </div>
-                  </div>
+                      <div className="px-4 py-3">
+                        <div className="text-[16px] font-semibold text-gray-900">
+                          {h.title}
+                        </div>
 
-                  {/* Card 2 */}
-                  <div className="bg-[#FAFAFA] rounded-2xl overflow-hidden">
-                    <div className="w-full h-[180px]">
-                      <img
-                        src={festiv}
-                        alt="holiday"
-                        className="w-[360px] h-full  p-1.5"
-                      />
-                    </div>
+                        <div className="flex items-center justify-between mt-1">
+                          <div className="text-[13px] text-gray-500">
+                            {new Date(h.date).toDateString()}
+                            <span className="mx-1">•</span>
+                            {h.day}
+                          </div>
 
-                    <div className="px-4 py-3">
-                      <div className="text-[16px] font-semibold text-gray-900">
-                        Eid al-Fitr
-                      </div>
-                      <div className="text-[13px] text-gray-500 mt-1">
-                        30 Mar 2026 <span className="mx-1">•</span> Tuesday
-                      </div>
-                    </div>
-                  </div>
+                          <div className="flex items-center gap-2 relative z-20">
+                            <img
+                              src={edit}
+                              alt="edit"
+                              className="w-4 h-4 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEdit(h);
+                              }}
+                            />
 
-                  {/* Card 1 */}
-                  <div className="bg-[#FAFAFA] rounded-2xl overflow-hidden">
-                    <div className="w-full h-[180px]">
-                      <img
-                        src={festiv}
-                        alt="holiday"
-                        className="w-[370px] h-full  p-1.5"
-                      />
-                    </div>
-
-                    <div className="px-4 py-3">
-                      <div className="text-[16px] font-semibold text-gray-900">
-                        New Year's Day
-                      </div>
-                      <div className="text-[13px] text-gray-500 mt-1">
-                        1 Jan 2026 <span className="mx-1">•</span> Thursday
+                            <img
+                              src={del}
+                              alt="delete"
+                              className="w-4 h-4 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(h.id);
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Card 3 */}
-                  <div className="bg-[#FAFAFA] rounded-2xl overflow-hidden">
-                    <div className="w-full h-[180px]">
-                      <img
-                        src={festiv}
-                        alt="holiday"
-                        className="w-[360px] h-full  p-1.5"
-                      />
-                    </div>
-
-                    <div className="px-4 py-3">
-                      <div className="text-[16px] font-semibold text-gray-900">
-                        Eid al-Adha
-                      </div>
-                      <div className="text-[13px] text-gray-500 mt-1">
-                        4 Jul 2026 <span className="mx-1">•</span> Tuesday
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
             <div className="p-4 rounded-xl"></div>
-            {showModal && <HolidaysModal onClose={() => setShowModal(false)} />}
+            {showModal && (
+              <HolidaysModal
+                onClose={() => {
+                  setShowModal(false);
+                  setSelectedHoliday(null);
+                }}
+                refreshHolidays={fetchHolidays}
+                holidayData={selectedHoliday}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -1,21 +1,82 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
-const HolidaysModal = ({ onClose }) => {
+const HolidaysModal = ({ onClose, refreshHolidays, holidayData }) => {
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState("");
+  const [day, setDay] = useState("");
+  const [file, setFile] = useState(null);
   const [image, setImage] = useState(null);
 
+  const dateRef = useRef(null);
+
+  /* PREFILL DATA WHEN EDITING */
+  useEffect(() => {
+    if (holidayData) {
+      setTitle(holidayData.title);
+      setDate(holidayData.date);
+      setDay(holidayData.day);
+
+      if (holidayData.image) {
+        setImage(`http://localhost:5000/uploads/${holidayData.image}`);
+      }
+    }
+  }, [holidayData]);
+
+  /* IMAGE  */
   const handleImage = (e) => {
-    const file = e.target.files[0];
+    const selected = e.target.files[0];
+
+    if (selected) {
+      setFile(selected);
+      setImage(URL.createObjectURL(selected));
+    }
+  };
+
+  /* SUBMIT */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("title", title);
+    formData.append("date", date);
+    formData.append("day", day);
+
     if (file) {
-      setImage(URL.createObjectURL(file));
+      formData.append("image", file);
+    }
+
+    try {
+      if (holidayData) {
+        /* UPDATE */
+        await fetch(`http://localhost:5000/api/holidays/${holidayData.id}`, {
+          method: "PUT",
+          body: formData,
+        });
+      } else {
+        /* CREATE */
+        await fetch("http://localhost:5000/api/holidays", {
+          method: "POST",
+          body: formData,
+        });
+      }
+
+      refreshHolidays();
+      onClose();
+    } catch (err) {
+      console.log(err);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center z-50">
-      <form className="bg-[#F9FAFB] w-[480px] rounded-2xl shadow-xl px-4 py-3 flex flex-col">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-[#F9FAFB] w-[480px] rounded-2xl shadow-xl px-4 py-3 flex flex-col"
+      >
         {/* HEADER */}
         <div className="text-sm font-medium text-gray-800 mb-2">
-          Add Holiday
+          {holidayData ? "Edit Holiday" : "Add Holiday"}
         </div>
 
         {/* IMAGE */}
@@ -47,6 +108,8 @@ const HolidaysModal = ({ onClose }) => {
           <input
             type="text"
             placeholder="Holiday title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             className="w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
           />
         </div>
@@ -57,7 +120,11 @@ const HolidaysModal = ({ onClose }) => {
             <label className="block text-[11px] text-gray-500 mb-1">Date</label>
 
             <input
+              ref={dateRef}
               type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              onClick={() => dateRef.current?.showPicker?.()}
               className="w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
             />
           </div>
@@ -68,6 +135,8 @@ const HolidaysModal = ({ onClose }) => {
             <input
               type="text"
               placeholder="Thursday"
+              value={day}
+              onChange={(e) => setDay(e.target.value)}
               className="w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
             />
           </div>
@@ -87,7 +156,7 @@ const HolidaysModal = ({ onClose }) => {
             type="submit"
             className="px-10 py-1.5 bg-black text-white rounded-xl text-sm hover:bg-gray-800"
           >
-            Submit
+            {holidayData ? "Update" : "Submit"}
           </button>
         </div>
       </form>
