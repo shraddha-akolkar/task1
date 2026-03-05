@@ -4,15 +4,14 @@ import MeetingModal from "./MeetingModal";
 import filter from "../assets/filter.png";
 import file from "../assets/file.png";
 import meeting from "../assets/meeting.png";
-import user from "../assets/user.png";
 import window from "../assets/window.png";
 import umbrella from "../assets/umbrella.png";
 import employee from "../assets/employees 1.png";
 import calender from "../assets/calendar1.png";
 import person from "../assets/person.png";
 import plus from "../assets/plus.png";
-import pencil from "../assets/pencil.png";
-import user1 from "../assets/user1.png";
+import edit from "../assets/edit.png";
+import del from "../assets/delete.png";
 import Navbar from "./Navbar";
 import { Plus } from "lucide-react";
 
@@ -177,31 +176,31 @@ export default function Meeting() {
                 >
                   <thead style={{ background: "#FAFAFA" }}>
                     <tr className="text-[12px] uppercase text-[#151515]">
-                      <th className="px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
+                      <th className="px-3 py-[10px] text-left rounded-l-lg border border-gray-200 font-medium">
                         CLIENT NAME
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200">
+                      <th className="px-3 py-[10px] text-left border border-gray-200 font-medium">
                         EMPLOYEE NAME
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200">
+                      <th className="px-3 py-[10px] text-left border border-gray-200 font-medium">
                         DATE
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200">
+                      <th className="px-3 py-[10px] text-left border border-gray-200 font-medium">
                         SERVICE
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200">
+                      <th className="px-3 py-[10px] text-left border border-gray-200 font-medium">
                         DAY TYPE
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200">
+                      <th className="px-3 py-[10px] text-left border border-gray-200 font-medium">
                         ADDRESS
                       </th>
 
-                      <th className="px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
+                      <th className="px-3 py-[10px] text-left rounded-r-lg border border-gray-200 font-medium">
                         ACTION
                       </th>
                     </tr>
@@ -243,10 +242,16 @@ export default function Meeting() {
                           {item.address}
                         </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200 rounded-r-lg">
+                        <td className="px-3 py-[10px] border border-gray-200 rounded-r-lg flex gap-3">
                           <img
-                            src={pencil}
+                            src={edit}
                             alt="Edit"
+                            className="w-4 h-4 cursor-pointer "
+                          />
+
+                          <img
+                            src={del}
+                            alt="Delete"
                             className="w-4 h-4 cursor-pointer"
                           />
                         </td>
