@@ -4,14 +4,14 @@ import LeaveModal from "./LeaveModal";
 import filter from "../assets/filter.png";
 import file from "../assets/file.png";
 import building from "../assets/building.png";
-import user from "../assets/user.png";
 import window from "../assets/window.png";
 import umbrella from "../assets/umbrella.png";
 import employee from "../assets/employees 1.png";
 import leave from "../assets/leave.png";
 import person from "../assets/person.png";
 import plus from "../assets/plus.png";
-import pencil from "../assets/pencil.png";
+import edit from "../assets/edit.png";
+import del from "../assets/delete.png";
 import user1 from "../assets/user1.png";
 import Navbar from "./Navbar";
 
@@ -429,10 +429,16 @@ export default function Leave() {
                           )}
                         </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200 rounded-r-lg">
+                        <td className="px-3 py-[16px] border border-gray-200 rounded-r-lg flex gap-3">
                           <img
-                            src={pencil}
+                            src={edit}
                             alt="Edit"
+                            className="w-4 h-4 cursor-pointer"
+                          />
+
+                          <img
+                            src={del}
+                            alt="Delete"
                             className="w-4 h-4 cursor-pointer"
                           />
                         </td>

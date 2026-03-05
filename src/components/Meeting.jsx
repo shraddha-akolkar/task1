@@ -13,57 +13,54 @@ import plus from "../assets/plus.png";
 import edit from "../assets/edit.png";
 import del from "../assets/delete.png";
 import Navbar from "./Navbar";
-import { Plus } from "lucide-react";
 
 const API_BASE_URL = "http://localhost:5000/api";
-
-/* DATA */
-const data = [
-  {
-    id: 1,
-    client: "Marriot Hotel",
-    employee: "Khalid Al-Zahrani, Rajiv Patel",
-    date: "01 Jan 2026",
-    services: ["Interior Design", "Marble Work"],
-    dayType: "Half day / First Half",
-    address: "Po Box 349, Ras Al Khaimah, Abu Dhabi",
-  },
-  {
-    id: 2,
-    client: "Hilton Resort",
-    employee: "Sara Al-Mansoori",
-    date: "15 Feb 2026",
-    services: ["Landscape Architecture", "Garden Design"],
-    dayType: "Full Day",
-    address: "Po Box 123, Dubai, UAE",
-  },
-  {
-    id: 3,
-    client: "Radisson Blu",
-    employee: "Khalid Al-Zahrani",
-    date: "10 Mar 2026",
-    services: ["Graphic Design", "Branding"],
-    dayType: "Half day / First Half",
-    address: "Po Box 456, Abu Dhabi, UAE",
-  },
-];
 
 export default function Meeting() {
   const [activeTab, setActiveTab] = useState("All Employee");
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [meetings, setMeetings] = useState([]);
+  const [selectedMeeting, setSelectedMeeting] = useState(null);
 
   const navigate = useNavigate();
 
-  const tabs = [
-    "Self",
-    "All Employee",
-    "InFactory",
-    "On Site",
-    "Payroll",
-    "Contract",
-  ];
+  const fetchMeetings = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/meetings`);
+      const data = await res.json();
+      setMeetings(data.meetings);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchMeetings();
+  }, [fetchMeetings]);
+
+  const handleDelete = async (id) => {
+    console.log("Delete clicked:", id);
+
+    if (!confirm("Delete this meeting?")) return;
+
+    try {
+      await fetch(`${API_BASE_URL}/meetings/${id}`, {
+        method: "DELETE",
+      });
+
+      fetchMeetings();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleEdit = (meeting) => {
+    console.log("Edit clicked:", meeting);
+    setSelectedMeeting(meeting);
+    setShowModal(true);
+  };
 
   return (
     <div className="border-lg">
@@ -78,35 +75,31 @@ export default function Meeting() {
                 Meeting
               </h1>
 
-              {/* RIGHT ICONS */}
+              {/* ICONS */}
               <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 lg:pb-0">
                 <div
-                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100"
+                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
                   onClick={() => navigate("/adminportal")}
                 >
                   <img src={window} className="w-4 h-4" />
                 </div>
 
                 <div
-                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100"
+                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
                   onClick={() => navigate("/attendance")}
                 >
                   <img src={person} className="w-4 h-4" />
                 </div>
 
                 <div
-                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100"
+                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
                   onClick={() => navigate("/dashboard")}
                 >
                   <img src={employee} className="w-4 h-4" />
                 </div>
 
-                {/* <div className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center">
-                  <img src={user} className="w-4 h-4" />
-                </div> */}
-
                 <div
-                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100"
+                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
                   onClick={() => navigate("/leave")}
                 >
                   <img src={calender} className="w-4 h-4" />
@@ -129,7 +122,7 @@ export default function Meeting() {
 
           {/* TABLE AREA */}
           <div className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2 pt-2">
-            {/* SEARCH + ACTION */}
+            {/* SEARCH */}
             <div className="flex items-center justify-between gap-3 px-4 pb-2">
               <div className="flex items-center w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
                 <input
@@ -158,7 +151,10 @@ export default function Meeting() {
                 </div>
 
                 <button
-                  onClick={() => setShowModal(true)}
+                  onClick={() => {
+                    setSelectedMeeting(null);
+                    setShowModal(true);
+                  }}
                   className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm"
                 >
                   <img src={plus} className="w-4 h-4" />
@@ -207,10 +203,10 @@ export default function Meeting() {
                   </thead>
 
                   <tbody>
-                    {data.map((item) => (
+                    {meetings.map((item) => (
                       <tr key={item.id} className="bg-white">
                         <td className="px-3 py-[6px] border border-gray-200 rounded-l-lg">
-                          {item.client}
+                          {item.clientName}
                         </td>
 
                         <td className="px-3 py-[6px] border border-gray-200">
@@ -222,38 +218,41 @@ export default function Meeting() {
                         </td>
 
                         <td className="px-3 py-[6px] border border-gray-200">
-                          <div className="flex flex-wrap gap-2">
-                            {item.services.map((s, i) => (
-                              <span
-                                key={i}
-                                className="bg-[#F3F4F6] text-gray-700 text-[11px] px-2 py-1 rounded-md"
-                              >
-                                {s}
-                              </span>
-                            ))}
+                          <span className="bg-[#F3F4F6] text-gray-700 text-[11px] px-2 py-1 rounded-md">
+                            {item.service}
+                          </span>
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.dayType} / {item.shiftType}
+                        </td>
+
+                        <td className="px-3 py-[6px] border border-gray-200">
+                          {item.clientAddress}
+                        </td>
+
+                        <td className="px-3 py-[10px] border border-gray-200 rounded-r-lg">
+                          <div className="flex gap-3 relative z-10">
+                            <img
+                              src={edit}
+                              alt="Edit"
+                              className="w-4 h-4 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEdit(item);
+                              }}
+                            />
+
+                            <img
+                              src={del}
+                              alt="Delete"
+                              className="w-4 h-4 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(item.id);
+                              }}
+                            />
                           </div>
-                        </td>
-
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.dayType}
-                        </td>
-
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.address}
-                        </td>
-
-                        <td className="px-3 py-[10px] border border-gray-200 rounded-r-lg flex gap-3">
-                          <img
-                            src={edit}
-                            alt="Edit"
-                            className="w-4 h-4 cursor-pointer "
-                          />
-
-                          <img
-                            src={del}
-                            alt="Delete"
-                            className="w-4 h-4 cursor-pointer"
-                          />
                         </td>
                       </tr>
                     ))}
@@ -264,7 +263,16 @@ export default function Meeting() {
           </div>
 
           {/* MODAL */}
-          {showModal && <MeetingModal onClose={() => setShowModal(false)} />}
+          {showModal && (
+            <MeetingModal
+              onClose={() => {
+                setShowModal(false);
+                setSelectedMeeting(null);
+              }}
+              meetingData={selectedMeeting}
+              refreshMeetings={fetchMeetings}
+            />
+          )}
         </div>
       </div>
     </div>

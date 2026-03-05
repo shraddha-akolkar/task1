@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import calendar from "../assets/calendar.png";
 
-const MeetingModal = ({ onClose }) => {
+const MeetingModal = ({ onClose, meetingData, refreshMeetings }) => {
   const dateRef = useRef(null);
 
   const [clientName, setClientName] = useState("");
@@ -17,31 +17,57 @@ const MeetingModal = ({ onClose }) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/meetings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          clientName,
-          employee,
-          clientAddress,
-          dayType,
-          shiftType,
-          date,
-          service,
-        }),
-      });
+      if (meetingData) {
+        await fetch(`http://localhost:5000/api/meetings/${meetingData.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            clientName,
+            employee,
+            clientAddress,
+            dayType,
+            shiftType,
+            date,
+            service,
+          }),
+        });
+      } else {
+        await fetch("http://localhost:5000/api/meetings", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            clientName,
+            employee,
+            clientAddress,
+            dayType,
+            shiftType,
+            date,
+            service,
+          }),
+        });
+      }
 
-      const data = await res.json();
-      console.log(data);
-
-      alert("Meeting Created Successfully");
+      refreshMeetings();
       onClose();
     } catch (error) {
       console.log(error);
     }
   };
+  useEffect(() => {
+    if (meetingData) {
+      setClientName(meetingData.clientName || "");
+      setEmployee(meetingData.employee || "");
+      setClientAddress(meetingData.clientAddress || "");
+      setDayType(meetingData.dayType || "");
+      setShiftType(meetingData.shiftType || "");
+      setDate(meetingData.date || "");
+      setService(meetingData.service || "");
+    }
+  }, [meetingData]);
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center z-50">

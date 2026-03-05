@@ -107,10 +107,10 @@ const HolidaysModal = ({ onClose, refreshHolidays, holidayData }) => {
 
           <input
             type="text"
-            placeholder="Holiday title"
+            placeholder="Please Enter Holiday title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
+            className="text-gray-600 w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
           />
         </div>
 
@@ -125,7 +125,7 @@ const HolidaysModal = ({ onClose, refreshHolidays, holidayData }) => {
               value={date}
               onChange={(e) => setDate(e.target.value)}
               onClick={() => dateRef.current?.showPicker?.()}
-              className="w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
+              className="text-gray-600 w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
             />
           </div>
 
@@ -134,10 +134,10 @@ const HolidaysModal = ({ onClose, refreshHolidays, holidayData }) => {
 
             <input
               type="text"
-              placeholder="Thursday"
+              placeholder="Please Enter Holiday Day"
               value={day}
               onChange={(e) => setDay(e.target.value)}
-              className="w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
+              className="text-gray-600 w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
             />
           </div>
         </div>
