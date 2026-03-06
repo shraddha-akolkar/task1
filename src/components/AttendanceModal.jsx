@@ -30,47 +30,29 @@ const AttendanceModal = ({ onClose }) => {
           <input
             type="text"
             defaultValue="Thu, 16 Oct 2025"
-            className="w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
+            className=" text-gray-600 w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
           />
         </div>
 
         {/* GRID */}
-        <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-2">
-          <Field label="In Time" value="09:32 AM" />
+        <div className=" text-gray-600 grid grid-cols-2 gap-x-4 gap-y-2 mb-2">
+          <Field label="In Time" value="09:32 AM" className=" text-gray-600 " />
           <Field label="Out Time" value="08:53 AM" />
           <Field label="Overtime" value="02h 28mins" />
           <Field label="Total Duration" value="11h 16mins" />
 
           {/* TYPE */}
-          <div>
-            <label className="block text-[11px] text-gray-500 mb-0.5">
-              Type
-            </label>
-            <div className="bg-[#F1F3F5] rounded-lg px-2 py-1.5 flex items-center justify-between">
-              <div className="flex gap-1 flex-wrap">
-                <span className="bg-white px-2 py-[2px] rounded-md text-[11px] border">
-                  On Site ✕
-                </span>
-                <span className="bg-white px-2 py-[2px] rounded-md text-[11px] border">
-                  In Factory ✕
-                </span>
-              </div>
-              <ChevronRight size={14} className="text-gray-400" />
-            </div>
-          </div>
 
           {/* HALF DAY */}
-          <div>
-            <label className="block text-[11px] text-gray-500 mb-0.5">
-              Half Day
-            </label>
-            <select className="w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none">
-              <option>NA</option>
-              <option>Half Day</option>
-            </select>
-          </div>
         </div>
-
+        <div className="mb-2">
+          <label className="block text-[11px] text-gray-500 mb-0.5">Type</label>
+          <input
+            type="text"
+            defaultValue="Payroll"
+            className=" text-gray-600 w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
+          />
+        </div>
         {/* REDUCTION */}
         <div className="mb-2">
           <label className="block text-[11px] text-gray-500 mb-0.5">
@@ -79,7 +61,7 @@ const AttendanceModal = ({ onClose }) => {
           <input
             type="text"
             defaultValue="01h 15mins"
-            className="w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
+            className=" text-gray-600 w-full bg-[#F1F3F5] rounded-lg px-3 py-1.5 text-sm outline-none"
           />
         </div>
 
@@ -90,7 +72,7 @@ const AttendanceModal = ({ onClose }) => {
           </label>
           <textarea
             placeholder="Enter remark"
-            className="w-full bg-[#F1F3F5] rounded-xl px-3 py-2 text-sm outline-none h-[55px]"
+            className=" text-gray-600 w-full bg-[#F1F3F5] rounded-xl px-3 py-2 text-sm outline-none h-[55px]"
           />
         </div>
 

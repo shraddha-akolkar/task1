@@ -1,19 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AttendanceModal from "./AttendanceModal";
-import filter from "../assets/filter.png";
-import file from "../assets/file.png";
 import building from "../assets/building.png";
-import user from "../assets/user.png";
 import dashboard from "../assets/dashboard.png";
 import umbrella from "../assets/umbrella.png";
 import employee from "../assets/employees 1.png";
-import leave from "../assets/leave.png";
 import person from "../assets/person.png";
 import calender from "../assets/calendar1.png";
 import graphImg from "../assets/time.png";
-import attendence from "../assets/attendance.png";
-import plus from "../assets/plus.png";
 import pencil from "../assets/pencil.png";
 import user1 from "../assets/user1.png";
 import Navbar from "./Navbar";
@@ -21,7 +15,8 @@ import admin1 from "../assets/admin1.png";
 import admin2 from "../assets/admin2.png";
 import admin3 from "../assets/admin3.png";
 import admin4 from "../assets/admin4.png";
-
+import edit from "../assets/edit.png";
+import del from "../assets/delete.png";
 const API_BASE_URL = "http://localhost:5000/api";
 
 export default function Leave() {
@@ -348,11 +343,10 @@ export default function Leave() {
                           </span>
                         </td>
 
-                        <td className="px-3 py-[10px] border border-gray-200 rounded-r-lg">
-                          <img
-                            src={pencil}
-                            className="w-4 h-4 cursor-pointer"
-                          />
+                        <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
+                          <img src={edit} className="w-4 h-4 cursor-pointer" />
+
+                          <img src={del} className="w-4 h-4 cursor-pointer" />
                         </td>
                       </tr>
                     ))}
