@@ -119,12 +119,11 @@ export default function Leave() {
       const todayRecord = data.find((a) => a.date === today);
 
       if (todayRecord) {
-        if (todayRecord.inTime && !todayRecord.outTime) {
-          setInTime(todayRecord.inTime);
-          setIsScannedIn(true);
-        }
+        setInTime(todayRecord.inTime || null);
 
-        if (todayRecord.outTime) {
+        if (!todayRecord.outTime || todayRecord.outTime === "00:00:00") {
+          setIsScannedIn(true);
+        } else {
           setIsScannedIn(false);
         }
       }
