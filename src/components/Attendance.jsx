@@ -4,7 +4,7 @@ import AttendanceModal from "./AttendanceModal";
 import filter from "../assets/filter.png";
 import file from "../assets/file.png";
 import building from "../assets/building.png";
-import windowIcon from "../assets/window.png";
+import window from "../assets/window.png";
 import umbrella from "../assets/umbrella.png";
 import employee from "../assets/employees 1.png";
 import calender from "../assets/calendar1.png";
@@ -69,19 +69,6 @@ export default function Leave() {
     }
   };
 
-  //   const confirmDelete = window.confirm("Delete this attendance?");
-  //   if (!confirmDelete) return;
-
-  //   try {
-  //     await fetch(`${API_BASE_URL}/attendance/${id}`, {
-  //       method: "DELETE",
-  //     });
-
-  //     fetchAttendance(); // refresh table
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
   return (
     <div className="border-lg">
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
@@ -107,7 +94,7 @@ export default function Leave() {
               >
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
-                    src={windowIcon}
+                    src={window}
                     className="w-4 h-4"
                     onClick={() => navigate("/adminportal")}
                   />
@@ -350,11 +337,7 @@ export default function Leave() {
 
             {/*   MODAL */}
             {showModal && (
-              <AttendanceModal
-                onClose={() => setShowModal(false)}
-                editData={editData}
-                refresh={fetchAttendance}
-              />
+              <AttendanceModal onClose={() => setShowModal(false)} />
             )}
           </div>
         </div>
