@@ -66,11 +66,6 @@ export default function Leave() {
 
   /*SCAN*/
   const handleScan = async () => {
-    if (!user?.id) {
-      alert("User not loaded yet");
-      return;
-    }
-
     try {
       const res = await fetch(`${API_BASE_URL}/attendance/scan`, {
         method: "POST",
@@ -84,23 +79,11 @@ export default function Leave() {
 
       const data = await res.json();
 
-      if (data.type === "IN") {
-        setInTime(data.attendance.inTime);
-        setIsScannedIn(true);
-      }
-
-      if (data.type === "OUT") {
-        setIsScannedIn(false);
-        setInTime(null); // reset timer
-        setDuration("0h 0m");
-      }
-
       alert(data.message);
 
       await fetchAttendance(); // refresh table
     } catch (error) {
       console.error(error);
-      alert("Scan failed");
     }
   };
 
@@ -140,6 +123,10 @@ export default function Leave() {
           setInTime(todayRecord.inTime);
           setIsScannedIn(true);
         }
+
+        if (todayRecord.outTime) {
+          setIsScannedIn(false);
+        }
       }
     } catch (err) {
       console.error(err);
@@ -147,7 +134,7 @@ export default function Leave() {
   };
 
   const formatDuration = (minutes) => {
-    if (!minutes) return "-";
+    if (minutes === null || minutes === undefined) return "-";
 
     const h = Math.floor(minutes / 60);
     const m = minutes % 60;
