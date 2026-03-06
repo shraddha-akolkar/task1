@@ -76,7 +76,7 @@ export default function Meeting() {
 
                 <div
                   className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
-                  onClick={() => navigate("/employee-holidays")}
+                  onClick={() => navigate("/employee-holiday")}
                 >
                   <img src={umbrella} className="w-4 h-4" />
                 </div>

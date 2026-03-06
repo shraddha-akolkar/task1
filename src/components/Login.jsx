@@ -4,10 +4,11 @@ import axios from "axios";
 import bgImage from "../assets/bg.png";
 import logo from "../assets/Logo.png";
 import { toast } from "react-hot-toast";
-
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 const Login = () => {
   const navigate = useNavigate();
-
+  const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     id: "",
     password: "",
@@ -74,12 +75,21 @@ const Login = () => {
       );
 
       if (response.data.success) {
-        localStorage.setItem("displayId", response.data.data.displayId);
-        localStorage.setItem("role", response.data.role);
-        localStorage.setItem("token", response.data.token);
+        const userData = {
+          displayId: response.data.data.displayId,
+          role: response.data.role,
+          token: response.data.token,
+        };
+
+        localStorage.setItem("displayId", userData.displayId);
+        localStorage.setItem("role", userData.role);
+        localStorage.setItem("token", userData.token);
+
+        login(userData); // store in context
+
         toast.success("Login successful!");
 
-        if (response.data.role === "admin") {
+        if (userData.role === "admin") {
           navigate("/adminportal");
         } else {
           navigate("/employee-dashboard");
