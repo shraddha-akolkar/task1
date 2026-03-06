@@ -65,7 +65,6 @@ export default function Leave() {
   const [selectedRow, setSelectedRow] = useState(null);
 
   /*SCAN*/
-
   const handleScan = async () => {
     if (!user?.id) {
       alert("User not loaded yet");
@@ -92,10 +91,13 @@ export default function Leave() {
 
       if (data.type === "OUT") {
         setIsScannedIn(false);
+        setInTime(null); // reset timer
+        setDuration("0h 0m");
       }
 
       alert(data.message);
-      fetchAttendance();
+
+      await fetchAttendance(); // refresh table
     } catch (error) {
       console.error(error);
       alert("Scan failed");
@@ -126,7 +128,19 @@ export default function Leave() {
     try {
       const res = await fetch(`${API_BASE_URL}/attendance/${user.id}`);
       const data = await res.json();
+
       setAttendanceData(data);
+
+      const today = new Date().toISOString().split("T")[0];
+
+      const todayRecord = data.find((a) => a.date === today);
+
+      if (todayRecord) {
+        if (todayRecord.inTime && !todayRecord.outTime) {
+          setInTime(todayRecord.inTime);
+          setIsScannedIn(true);
+        }
+      }
     } catch (err) {
       console.error(err);
     }
@@ -305,7 +319,7 @@ export default function Leave() {
                       <tr key={item.id} className="bg-white">
                         <td className="px-3 py-[10px] border border-gray-200 rounded-l-lg">
                           <div className="flex items-center gap-3">
-                            <input
+                            {/* <input
                               type="checkbox"
                               checked={selectedRow === item.id}
                               onChange={() =>
@@ -314,7 +328,7 @@ export default function Leave() {
                                 )
                               }
                               className="w-3 h-4 accent-black cursor-pointer"
-                            />
+                            /> */}
 
                             <img src={user1} className="w-8 h-8 rounded-full" />
 
@@ -324,7 +338,9 @@ export default function Leave() {
                               </div>
 
                               <div className="text-[11px] text-gray-400">
-                                {item.Employee?.designation || "-"}
+                                {item.Employee?.id
+                                  ? `IN${item.Employee.id}`
+                                  : "-"}{" "}
                               </div>
                             </div>
                           </div>
