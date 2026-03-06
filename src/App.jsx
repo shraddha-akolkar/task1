@@ -15,6 +15,10 @@ import Meeting from "./components/Meeting";
 import MeetingModal from "./components/MeetingModal";
 import Demo from "./components/Demo";
 import Leave from "./components/Leave";
+import EmployeeHoliday from "./components/EmployeeHoliday";
+import EmployeeMeeting from "./components/EmployeeMeeting";
+import EmployeeAttendance from "./components/EmployeeAttendance";
+import EmployeeLeave from "./components/EmployeeLeave";
 import { Toaster } from "react-hot-toast";
 
 // Protected Route Component
@@ -86,6 +90,13 @@ function App() {
         <Route path="/MeetingModal" element={<MeetingModal />} />
         <Route path="/Leave" element={<Leave />} />
         <Route path="/register" element={<RegisterEmployeeModal />} />
+
+        {/*  */}
+        <Route path="/employee-holiday" element={<EmployeeHoliday />} />
+        <Route path="/employee-meeting" element={<EmployeeMeeting />} />
+        <Route path="/employee-leave" element={<EmployeeLeave />} />
+        <Route path="/employee-attendance" element={<EmployeeAttendance />} />
+
         <Route
           path="/employee-dashboard"
           element={
