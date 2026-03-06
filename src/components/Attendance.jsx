@@ -4,14 +4,12 @@ import AttendanceModal from "./AttendanceModal";
 import filter from "../assets/filter.png";
 import file from "../assets/file.png";
 import building from "../assets/building.png";
-import user from "../assets/user.png";
-import window from "../assets/window.png";
+import windowIcon from "../assets/window.png";
 import umbrella from "../assets/umbrella.png";
 import employee from "../assets/employees 1.png";
-import leave from "../assets/leave.png";
-import person from "../assets/person.png";
 import calender from "../assets/calendar1.png";
-
+import edit from "../assets/edit.png";
+import del from "../assets/delete.png";
 import attendence from "../assets/attendance.png";
 import plus from "../assets/plus.png";
 import pencil from "../assets/pencil.png";
@@ -31,39 +29,59 @@ export default function Leave() {
   const navigate = useNavigate();
   const tabs = ["All Employee", "Payroll", "Contract", "Staff"];
 
-  const data = [
-    {
-      id: 1,
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      category: "Payroll",
-      date: "16 Oct 2025",
-      inTime: "09:42 AM",
-      outTime: "07:51 PM",
-      overtime: "2h 30m",
-      reduction: "2h",
-      duration: "11h 30m",
-      type: "In Factory",
-      remark: "Remark",
-    },
-    {
-      id: 2,
-      name: "Liam Carter",
-      empId: "EM02",
-      designation: "Home Consultant",
-      category: "Payroll",
-      date: "16 Oct 2025",
-      inTime: "09:44 AM",
-      outTime: "02:43 PM",
-      overtime: "NA",
-      reduction: "2h",
-      duration: "05h 2m",
-      type: "Staff",
-      remark: "Half Day",
-    },
-  ];
+  const [attendanceData, setAttendanceData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [editData, setEditData] = useState(null);
+  useEffect(() => {
+    fetchAttendance();
+  }, []);
+
+  const fetchAttendance = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/attendance`);
+      const data = await res.json();
+      setAttendanceData(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const formatDuration = (minutes) => {
+    if (!minutes && minutes !== 0) return "-";
+
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+
+    return `${h}h ${m}m`;
+  };
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Delete this attendance?");
+    if (!confirmDelete) return;
+
+    try {
+      await fetch(`${API_BASE_URL}/attendance/${id}`, {
+        method: "DELETE",
+      });
+
+      fetchAttendance(); // refresh table
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //   const confirmDelete = window.confirm("Delete this attendance?");
+  //   if (!confirmDelete) return;
+
+  //   try {
+  //     await fetch(`${API_BASE_URL}/attendance/${id}`, {
+  //       method: "DELETE",
+  //     });
+
+  //     fetchAttendance(); // refresh table
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   return (
     <div className="border-lg">
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
@@ -89,7 +107,7 @@ export default function Leave() {
               >
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
-                    src={window}
+                    src={windowIcon}
                     className="w-4 h-4"
                     onClick={() => navigate("/adminportal")}
                   />
@@ -243,7 +261,7 @@ export default function Leave() {
                   </thead>
 
                   <tbody>
-                    {data.map((item) => (
+                    {attendanceData.map((item) => (
                       <tr key={item.id} className="bg-white">
                         <td className="px-3 py-[10px] border border-gray-200 rounded-l-lg">
                           <div className="flex items-center gap-3">
@@ -262,55 +280,65 @@ export default function Leave() {
 
                             <div>
                               <div className="font-medium text-gray-800">
-                                {item.name}
+                                {item.Employee?.name || "-"}
                               </div>
                               <div className="text-[11px] text-gray-400">
-                                {item.empId}
+                                {item.Employee?.id
+                                  ? `IN${item.Employee.id}`
+                                  : "-"}
                               </div>
                             </div>
                           </div>
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          <div>{item.designation}</div>
+                          <div>{item.Employee?.designation || "-"}</div>
                           <div className="text-[11px] text-gray-400">
-                            {item.category}
+                            {item.Employee?.type || "-"}
                           </div>
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
                           {item.date}
                         </td>
+
                         <td className="px-3 py-[10px] border border-gray-200">
                           {item.inTime}
                         </td>
-                        <td className="px-3 py-[10px] border border-gray-200">
-                          {item.outTime}
-                        </td>
-                        <td className="px-3 py-[10px] border border-gray-200">
-                          {item.overtime}
-                        </td>
-                        <td className="px-3 py-[10px] border border-gray-200">
-                          {item.reduction}
-                        </td>
-                        <td className="px-3 py-[10px] border border-gray-200">
-                          {item.duration}
-                        </td>
-
-                        {/* <td className="px-3 py-[10px] border border-gray-200">
-                          <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded-md text-xs">
-                            {item.type}
-                          </span>
-                        </td> */}
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.remark}
+                          {item.outTime && item.outTime !== "00:00:00"
+                            ? item.outTime
+                            : "-"}
                         </td>
 
-                        <td className="px-3 py-[10px] border border-gray-200 rounded-r-lg">
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {formatDuration(item.overtime)}
+                        </td>
+
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          -
+                        </td>
+
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {formatDuration(item.duration)}
+                        </td>
+
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          -
+                        </td>
+
+                        <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
                           <img
-                            src={pencil}
+                            src={edit}
                             className="w-4 h-4 cursor-pointer"
+                            onClick={() => handleEdit(item)}
+                          />
+
+                          <img
+                            src={del}
+                            className="w-4 h-4 cursor-pointer"
+                            onClick={() => handleDelete(item.id)}
                           />
                         </td>
                       </tr>
@@ -322,7 +350,11 @@ export default function Leave() {
 
             {/*   MODAL */}
             {showModal && (
-              <AttendanceModal onClose={() => setShowModal(false)} />
+              <AttendanceModal
+                onClose={() => setShowModal(false)}
+                editData={editData}
+                refresh={fetchAttendance}
+              />
             )}
           </div>
         </div>
