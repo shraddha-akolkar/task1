@@ -1,52 +1,77 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AttendanceModal from "./AttendanceModal";
-import filter from "../assets/filter.png";
-import file from "../assets/file.png";
 import building from "../assets/building.png";
-import user from "../assets/user.png";
 import dashboard from "../assets/dashboard.png";
 import umbrella from "../assets/umbrella.png";
-import employee from "../assets/employees 1.png";
-import leave from "../assets/leave.png";
 import person from "../assets/person.png";
 import calender from "../assets/calendar1.png";
-import graphImg from "../assets/time.png";
-import attendence from "../assets/attendance.png";
-import plus from "../assets/plus.png";
-import pencil from "../assets/pencil.png";
 import user1 from "../assets/user1.png";
 import Navbar from "./Navbar";
 import admin1 from "../assets/admin1.png";
 import admin2 from "../assets/admin2.png";
 import admin3 from "../assets/admin3.png";
-import admin4 from "../assets/admin4.png";
-
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 const API_BASE_URL = "http://localhost:5000/api";
 
 export default function Leave() {
-  const [activeTab, setActiveTab] = useState("All Employee");
-  const [search, setSearch] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
+  const [inTime, setInTime] = useState(null);
+  const [isScannedIn, setIsScannedIn] = useState(false);
+  const [duration, setDuration] = useState("0h 0m");
+  const [attendanceData, setAttendanceData] = useState([]);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  // const tabs = [
+  //   "Self",
+  //   "All Employee",
+  //   "InFactory",
+  //   "On Site",
+  //   "Payroll",
+  //   "Contract",
+  // ];
 
-  const tabs = [
-    "Self",
-    "All Employee",
-    "InFactory",
-    "On Site",
-    "Payroll",
-    "Contract",
-  ];
+  useEffect(() => {
+    if (!inTime) return;
 
-  const leaveTabs = ["On Leave", "On Site", "In Factory", "New"];
+    const interval = setInterval(() => {
+      const now = new Date();
+
+      const [h, m, s] = inTime.split(":");
+
+      const start = new Date();
+      start.setHours(h);
+      start.setMinutes(m);
+      start.setSeconds(s);
+
+      const diff = now - start;
+
+      const hrs = Math.floor(diff / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+
+      setDuration(`${hrs}h ${mins}m`);
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [inTime]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    fetchAttendance();
+  }, [user]);
+
+  const leaveTabs = ["On Leave", "On Site", "In Factory"];
 
   const [selectedRow, setSelectedRow] = useState(null);
 
-  /* ---------------- SCAN FUNCTION ---------------- */
+  /*SCAN*/
 
   const handleScan = async () => {
+    if (!user?.id) {
+      alert("User not loaded yet");
+      return;
+    }
+
     try {
       const res = await fetch(`${API_BASE_URL}/attendance/scan`, {
         method: "POST",
@@ -54,52 +79,28 @@ export default function Leave() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          employeeId: 14,
+          employeeId: user.id,
         }),
       });
 
       const data = await res.json();
 
+      if (data.type === "IN") {
+        setInTime(data.attendance.inTime);
+        setIsScannedIn(true);
+      }
+
+      if (data.type === "OUT") {
+        setIsScannedIn(false);
+      }
+
       alert(data.message);
-      console.log(data);
+      fetchAttendance();
     } catch (error) {
       console.error(error);
       alert("Scan failed");
     }
   };
-
-  const data = [
-    {
-      id: 1,
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      category: "Payroll",
-      date: "16 Oct 2025",
-      inTime: "09:42 AM",
-      outTime: "07:51 PM",
-      overtime: "2h 30m",
-      reduction: "2h",
-      duration: "11h 30m",
-      type: "In Factory",
-      remark: "Remark",
-    },
-    {
-      id: 2,
-      name: "Liam Carter",
-      empId: "EM02",
-      designation: "Home Consultant",
-      category: "Payroll",
-      date: "16 Oct 2025",
-      inTime: "09:44 AM",
-      outTime: "02:43 PM",
-      overtime: "NA",
-      reduction: "2h",
-      duration: "05h 2m",
-      type: "Staff",
-      remark: "Half Day",
-    },
-  ];
 
   const leaveData = [
     {
@@ -121,7 +122,24 @@ export default function Leave() {
       period: "10 Mar - 20 Apr, 2026",
     },
   ];
+  const fetchAttendance = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/attendance/${user.id}`);
+      const data = await res.json();
+      setAttendanceData(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
+  const formatDuration = (minutes) => {
+    if (!minutes) return "-";
+
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+
+    return `${h}h ${m}m`;
+  };
   return (
     <div>
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
@@ -131,7 +149,7 @@ export default function Leave() {
           <div className="mx-6 mt-2">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <h1 className="text-[20px] font-[500] text-gray-800 pb-2 lg:pb-1">
-                Employee
+                {user?.name || "Employee"}
               </h1>
 
               <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 lg:pb-0">
@@ -186,20 +204,21 @@ export default function Leave() {
               <div>
                 <p className="text-gray-400 text-xs">In Time</p>
 
-                <h2 className="text-3xl font-bold mt-1">09:43 AM</h2>
-
+                <h2 className="text-3xl font-bold mt-1">
+                  {inTime ? inTime : "--:--"}
+                </h2>
                 {/* SCAN BUTTON */}
 
                 <button
                   onClick={handleScan}
                   className="mt-6 bg-black text-white px-6 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 transition"
                 >
-                  Scan Out
+                  {isScannedIn ? "Scan Out" : "Scan In"}
                 </button>
               </div>
 
-              <div className="w-[150px]">
-                <img src={graphImg} className="w-full object-contain" />
+              <div className="w-[150px] flex flex-col items-center">
+                <p className="text-sm font-semibold mt-1">{duration}</p>
               </div>
             </div>
 
@@ -276,13 +295,13 @@ export default function Leave() {
                       </th>
 
                       <th className="px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
-                        ACTION
+                        Remark
                       </th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    {data.map((item) => (
+                    {attendanceData.map((item) => (
                       <tr key={item.id} className="bg-white">
                         <td className="px-3 py-[10px] border border-gray-200 rounded-l-lg">
                           <div className="flex items-center gap-3">
@@ -301,10 +320,11 @@ export default function Leave() {
 
                             <div>
                               <div className="font-medium text-gray-800">
-                                {item.name}
+                                {item.Employee?.name || "-"}
                               </div>
+
                               <div className="text-[11px] text-gray-400">
-                                {item.empId}
+                                {item.Employee?.designation || "-"}
                               </div>
                             </div>
                           </div>
@@ -319,27 +339,27 @@ export default function Leave() {
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.outTime}
-                        </td>
-
-                        <td className="px-2 py-[5px] border border-gray-200">
-                          {item.overtime}
+                          {item.outTime && item.outTime !== "00:00:00"
+                            ? item.outTime
+                            : "-"}
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.duration}
+                          {formatDuration(item.overtime)}
+                        </td>
+
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {formatDuration(item.duration)}
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
                           <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded-md text-xs">
-                            {item.type}
+                            {item.Employee?.type || "-"}
                           </span>
                         </td>
 
-                        <td className="px-2 py-[10px] border border-gray-200">
-                          <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded-md text-xs">
-                            {item.type}
-                          </span>
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          -
                         </td>
                       </tr>
                     ))}

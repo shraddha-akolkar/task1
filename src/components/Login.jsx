@@ -76,16 +76,20 @@ const Login = () => {
 
       if (response.data.success) {
         const userData = {
+          id: response.data.data.id,
           displayId: response.data.data.displayId,
+          name: response.data.data.name,
           role: response.data.role,
           token: response.data.token,
         };
 
+        localStorage.setItem("id", userData.id);
         localStorage.setItem("displayId", userData.displayId);
+        localStorage.setItem("name", userData.name);
         localStorage.setItem("role", userData.role);
         localStorage.setItem("token", userData.token);
 
-        login(userData); // store in context
+        login(userData);
 
         toast.success("Login successful!");
 
