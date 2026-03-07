@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AttendanceModal from "./AttendanceModal";
 import building from "../assets/building.png";
@@ -20,22 +20,26 @@ import del from "../assets/delete.png";
 const API_BASE_URL = "http://localhost:5000/api";
 
 export default function Leave() {
+  const [employeeStats, setEmployeeStats] = useState({
+    total: 0,
+    payroll: 0,
+    contract: 0,
+    staff: 0,
+  });
+
   const [activeTab, setActiveTab] = useState("All Employee");
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
 
-  const tabs = [
-    "Self",
-    "All Employee",
-    "InFactory",
-    "On Site",
-    "Payroll",
-    "Contract",
-  ];
+  useEffect(() => {
+    fetchEmployeeStats();
+  }, []);
 
-  const leaveTabs = ["On Leave", "On Site", "In Factory", "New"];
+  // const tabs = ["Self", "All Employee", "Staff", "Payroll", "Contract"];
+
+  const leaveTabs = ["Staff", "payroll", "Contract"];
 
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -117,6 +121,36 @@ export default function Leave() {
     },
   ];
 
+  const fetchEmployeeStats = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/employees`);
+      const data = await res.json();
+
+      const employees = data.employees || [];
+
+      const payroll = employees.filter(
+        (e) => e.type?.toLowerCase() === "payroll",
+      ).length;
+
+      const contract = employees.filter(
+        (e) => e.type?.toLowerCase() === "contract",
+      ).length;
+
+      const staff = employees.filter(
+        (e) => e.type?.toLowerCase() === "staff",
+      ).length;
+
+      setEmployeeStats({
+        total: employees.length,
+        payroll,
+        contract,
+        staff,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div>
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
@@ -180,7 +214,7 @@ export default function Leave() {
 
           {/* DASHBOARD CARD */}
 
-          <div className="grid grid-cols-1 lg:grid-cols-7 gap-4 px-4 py-4">
+          <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 px-4 py-4">
             <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 px-6 py-5 flex items-center justify-between">
               <div>
                 <p className="text-gray-400 text-xs">In Time</p>
@@ -206,7 +240,9 @@ export default function Leave() {
               <img src={admin1} className="w-7 h-7" />
               <div>
                 <p className="text-gray-500 text-sm mt-2">Assigned Employee</p>
-                <h3 className="text-2xl font-semibold">25</h3>
+                <h3 className="text-2xl font-semibold">
+                  {employeeStats.total}
+                </h3>{" "}
               </div>
             </div>
 
@@ -214,7 +250,9 @@ export default function Leave() {
               <img src={admin1} className="w-7 h-7" />
               <div>
                 <p className="text-gray-500 text-sm mt-2">Payroll Employee</p>
-                <h3 className="text-2xl font-semibold">18</h3>
+                <h3 className="text-2xl font-semibold">
+                  {employeeStats.payroll}
+                </h3>{" "}
               </div>
             </div>
 
@@ -222,25 +260,29 @@ export default function Leave() {
               <img src={admin2} className="w-7 h-7" />
               <div>
                 <p className="text-gray-500 text-sm mt-2">Contract Employee</p>
-                <h3 className="text-2xl font-semibold">7</h3>
+                <h3 className="text-2xl font-semibold">
+                  {employeeStats.contract}
+                </h3>{" "}
               </div>
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-5 py-4 flex flex-col justify-between">
               <img src={admin3} className="w-7 h-7" />
               <div>
-                <p className="text-gray-500 text-sm mt-2">On Site</p>
-                <h3 className="text-2xl font-semibold">19</h3>
+                <p className="text-gray-500 text-sm mt-2">Staff</p>
+                <h3 className="text-2xl font-semibold">
+                  {employeeStats.staff}
+                </h3>{" "}
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-5 py-4 flex flex-col justify-between">
+            {/* <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-5 py-4 flex flex-col justify-between">
               <img src={admin4} className="w-7 h-7" />
               <div>
                 <p className="text-gray-500 text-sm mt-2">In Factory</p>
                 <h3 className="text-2xl font-semibold">6</h3>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* MAIN SECTION */}

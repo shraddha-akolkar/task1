@@ -84,7 +84,7 @@ export default function Leave() {
     fetchEmployeeStats();
   }, [user]);
 
-  const leaveTabs = ["On Leave", "On Site", "In Factory"];
+  const leaveTabs = ["Payroll", "Staff", "Contract"];
 
   const [selectedRow, setSelectedRow] = useState(null);
 
