@@ -15,6 +15,22 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 const API_BASE_URL = "http://localhost:5000/api";
 
+function formatTime(time) {
+  if (!time) return "--:--";
+
+  const [hours, minutes] = time.split(":");
+
+  const date = new Date();
+  date.setHours(hours);
+  date.setMinutes(minutes);
+
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
 export default function Leave() {
   const [inTime, setInTime] = useState(null);
   const [isScannedIn, setIsScannedIn] = useState(false);
@@ -30,6 +46,13 @@ export default function Leave() {
   //   "Payroll",
   //   "Contract",
   // ];
+
+  const [employeeStats, setEmployeeStats] = useState({
+    total: 0,
+    payroll: 0,
+    contract: 0,
+    staff: 0,
+  });
 
   useEffect(() => {
     if (!inTime) return;
@@ -58,6 +81,7 @@ export default function Leave() {
   useEffect(() => {
     if (!user?.id) return;
     fetchAttendance();
+    fetchEmployeeStats();
   }, [user]);
 
   const leaveTabs = ["On Leave", "On Site", "In Factory"];
@@ -107,6 +131,7 @@ export default function Leave() {
       period: "10 Mar - 20 Apr, 2026",
     },
   ];
+
   const fetchAttendance = async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/attendance/${user.id}`);
@@ -115,7 +140,6 @@ export default function Leave() {
       setAttendanceData(data);
 
       const today = new Date().toISOString().split("T")[0];
-
       const todayRecord = data.find((a) => a.date === today);
 
       if (todayRecord) {
@@ -123,10 +147,57 @@ export default function Leave() {
 
         if (!todayRecord.outTime || todayRecord.outTime === "00:00:00") {
           setIsScannedIn(true);
+
+          const now = new Date();
+
+          const [h, m, s] = todayRecord.inTime.split(":");
+
+          const start = new Date();
+          start.setHours(h);
+          start.setMinutes(m);
+          start.setSeconds(s);
+
+          const diff = now - start;
+
+          const hrs = Math.floor(diff / 3600000);
+          const mins = Math.floor((diff % 3600000) / 60000);
+
+          setDuration(`${hrs}h ${mins}m`);
         } else {
           setIsScannedIn(false);
+          setDuration(formatDuration(todayRecord.duration));
         }
       }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchEmployeeStats = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/employees`);
+      const data = await res.json();
+
+      const employees = data.employees || [];
+
+      const payroll = employees.filter(
+        (e) => e.type?.toLowerCase() === "payroll",
+      ).length;
+
+      const contract = employees.filter(
+        (e) => e.type?.toLowerCase() === "contract",
+      ).length;
+
+      const staff = employees.filter(
+        (e) => e.type?.toLowerCase() === "staff",
+      ).length;
+
+      setEmployeeStats({
+        total: employees.length,
+        payroll,
+        contract,
+        staff,
+      });
     } catch (err) {
       console.error(err);
     }
@@ -205,7 +276,7 @@ export default function Leave() {
                 <p className="text-gray-400 text-xs">In Time</p>
 
                 <h2 className="text-3xl font-bold mt-1">
-                  {inTime ? inTime : "--:--"}
+                  {inTime ? formatTime(inTime) : "--:--"}
                 </h2>
                 {/* SCAN BUTTON */}
 
@@ -225,8 +296,10 @@ export default function Leave() {
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-5 py-4 flex flex-col justify-between">
               <img src={admin1} className="w-7 h-7" />
               <div>
-                <p className="text-gray-500 text-sm mt-2">Assigned Employee</p>
-                <h3 className="text-2xl font-semibold">25</h3>
+                <p className="text-gray-500 text-sm mt-2">Total Employee</p>
+                <h3 className="text-2xl font-semibold">
+                  {employeeStats.total}
+                </h3>
               </div>
             </div>
 
@@ -234,7 +307,9 @@ export default function Leave() {
               <img src={admin1} className="w-7 h-7" />
               <div>
                 <p className="text-gray-500 text-sm mt-2">Payroll Employee</p>
-                <h3 className="text-2xl font-semibold">18</h3>
+                <h3 className="text-2xl font-semibold">
+                  {employeeStats.payroll}
+                </h3>{" "}
               </div>
             </div>
 
@@ -242,15 +317,19 @@ export default function Leave() {
               <img src={admin2} className="w-7 h-7" />
               <div>
                 <p className="text-gray-500 text-sm mt-2">Contract Employee</p>
-                <h3 className="text-2xl font-semibold">7</h3>
+                <h3 className="text-2xl font-semibold">
+                  {employeeStats.contract}
+                </h3>{" "}
               </div>
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-5 py-4 flex flex-col justify-between">
               <img src={admin3} className="w-7 h-7" />
               <div>
-                <p className="text-gray-500 text-sm mt-2">On Site</p>
-                <h3 className="text-2xl font-semibold">19</h3>
+                <p className="text-gray-500 text-sm mt-2">Staff</p>
+                <h3 className="text-2xl font-semibold">
+                  {employeeStats.staff}
+                </h3>{" "}
               </div>
             </div>
           </div>
@@ -294,9 +373,9 @@ export default function Leave() {
                         TYPE
                       </th>
 
-                      <th className="px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
+                      {/* <th className="px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
                         Remark
-                      </th>
+                      </th> */}
                     </tr>
                   </thead>
 
@@ -337,12 +416,12 @@ export default function Leave() {
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.inTime}
+                          {formatTime(item.inTime)}
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
                           {item.outTime && item.outTime !== "00:00:00"
-                            ? item.outTime
+                            ? formatTime(item.outTime)
                             : "-"}
                         </td>
 
@@ -360,9 +439,9 @@ export default function Leave() {
                           </span>
                         </td>
 
-                        <td className="px-3 py-[10px] border border-gray-200">
+                        {/* <td className="px-3 py-[10px] border border-gray-200">
                           -
-                        </td>
+                        </td> */}
                       </tr>
                     ))}
                   </tbody>

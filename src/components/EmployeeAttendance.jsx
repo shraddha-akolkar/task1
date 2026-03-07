@@ -153,18 +153,18 @@ export default function Leave() {
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         OVERTIME
                       </th>
-                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         REDUCTION
-                      </th>
-                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      </th> */}
+                      <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
                         DURATION
                       </th>
                       {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         TYPE
                       </th> */}
-                      <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
+                      {/* <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
                         REMARK
-                      </th>
+                      </th> */}
                     </tr>
                   </thead>
 
@@ -213,17 +213,17 @@ export default function Leave() {
                           {formatDuration(item.overtime)}
                         </td>
 
-                        <td className="px-3 py-[10px] border border-gray-200">
+                        {/* <td className="px-3 py-[10px] border border-gray-200">
                           -
-                        </td>
+                        </td> */}
 
-                        <td className="px-3 py-[10px] border border-gray-200">
+                        <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
                           {formatDuration(item.duration)}
                         </td>
 
-                        <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
+                        {/* <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
                           -
-                        </td>
+                        </td> */}
 
                         {/* <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
                           <img
