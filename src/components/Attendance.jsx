@@ -4,7 +4,7 @@ import AttendanceModal from "./AttendanceModal";
 import filter from "../assets/filter.png";
 import file from "../assets/file.png";
 import building from "../assets/building.png";
-import window from "../assets/window.png";
+import windowIcon from "../assets/window.png";
 import umbrella from "../assets/umbrella.png";
 import employee from "../assets/employees 1.png";
 import calender from "../assets/calendar1.png";
@@ -20,6 +20,52 @@ import { Plus } from "lucide-react";
 const API_BASE_URL = "http://localhost:5000/api";
 
 // MAIN
+
+function fileUrl(filename) {
+  if (!filename) return null;
+  if (filename.startsWith("http")) return filename;
+  return `${API_BASE_URL.replace("/api", "")}/uploads/${filename}`;
+}
+
+function EmployeeAvatar({ emp }) {
+  const [imgFailed, setImgFailed] = useState(false);
+
+  const picUrl = fileUrl(emp?.employeePicture);
+
+  if (!picUrl || imgFailed) {
+    return (
+      <img
+        src={user1}
+        className="w-8 h-8 rounded-full object-cover border border-gray-200"
+      />
+    );
+  }
+
+  return (
+    <img
+      src={picUrl}
+      alt={emp?.name}
+      className="w-8 h-8 rounded-full object-cover border border-gray-200"
+      onError={() => setImgFailed(true)}
+    />
+  );
+}
+
+function formatTime(time) {
+  if (!time) return "-";
+
+  const [hours, minutes] = time.split(":");
+
+  const date = new Date();
+  date.setHours(hours);
+  date.setMinutes(minutes);
+
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
 
 export default function Leave() {
   const [activeTab, setActiveTab] = useState("All Employee");
@@ -59,13 +105,21 @@ export default function Leave() {
     if (!confirmDelete) return;
 
     try {
-      await fetch(`${API_BASE_URL}/attendance/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/attendance/${id}`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
-      fetchAttendance(); // refresh table
+      if (!res.ok) {
+        throw new Error("Failed to delete attendance");
+      }
+
+      // Refresh table after deletion
+      fetchAttendance();
     } catch (error) {
-      console.error(error);
+      console.error("Delete error:", error);
     }
   };
 
@@ -94,7 +148,7 @@ export default function Leave() {
               >
                 <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
-                    src={window}
+                    src={windowIcon}
                     className="w-4 h-4"
                     onClick={() => navigate("/adminportal")}
                   />
@@ -194,13 +248,13 @@ export default function Leave() {
                   <img src={file} className="w-4 h-4" />
                 </div>
                 {/* New button */}
-                <button
+                {/* <button
                   onClick={() => setShowModal(true)}
                   className="  flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800 cursor-pointer"
                 >
                   <img src={plus} className="w-4 h-4" />
                   New
-                </button>
+                </button> */}
               </div>
             </div>
             <div className="pb-4 px-4 rounded-xl">
@@ -229,18 +283,18 @@ export default function Leave() {
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         OVERTIME
                       </th>
-                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         REDUCTION
-                      </th>
+                      </th> */}
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         DURATION
                       </th>
                       {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         TYPE
                       </th> */}
-                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         REMARK
-                      </th>
+                      </th> */}
                       <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
                         ACTION
                       </th>
@@ -263,12 +317,13 @@ export default function Leave() {
                               className="w-4 h-4 accent-black cursor-pointer"
                             />
 
-                            <img src={user1} className="w-8 h-8 rounded-full" />
+                            <EmployeeAvatar emp={item.Employee} />
 
                             <div>
                               <div className="font-medium text-gray-800">
                                 {item.Employee?.name || "-"}
                               </div>
+
                               <div className="text-[11px] text-gray-400">
                                 {item.Employee?.id
                                   ? `IN${item.Employee.id}`
@@ -277,7 +332,6 @@ export default function Leave() {
                             </div>
                           </div>
                         </td>
-
                         <td className="px-3 py-[10px] border border-gray-200">
                           <div>{item.Employee?.designation || "-"}</div>
                           <div className="text-[11px] text-gray-400">
@@ -290,12 +344,11 @@ export default function Leave() {
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.inTime}
+                          {formatTime(item.inTime)}
                         </td>
-
                         <td className="px-3 py-[10px] border border-gray-200">
                           {item.outTime && item.outTime !== "00:00:00"
-                            ? item.outTime
+                            ? formatTime(item.outTime)
                             : "-"}
                         </td>
 
@@ -303,30 +356,36 @@ export default function Leave() {
                           {formatDuration(item.overtime)}
                         </td>
 
-                        <td className="px-3 py-[10px] border border-gray-200">
+                        {/* <td className="px-3 py-[10px] border border-gray-200">
                           -
-                        </td>
+                        </td> */}
 
                         <td className="px-3 py-[10px] border border-gray-200">
                           {formatDuration(item.duration)}
                         </td>
 
-                        <td className="px-3 py-[10px] border border-gray-200">
+                        {/* <td className="px-3 py-[10px] border border-gray-200">
                           -
-                        </td>
+                        </td> */}
 
-                        <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
-                          <img
-                            src={edit}
-                            className="w-4 h-4 cursor-pointer"
-                            onClick={() => handleEdit(item)}
-                          />
-
-                          <img
-                            src={del}
-                            className="w-4 h-4 cursor-pointer"
-                            onClick={() => handleDelete(item.id)}
-                          />
+                        <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg">
+                          <div className="flex gap-3">
+                            <img
+                              src={edit}
+                              className="w-4 h-4 cursor-pointer"
+                              title="Edit"
+                              onClick={() => {
+                                setEditData(item);
+                                setShowModal(true);
+                              }}
+                            />
+                            <img
+                              src={del}
+                              className="w-4 h-4 cursor-pointer"
+                              title="Delete"
+                              onClick={() => handleDelete(item.id)}
+                            />
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -337,7 +396,14 @@ export default function Leave() {
 
             {/*   MODAL */}
             {showModal && (
-              <AttendanceModal onClose={() => setShowModal(false)} />
+              <AttendanceModal
+                onClose={() => {
+                  setShowModal(false);
+                  setEditData(null);
+                }}
+                editData={editData}
+                refreshData={fetchAttendance}
+              />
             )}
           </div>
         </div>
