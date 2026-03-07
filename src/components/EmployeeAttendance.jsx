@@ -1,21 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AttendanceModal from "./AttendanceModal";
-import filter from "../assets/filter.png";
-import file from "../assets/file.png";
 import building from "../assets/building.png";
 import window from "../assets/window.png";
 import umbrella from "../assets/umbrella.png";
-import employee from "../assets/employees 1.png";
 import calender from "../assets/calendar1.png";
-import edit from "../assets/edit.png";
-import del from "../assets/delete.png";
 import attendence from "../assets/attendance.png";
-import plus from "../assets/plus.png";
-import pencil from "../assets/pencil.png";
 import user1 from "../assets/user1.png";
 import Navbar from "./Navbar";
-
+import { AuthContext } from "../context/AuthContext";
 import { Plus } from "lucide-react";
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -32,13 +25,16 @@ export default function Leave() {
   const [attendanceData, setAttendanceData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [editData, setEditData] = useState(null);
+  const { user } = useContext(AuthContext);
   useEffect(() => {
-    fetchAttendance();
-  }, []);
+    if (user?.id) {
+      fetchAttendance();
+    }
+  }, [user]);
 
   const fetchAttendance = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/attendance`);
+      const res = await fetch(`${API_BASE_URL}/attendance/${user.id}`);
       const data = await res.json();
       setAttendanceData(data);
     } catch (err) {
