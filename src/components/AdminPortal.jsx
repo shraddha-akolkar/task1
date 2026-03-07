@@ -8,18 +8,16 @@ import employee from "../assets/employees 1.png";
 import person from "../assets/person.png";
 import calender from "../assets/calendar1.png";
 import graphImg from "../assets/time.png";
-import pencil from "../assets/pencil.png";
 import user1 from "../assets/user1.png";
 import Navbar from "./Navbar";
 import admin1 from "../assets/admin1.png";
 import admin2 from "../assets/admin2.png";
 import admin3 from "../assets/admin3.png";
-import admin4 from "../assets/admin4.png";
 import edit from "../assets/edit.png";
 import del from "../assets/delete.png";
 const API_BASE_URL = "http://localhost:5000/api";
 
-export default function Leave() {
+export default function Dashboard() {
   const [employeeStats, setEmployeeStats] = useState({
     total: 0,
     payroll: 0,
@@ -43,7 +41,7 @@ export default function Leave() {
 
   const [selectedRow, setSelectedRow] = useState(null);
 
-  /* ---------------- SCAN FUNCTION ---------------- */
+  /*SCAN FUNCTION*/
 
   const handleScan = async () => {
     try {

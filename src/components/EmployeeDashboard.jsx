@@ -31,7 +31,7 @@ function formatTime(time) {
   });
 }
 
-export default function Leave() {
+export default function Dashboard() {
   const [inTime, setInTime] = useState(null);
   const [isScannedIn, setIsScannedIn] = useState(false);
   const [duration, setDuration] = useState("0h 0m");
