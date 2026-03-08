@@ -69,7 +69,7 @@ export default function Dashboard() {
     {
       id: 1,
       name: "Omar Al-Farsi",
-      empId: "EM01",
+      empId: "IN01",
       designation: "Interior Designer",
       category: "Payroll",
       date: "16 Oct 2025",
@@ -84,7 +84,7 @@ export default function Dashboard() {
     {
       id: 2,
       name: "Liam Carter",
-      empId: "EM02",
+      empId: "IN02",
       designation: "Home Consultant",
       category: "Payroll",
       date: "16 Oct 2025",
