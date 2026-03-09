@@ -7,7 +7,7 @@ export default function Navbar() {
   const [activeTab, setActiveTab] = useState("Portal");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const tabs = ["Portal", "Project Management", "Sales", "Accounts"];
+  const tabs = ["Portal"];
 
   return (
     <div className="relative">
@@ -28,16 +28,16 @@ export default function Navbar() {
         {/* Center Tabs*/}
         <div
           className="hidden md:flex px-4 py-3 items-center justify-center
-                     border-b border-gray-50"
+                    "
         >
-          <div className="flex items-center gap-4 bg-white rounded-full px-3 py-1 shadow-sm border border-gray-200">
+          <div className="flex items-center gap-4  px-3 py-1  ">
             {tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-1 rounded-full text-sm transition-all whitespace-nowrap ${
                   activeTab === tab
-                    ? "bg-black text-white"
+                    ? "bg-black text-white h-10 w-20"
                     : "text-gray-600 hover:text-gray-800"
                 }`}
               >
