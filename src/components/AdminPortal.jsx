@@ -29,10 +29,14 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [leaveData, setLeaveData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchEmployeeStats();
+    fetchAttendance();
+    fetchLeave();
   }, []);
 
   // const tabs = ["Self", "All Employee", "Staff", "Payroll", "Contract"];
@@ -65,59 +69,59 @@ export default function Dashboard() {
     }
   };
 
-  const data = [
-    {
-      id: 1,
-      name: "Omar Al-Farsi",
-      empId: "IN01",
-      designation: "Interior Designer",
-      category: "Payroll",
-      date: "16 Oct 2025",
-      inTime: "09:42 AM",
-      outTime: "07:51 PM",
-      overtime: "2h 30m",
-      reduction: "2h",
-      duration: "11h 30m",
-      type: "In Factory",
-      remark: "Remark",
-    },
-    {
-      id: 2,
-      name: "Liam Carter",
-      empId: "IN02",
-      designation: "Home Consultant",
-      category: "Payroll",
-      date: "16 Oct 2025",
-      inTime: "09:44 AM",
-      outTime: "02:43 PM",
-      overtime: "NA",
-      reduction: "2h",
-      duration: "05h 2m",
-      type: "Staff",
-      remark: "Half Day",
-    },
-  ];
+  // const data = [
+  //   {
+  //     id: 1,
+  //     name: "Omar Al-Farsi",
+  //     empId: "IN01",
+  //     designation: "Interior Designer",
+  //     category: "Payroll",
+  //     date: "16 Oct 2025",
+  //     inTime: "09:42 AM",
+  //     outTime: "07:51 PM",
+  //     overtime: "2h 30m",
+  //     reduction: "2h",
+  //     duration: "11h 30m",
+  //     type: "In Factory",
+  //     remark: "Remark",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Liam Carter",
+  //     empId: "IN02",
+  //     designation: "Home Consultant",
+  //     category: "Payroll",
+  //     date: "16 Oct 2025",
+  //     inTime: "09:44 AM",
+  //     outTime: "02:43 PM",
+  //     overtime: "NA",
+  //     reduction: "2h",
+  //     duration: "05h 2m",
+  //     type: "Staff",
+  //     remark: "Half Day",
+  //   },
+  // ];
 
-  const leaveData = [
-    {
-      img: user1,
-      name: "Khalid Al-Maamari",
-      role: "Technician",
-      period: "05 Jan - 15 Feb, 2025",
-    },
-    {
-      img: user1,
-      name: "Amina Al-Qasim",
-      role: "Helper",
-      period: "First Half",
-    },
-    {
-      img: user1,
-      name: "Amina Al-Farsi",
-      role: "Engineer",
-      period: "10 Mar - 20 Apr, 2026",
-    },
-  ];
+  // const leaveData = [
+  //   {
+  //     img: user1,
+  //     name: "Khalid Al-Maamari",
+  //     role: "Technician",
+  //     period: "05 Jan - 15 Feb, 2025",
+  //   },
+  //   {
+  //     img: user1,
+  //     name: "Amina Al-Qasim",
+  //     role: "Helper",
+  //     period: "First Half",
+  //   },
+  //   {
+  //     img: user1,
+  //     name: "Amina Al-Farsi",
+  //     role: "Engineer",
+  //     period: "10 Mar - 20 Apr, 2026",
+  //   },
+  // ];
 
   const fetchEmployeeStats = async () => {
     try {
@@ -148,6 +152,62 @@ export default function Dashboard() {
       console.error(err);
     }
   };
+
+  const fetchAttendance = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/attendance`);
+      const data = await res.json();
+
+      const today = new Date().toISOString().split("T")[0];
+
+      // today's attendance
+      const todayRecords = data.filter((item) => item.date === today);
+
+      // if today empty show recent
+      const finalData =
+        todayRecords.length > 0 ? todayRecords : data.slice(0, 10);
+
+      setAttendanceData(finalData);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchLeave = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/leave`);
+      const data = await res.json();
+
+      const today = new Date();
+      const twoWeeks = new Date();
+      twoWeeks.setDate(today.getDate() + 14);
+
+      const upcomingLeaves = data.filter((leave) => {
+        const fromDate = new Date(leave.fromDate);
+        return fromDate >= today && fromDate <= twoWeeks;
+      });
+
+      setLeaveData(upcomingLeaves);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  function formatTime(time) {
+    if (!time) return "-";
+
+    const [h, m] = time.split(":");
+
+    const date = new Date();
+    date.setHours(h);
+    date.setMinutes(m);
+
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
 
   return (
     <div>
@@ -329,7 +389,7 @@ export default function Dashboard() {
                   </thead>
 
                   <tbody>
-                    {data.map((item) => (
+                    {attendanceData?.map((item) => (
                       <tr key={item.id} className="bg-white">
                         <td className="px-3 py-[10px] border border-gray-200 rounded-l-lg">
                           <div className="flex items-center gap-3">
@@ -344,14 +404,24 @@ export default function Dashboard() {
                               className="w-4 h-4 accent-black cursor-pointer"
                             />
 
-                            <img src={user1} className="w-8 h-8 rounded-full" />
+                            <img
+                              src={
+                                item.Employee?.employeePicture
+                                  ? `http://localhost:5000/uploads/${item.Employee.employeePicture}`
+                                  : user1
+                              }
+                              className="w-8 h-8 rounded-full object-cover"
+                            />
 
                             <div>
                               <div className="font-medium text-gray-800">
-                                {item.name}
+                                {item.Employee?.name || "-"}
                               </div>
+
                               <div className="text-[11px] text-gray-400">
-                                {item.empId}
+                                {item.Employee?.id
+                                  ? `IN${item.Employee.id}`
+                                  : "-"}
                               </div>
                             </div>
                           </div>
@@ -362,34 +432,54 @@ export default function Dashboard() {
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.inTime}
+                          {formatTime(item.inTime)}
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.outTime}
+                          {formatTime(item.outTime)}
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.overtime}
+                          {item.overtime ? `${item.overtime}m` : "-"}
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.duration}
+                          {item.duration
+                            ? `${Math.floor(item.duration / 60)}h ${item.duration % 60}m`
+                            : "-"}
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
                           <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded-md text-xs">
-                            {item.type}
+                            {item.Employee?.type || "-"}
                           </span>
                         </td>
 
-                        <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
-                          <img src={edit} className="w-4 h-4 cursor-pointer" />
-
-                          <img src={del} className="w-4 h-4 cursor-pointer" />
+                        <td className="px-3 py-[32px] border border-gray-200 rounded-r-lg flex gap-3">
+                          <img
+                            src={edit}
+                            className="w-4 h-4 cursor-pointer"
+                            onClick={() => navigate("/attendance")}
+                          />
+                          <img
+                            src={del}
+                            className="w-4 h-4 cursor-pointer"
+                            onClick={() => navigate("/attendance")}
+                          />
                         </td>
                       </tr>
                     ))}
+
+                    {attendanceData?.length === 0 && (
+                      <tr>
+                        <td
+                          colSpan="8"
+                          className="text-center py-6 text-gray-400"
+                        >
+                          No attendance records found
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -413,28 +503,41 @@ export default function Dashboard() {
               </div>
 
               <div className="space-y-4">
-                {leaveData.map((p, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={p.img}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
+                {Array.isArray(leaveData) &&
+                  leaveData.map((p, i) => (
+                    <div key={i} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={
+                            p.Employee?.employeePicture
+                              ? `http://localhost:5000/uploads/${p.Employee.employeePicture}`
+                              : user1
+                          }
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
 
-                      <div>
-                        <p className="text-sm font-semibold text-gray-800">
-                          {p.name}
-                        </p>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800">
+                            {p.Employee?.name || "-"}
+                          </p>
 
-                        <p className="text-xs text-gray-400">{p.role}</p>
+                          <p className="text-xs text-gray-400">
+                            {p.leaveType || "-"}
+                          </p>
+                        </div>
                       </div>
-                    </div>
 
-                    <p className="text-xs text-gray-400 whitespace-nowrap">
-                      {p.period}
-                    </p>
-                  </div>
-                ))}
+                      <p className="text-xs text-gray-400 whitespace-nowrap">
+                        {p.fromDate} - {p.toDate}
+                      </p>
+                    </div>
+                  ))}
+
+                {leaveData?.length === 0 && (
+                  <p className="text-center text-gray-400 text-sm">
+                    No upcoming leaves
+                  </p>
+                )}
               </div>
             </div>
           </div>
