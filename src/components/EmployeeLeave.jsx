@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import LeaveModal from "./LeaveModal";
 import filter from "../assets/filter.png";
@@ -6,12 +7,10 @@ import file from "../assets/file.png";
 import building from "../assets/building.png";
 import window from "../assets/window.png";
 import umbrella from "../assets/umbrella.png";
-import employee from "../assets/employees 1.png";
 import leave from "../assets/leave.png";
 import person from "../assets/person.png";
 import plus from "../assets/plus.png";
-import edit from "../assets/edit.png";
-import del from "../assets/delete.png";
+
 import user1 from "../assets/user1.png";
 import Navbar from "./Navbar";
 
@@ -25,157 +24,175 @@ export default function Leave() {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [leaveData, setLeaveData] = useState([]);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const tabs = ["All Employee", "Payroll", "Contract", "Staff"];
 
-  const data = [
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
+  // const data = [
+  //   {
+  //     id: 1,
+  //     appliedDate: "16 Oct 2025 | 11:11AM",
+  //     name: "Omar Al-Farsi",
+  //     empId: "EM01",
+  //     designation: "Interior Designer",
+  //     visaStatus: "31 Dec 2026",
+  //     from: "20 Oct 2025",
+  //     to: "24 Nov 2025",
+  //     days: "34",
+  //     remark: "For Diwali",
+  //     status: "Approved",
+  //   },
+  //   {
+  //     id: 1,
+  //     appliedDate: "16 Oct 2025 | 11:11AM",
+  //     name: "Omar Al-Farsi",
+  //     empId: "EM01",
+  //     designation: "Interior Designer",
+  //     visaStatus: "31 Dec 2026",
+  //     from: "20 Oct 2025",
+  //     to: "24 Nov 2025",
+  //     days: "34",
+  //     remark: "For Diwali",
+  //     status: "Approved",
+  //   },
+  //   {
+  //     id: 1,
+  //     appliedDate: "16 Oct 2025 | 11:11AM",
+  //     name: "Omar Al-Farsi",
+  //     empId: "EM01",
+  //     designation: "Interior Designer",
+  //     visaStatus: "31 Dec 2026",
+  //     from: "20 Oct 2025",
+  //     to: "24 Nov 2025",
+  //     days: "34",
+  //     remark: "For Diwali",
+  //     status: "Approved",
+  //   },
+  //   {
+  //     id: 1,
+  //     appliedDate: "16 Oct 2025 | 11:11AM",
+  //     name: "Omar Al-Farsi",
+  //     empId: "EM01",
+  //     designation: "Interior Designer",
+  //     visaStatus: "31 Dec 2026",
+  //     from: "20 Oct 2025",
+  //     to: "24 Nov 2025",
+  //     days: "34",
+  //     remark: "For Diwali",
+  //     status: "Approved",
+  //   },
+  //   {
+  //     id: 1,
+  //     appliedDate: "16 Oct 2025 | 11:11AM",
+  //     name: "Omar Al-Farsi",
+  //     empId: "EM01",
+  //     designation: "Interior Designer",
+  //     visaStatus: "31 Dec 2026",
+  //     from: "20 Oct 2025",
+  //     to: "24 Nov 2025",
+  //     days: "34",
+  //     remark: "For Diwali",
+  //     status: "Approved",
+  //   },
+  //   {
+  //     id: 1,
+  //     appliedDate: "16 Oct 2025 | 11:11AM",
+  //     name: "Omar Al-Farsi",
+  //     empId: "EM01",
+  //     designation: "Interior Designer",
+  //     visaStatus: "31 Dec 2026",
+  //     from: "20 Oct 2025",
+  //     to: "24 Nov 2025",
+  //     days: "34",
+  //     remark: "For Diwali",
+  //     status: "Approved",
+  //   },
+  //   {
+  //     id: 1,
+  //     appliedDate: "16 Oct 2025 | 11:11AM",
+  //     name: "Omar Al-Farsi",
+  //     empId: "EM01",
+  //     designation: "Interior Designer",
+  //     visaStatus: "31 Dec 2026",
+  //     from: "20 Oct 2025",
+  //     to: "24 Nov 2025",
+  //     days: "34",
+  //     remark: "For Diwali",
+  //     status: "Approved",
+  //   },
 
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
+  //   {
+  //     id: 1,
+  //     appliedDate: "16 Oct 2025 | 11:11AM",
+  //     name: "Omar Al-Farsi",
+  //     empId: "EM01",
+  //     designation: "Interior Designer",
+  //     visaStatus: "31 Dec 2026",
+  //     from: "20 Oct 2025",
+  //     to: "24 Nov 2025",
+  //     days: "34",
+  //     remark: "For Diwali",
+  //     status: "Approved",
+  //   },
+  //   {
+  //     id: 1,
+  //     appliedDate: "16 Oct 2025 | 11:11AM",
+  //     name: "Omar Al-Farsi",
+  //     empId: "EM01",
+  //     designation: "Interior Designer",
+  //     visaStatus: "31 Dec 2026",
+  //     from: "20 Oct 2025",
+  //     to: "24 Nov 2025",
+  //     days: "34",
+  //     remark: "For Diwali",
+  //     status: "Approved",
+  //   },
+  //   {
+  //     id: 1,
+  //     appliedDate: "16 Oct 2025 | 11:11AM",
+  //     name: "Omar Al-Farsi",
+  //     empId: "EM01",
+  //     designation: "Interior Designer",
+  //     visaStatus: "31 Dec 2026",
+  //     from: "20 Oct 2025",
+  //     to: "24 Nov 2025",
+  //     days: "34",
+  //     remark: "For Diwali",
+  //     status: "Approved",
+  //   },
 
-    {
-      id: 1,
-      appliedDate: "16 Oct 2025 | 11:11AM",
-      name: "Omar Al-Farsi",
-      empId: "EM01",
-      designation: "Interior Designer",
-      visaStatus: "31 Dec 2026",
-      from: "20 Oct 2025",
-      to: "24 Nov 2025",
-      days: "34",
-      remark: "For Diwali",
-      status: "Approved",
-    },
-  ];
+  //   {
+  //     id: 1,
+  //     appliedDate: "16 Oct 2025 | 11:11AM",
+  //     name: "Omar Al-Farsi",
+  //     empId: "EM01",
+  //     designation: "Interior Designer",
+  //     visaStatus: "31 Dec 2026",
+  //     from: "20 Oct 2025",
+  //     to: "24 Nov 2025",
+  //     days: "34",
+  //     remark: "For Diwali",
+  //     status: "Approved",
+  //   },
+  // ];
 
+  const fetchLeaves = async () => {
+    try {
+      if (!user?.id) return;
+
+      const res = await fetch(`${API_BASE_URL}/leave/employee/${user.id}`);
+      const data = await res.json();
+
+      setLeaveData(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeaves();
+  }, [user]);
   return (
     <div className="border-lg">
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
@@ -252,7 +269,6 @@ export default function Leave() {
            "
           >
             <div className="flex items-center justify-between gap-3 pt-2 pb-2 px-4 flex-nowrap">
-              {" "}
               <div className="flex flex-wrap gap-2 ">
                 {tabs.map((tab) => (
                   <button
@@ -270,7 +286,6 @@ export default function Leave() {
               </div>
               {/* RIGHT SIDE ICON  */}
               <div className="flex items-center gap-2 whitespace-nowrap">
-                {" "}
                 {/* Search pill */}
                 <div className="flex items-center w-full sm:w-full md:w-full lg:w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
                   <input
@@ -322,9 +337,9 @@ export default function Leave() {
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         DESIGNATION
                       </th>
-                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         VISA STATUS
-                      </th>
+                      </th> */}
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         FROM DATE
                       </th>
@@ -337,97 +352,101 @@ export default function Leave() {
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         REMARK
                       </th>
-                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
                         STATUS
                       </th>
-                      <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
+                      {/* <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
                         ACTION
-                      </th>
+                      </th> */}
                     </tr>
                   </thead>
 
                   <tbody>
-                    {data.map((item) => (
-                      <tr key={item.id} className="bg-white">
-                        <td className="px-3 py-[6px] border border-gray-200 rounded-l-lg">
-                          {item.appliedDate}
-                        </td>
+                    {Array.isArray(leaveData) &&
+                      leaveData.map((item) => (
+                        <tr key={item.id} className="bg-white">
+                          <td className="px-3 py-[6px] border border-gray-200 rounded-l-lg">
+                            {item.createdAt?.split("T")[0]}
+                          </td>
 
-                        {/* EMPLOYEE NAME COLUMN */}
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          <div className="flex items-center gap-2">
-                            <img
-                              src={user1}
-                              alt="User"
-                              className="w-8 h-8 rounded-full object-cover border border-gray-200"
-                            />
+                          <td className="px-3 py-[6px] border border-gray-200">
+                            <div className="flex items-center gap-2">
+                              <img
+                                src={
+                                  item.Employee?.employeePicture
+                                    ? `http://localhost:5000/uploads/${item.Employee.employeePicture}`
+                                    : user1
+                                }
+                                className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                              />
 
-                            <div>
-                              <div className="font-medium text-gray-800">
-                                {item.name}
-                              </div>
-                              <div className="text-[11px] text-gray-400">
-                                {item.empId}
+                              <div>
+                                <div className="font-medium text-gray-800">
+                                  {item.Employee?.name}
+                                </div>
+                                <div className="text-[11px] text-gray-400">
+                                  IN{item.Employee?.id}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </td>
+                          </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          <div>{item.designation}</div>
-                          <div className="text-[11px] text-gray-400">
-                            Payroll
-                          </div>
-                        </td>
+                          <td className="px-3 py-[10px] border border-gray-200">
+                            <div>{item.Employee?.designation || "-"}</div>
+                            <div className="text-[11px] text-gray-400">
+                              {item.Employee?.type || "-"}
+                            </div>
+                          </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.visaStatus}
-                        </td>
+                          {/* <td className="px-3 py-[6px] border border-gray-200">
+                            {item.Employee?.visaStatus || "-"}
+                          </td> */}
 
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.from}
-                        </td>
+                          <td className="px-3 py-[6px] border border-gray-200">
+                            {item.fromDate}
+                          </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.to}
-                        </td>
+                          <td className="px-3 py-[6px] border border-gray-200">
+                            {item.toDate}
+                          </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.days}
-                        </td>
+                          <td className="px-3 py-[6px] border border-gray-200">
+                            {item.totalDays}
+                          </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.remark}
-                        </td>
+                          <td className="px-3 py-[6px] border border-gray-200">
+                            {item.remark}
+                          </td>
 
-                        <td className="px-3 py-[6px] border border-gray-200">
-                          {item.status === "Approved" && (
-                            <span className="bg-green-500 text-white text-xs px-3 py-1 rounded-md">
-                              Approved
-                            </span>
-                          )}
-                          {item.status === "Rejected" && (
-                            <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-md">
-                              Rejected
-                            </span>
-                          )}
-                        </td>
+                          <td className="px-3 py-[16px] border border-gray-200 rounded-r-lg flex gap-3">
+                            {item.status === "Approved" && (
+                              <span className="bg-green-500 text-white text-xs px-3 py-1 rounded-md">
+                                Approved
+                              </span>
+                            )}
 
-                        <td className="px-3 py-[16px] border border-gray-200 rounded-r-lg flex gap-3">
-                          <img
-                            src={edit}
-                            alt="Edit"
-                            className="w-4 h-4 cursor-pointer"
-                          />
+                            {item.status === "Rejected" && (
+                              <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-md">
+                                Rejected
+                              </span>
+                            )}
 
-                          <img
-                            src={del}
-                            alt="Delete"
-                            className="w-4 h-4 cursor-pointer"
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                            {item.status === "Pending" && (
+                              <span className="bg-yellow-500 text-white text-xs px-3 py-1 rounded-md">
+                                Pending
+                              </span>
+                            )}
+                          </td>
+
+                          {/* <td className="px-3 py-[16px] border border-gray-200 rounded-r-lg flex gap-3">
+                            <img
+                              src={edit}
+                              className="w-4 h-4 cursor-pointer"
+                            />
+                            <img src={del} className="w-4 h-4 cursor-pointer" />
+                          </td> */}
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>

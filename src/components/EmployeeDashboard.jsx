@@ -13,6 +13,7 @@ import admin2 from "../assets/admin2.png";
 import admin3 from "../assets/admin3.png";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import toast from "react-hot-toast";
 const API_BASE_URL = "http://localhost:5000/api";
 
 function formatTime(time) {
@@ -36,6 +37,7 @@ export default function Dashboard() {
   const [isScannedIn, setIsScannedIn] = useState(false);
   const [duration, setDuration] = useState("0h 0m");
   const [attendanceData, setAttendanceData] = useState([]);
+  const [leaveData, setLeaveData] = useState([]);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   // const tabs = [
@@ -82,6 +84,7 @@ export default function Dashboard() {
     if (!user?.id) return;
     fetchAttendance();
     fetchEmployeeStats();
+    fetchEmployeeLeave();
   }, [user]);
 
   const leaveTabs = ["Payroll", "Staff", "Contract"];
@@ -103,7 +106,7 @@ export default function Dashboard() {
 
       const data = await res.json();
 
-      alert(data.message);
+      toast.success(data.message);
 
       await fetchAttendance(); // refresh table
     } catch (error) {
@@ -111,26 +114,26 @@ export default function Dashboard() {
     }
   };
 
-  const leaveData = [
-    {
-      img: user1,
-      name: "Khalid Al-Maamari",
-      role: "Technician",
-      period: "05 Jan - 15 Feb, 2025",
-    },
-    {
-      img: user1,
-      name: "Amina Al-Qasim",
-      role: "Helper",
-      period: "First Half",
-    },
-    {
-      img: user1,
-      name: "Amina Al-Farsi",
-      role: "Engineer",
-      period: "10 Mar - 20 Apr, 2026",
-    },
-  ];
+  // const leaveData = [
+  //   {
+  //     img: user1,
+  //     name: "Khalid Al-Maamari",
+  //     role: "Technician",
+  //     period: "05 Jan - 15 Feb, 2025",
+  //   },
+  //   {
+  //     img: user1,
+  //     name: "Amina Al-Qasim",
+  //     role: "Helper",
+  //     period: "First Half",
+  //   },
+  //   {
+  //     img: user1,
+  //     name: "Amina Al-Farsi",
+  //     role: "Engineer",
+  //     period: "10 Mar - 20 Apr, 2026",
+  //   },
+  // ];
 
   const fetchAttendance = async () => {
     try {
@@ -203,6 +206,25 @@ export default function Dashboard() {
     }
   };
 
+  const fetchEmployeeLeave = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/leave`);
+      const data = await res.json();
+
+      const today = new Date();
+      const twoWeeks = new Date();
+      twoWeeks.setDate(today.getDate() + 14);
+
+      const upcomingLeaves = data.filter((leave) => {
+        const fromDate = new Date(leave.fromDate);
+        return fromDate >= today && fromDate <= twoWeeks;
+      });
+
+      setLeaveData(upcomingLeaves);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   const formatDuration = (minutes) => {
     if (minutes === null || minutes === undefined) return "-";
 
@@ -395,8 +417,14 @@ export default function Dashboard() {
                               className="w-3 h-4 accent-black cursor-pointer"
                             /> */}
 
-                            <img src={user1} className="w-8 h-8 rounded-full" />
-
+                            <img
+                              src={
+                                item.Employee?.employeePicture
+                                  ? `http://localhost:5000/uploads/${item.Employee.employeePicture}`
+                                  : user1
+                              }
+                              className="w-10 h-10 rounded-full object-cover"
+                            />
                             <div>
                               <div className="font-medium text-gray-800">
                                 {item.Employee?.name || "-"}
@@ -467,28 +495,36 @@ export default function Dashboard() {
               </div>
 
               <div className="space-y-4">
-                {leaveData.map((p, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={p.img}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
+                {Array.isArray(leaveData) &&
+                  leaveData.map((p, i) => (
+                    <div key={i} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={
+                            p.Employee?.employeePicture
+                              ? `http://localhost:5000/uploads/${p.Employee.employeePicture}`
+                              : user1
+                          }
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
 
-                      <div>
-                        <p className="text-sm font-semibold text-gray-800">
-                          {p.name}
-                        </p>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800">
+                            {p.Employee?.name}
+                          </p>
 
-                        <p className="text-xs text-gray-400">{p.role}</p>
+                          <p className="text-xs text-gray-400">
+                            {" "}
+                            {p.leaveType}
+                          </p>
+                        </div>
                       </div>
-                    </div>
 
-                    <p className="text-xs text-gray-400 whitespace-nowrap">
-                      {p.period}
-                    </p>
-                  </div>
-                ))}
+                      <p className="text-xs text-gray-400 whitespace-nowrap">
+                        {p.fromDate} - {p.toDate}
+                      </p>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
