@@ -589,7 +589,7 @@ export default function EmployeesPage() {
                                 <img
                                   src={del}
                                   className="w-4 h-4 cursor-pointer"
-                                />{" "}
+                                />
                               </button>
                             </div>
                           </td>

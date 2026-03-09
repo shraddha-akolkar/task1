@@ -461,11 +461,7 @@ export default function Dashboard() {
                             className="w-4 h-4 cursor-pointer"
                             onClick={() => navigate("/attendance")}
                           />
-                          <img
-                            src={del}
-                            className="w-4 h-4 cursor-pointer"
-                            onClick={() => navigate("/attendance")}
-                          />
+                          <img src={del} className="w-4 h-4 cursor-pointer" />
                         </td>
                       </tr>
                     ))}
@@ -521,9 +517,7 @@ export default function Dashboard() {
                             {p.Employee?.name || "-"}
                           </p>
 
-                          <p className="text-xs text-gray-400">
-                            {p.leaveType || "-"}
-                          </p>
+                          <p className="text-xs text-gray-400"></p>
                         </div>
                       </div>
 

@@ -331,7 +331,7 @@ export default function Dashboard() {
                 <p className="text-gray-500 text-sm mt-2">Payroll Employee</p>
                 <h3 className="text-2xl font-semibold">
                   {employeeStats.payroll}
-                </h3>{" "}
+                </h3>
               </div>
             </div>
 
@@ -341,7 +341,7 @@ export default function Dashboard() {
                 <p className="text-gray-500 text-sm mt-2">Contract Employee</p>
                 <h3 className="text-2xl font-semibold">
                   {employeeStats.contract}
-                </h3>{" "}
+                </h3>
               </div>
             </div>
 
@@ -351,7 +351,7 @@ export default function Dashboard() {
                 <p className="text-gray-500 text-sm mt-2">Staff</p>
                 <h3 className="text-2xl font-semibold">
                   {employeeStats.staff}
-                </h3>{" "}
+                </h3>
               </div>
             </div>
           </div>
@@ -433,7 +433,7 @@ export default function Dashboard() {
                               <div className="text-[11px] text-gray-400">
                                 {item.Employee?.id
                                   ? `IN${item.Employee.id}`
-                                  : "-"}{" "}
+                                  : "-"}
                               </div>
                             </div>
                           </div>
@@ -513,10 +513,7 @@ export default function Dashboard() {
                             {p.Employee?.name}
                           </p>
 
-                          <p className="text-xs text-gray-400">
-                            {" "}
-                            {p.leaveType}
-                          </p>
+                          <p className="text-xs text-gray-400">{p.leaveType}</p>
                         </div>
                       </div>
 

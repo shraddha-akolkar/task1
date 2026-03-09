@@ -205,7 +205,6 @@ export default function Leave() {
            "
           >
             <div className="flex items-center justify-between gap-3 pt-2 pb-2 px-4 flex-nowrap">
-              {" "}
               <div className="flex flex-wrap gap-2 ">
                 {tabs.map((tab) => (
                   <button
