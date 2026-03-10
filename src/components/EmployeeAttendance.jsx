@@ -7,7 +7,10 @@ import umbrella from "../assets/umbrella.png";
 import calender from "../assets/calendar1.png";
 import attendence from "../assets/attendance.png";
 import user1 from "../assets/user1.png";
+import time from "../assets/in-time.png";
 import Navbar from "./Navbar";
+import "../assets/fonts/fonts.css";
+
 import { AuthContext } from "../context/AuthContext";
 import { Plus } from "lucide-react";
 const API_BASE_URL = "http://localhost:5000/api";
@@ -50,6 +53,38 @@ export default function Leave() {
 
     return `${h}h ${m}m`;
   };
+
+  function formatDate(dateString) {
+    if (!dateString) return "-";
+
+    const date = new Date(dateString);
+
+    const day = date.getDate().toString().padStart(2, "0");
+
+    let month = date.toLocaleString("en-US", { month: "short" });
+
+    if (month === "Sep") month = "Sept";
+
+    const year = date.getFullYear();
+
+    return `${day} ${month} ${year}`;
+  }
+
+  function formatTime(timeString) {
+    if (!timeString) return "-";
+
+    const [hours, minutes] = timeString.split(":");
+
+    const date = new Date();
+    date.setHours(hours);
+    date.setMinutes(minutes);
+
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
 
   return (
     <div className="border-lg">
@@ -130,7 +165,7 @@ export default function Leave() {
                   style={{ borderSpacing: "0 8px" }}
                 >
                   <thead style={{ background: "#FAFAFA" }}>
-                    <tr className="text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
+                    <tr className="font-airbnb font[500] text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
                       <th className="font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
                         EMPLOYEE NAME
                       </th>
@@ -149,24 +184,27 @@ export default function Leave() {
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         OVERTIME
                       </th>
-                      {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         REDUCTION
-                      </th> */}
-                      <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         DURATION
                       </th>
-                      {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         TYPE
-                      </th> */}
-                      {/* <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
+                      </th>
+                      <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
                         REMARK
-                      </th> */}
+                      </th>
                     </tr>
                   </thead>
 
                   <tbody>
                     {attendanceData.map((item) => (
-                      <tr key={item.id} className="bg-white">
+                      <tr
+                        key={item.id}
+                        className="bg-white font-airbnb font-[400]"
+                      >
                         <td className="px-3 py-[10px] border border-gray-200 rounded-l-lg">
                           <div className="flex items-center gap-3">
                             <img
@@ -192,40 +230,49 @@ export default function Leave() {
 
                         <td className="px-3 py-[10px] border border-gray-200">
                           <div>{item.Employee?.designation || "-"}</div>
-                          <div className="text-[11px] text-gray-400">
-                            {item.Employee?.type || "-"}
+                        </td>
+
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {formatDate(item.date)}
+                        </td>
+
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          <div className="flex items-center gap-2">
+                            <img src={time} className="w-4 h-4 opacity-70" />
+                            {formatTime(item.inTime)}
                           </div>
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.date}
-                        </td>
-
-                        <td className="px-3 py-[10px] border border-gray-200">
-                          {item.inTime}
-                        </td>
-
-                        <td className="px-3 py-[10px] border border-gray-200">
-                          {item.outTime && item.outTime !== "00:00:00"
-                            ? item.outTime
-                            : "-"}
+                          <div className="flex items-center gap-2">
+                            <img src={time} className="w-4 h-4 opacity-70" />
+                            {item.outTime && item.outTime !== "00:00:00"
+                              ? formatTime(item.outTime)
+                              : "-"}
+                          </div>
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
                           {formatDuration(item.overtime)}
                         </td>
 
-                        {/* <td className="px-3 py-[10px] border border-gray-200">
-                          -
-                        </td> */}
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          REDUCTION
+                        </td>
 
-                        <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
+                        <td className="px-3 py-[10px] border border-gray-200">
                           {formatDuration(item.duration)}
                         </td>
 
-                        {/* <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
-                          -
-                        </td> */}
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          <div className="text-[11px] text-[#151515]">
+                            {item.Employee?.type || "-"}
+                          </div>
+                        </td>
+
+                        <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
+                          Remark
+                        </td>
 
                         {/* <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg flex gap-3">
                           <img

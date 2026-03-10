@@ -17,7 +17,7 @@ import plus from "../assets/plus.png";
 import attendence from "../assets/attendance.png";
 import user1 from "../assets/user1.png";
 import Navbar from "./Navbar";
-
+import "../assets/fonts/fonts.css";
 import { Plus } from "lucide-react";
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -264,7 +264,7 @@ export default function Leave() {
             <div className="pb-4 px-4 rounded-xl">
               <div className="overflow-x-auto bg-white px-[5px]">
                 <table className="w-full text-[13px] border-separate border-spacing-y-[5px]">
-                  <thead className="bg-[#FAFAFA]">
+                  <thead className="bg-[#FAFAFA], font-airbnb">
                     <tr className="text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
                       <th className="font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
                         EMPLOYEE NAME
@@ -286,19 +286,23 @@ export default function Leave() {
                         OUT-TIME
                       </th>
 
-                      <th className="font-medium px-3 py-[10px] text-center border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        OVERTIME
+                      </th>
+
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         REDUCTION
                       </th>
 
-                      <th className="font-medium px-3 py-[10px] text-center border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         DURATION
                       </th>
 
-                      <th className="font-medium px-3 py-[10px] text-center border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         TYPE
                       </th>
 
-                      <th className="font-medium px-3 py-[10px] text-center border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         REMARK
                       </th>
 
@@ -308,7 +312,9 @@ export default function Leave() {
                     </tr>
                   </thead>
 
-                  <tbody>
+                  <tbody
+                    style={{ fontFamily: "AirbnbCereal", fontWeight: 300 }}
+                  >
                     {attendanceData.map((item) => (
                       <tr key={item.id} className="bg-white">
                         <td className="px-3 py-[10px] border border-gray-200 rounded-l-lg">
@@ -384,6 +390,16 @@ export default function Leave() {
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
+                          {item.reduction ? (
+                            <span className="px-3 py-1 bg-gray-100 text-[#151515] rounded-full text-xs">
+                              {item.reduction}
+                            </span>
+                          ) : (
+                            "2h"
+                          )}
+                        </td>
+
+                        <td className="px-3 py-[10px] border border-gray-200">
                           {formatDuration(item.duration)}
                         </td>
 
@@ -405,7 +421,7 @@ export default function Leave() {
 
                         <td className="px-3 py-[10px] border border-gray-200">
                           {item.remark ? (
-                            <span className="px-3 py-1 bg-gray-100 text-[#151515] rounded-full text-xs">
+                            <span className="px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-xs">
                               {item.remark}
                             </span>
                           ) : (

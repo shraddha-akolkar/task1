@@ -97,9 +97,18 @@ function calcExperience(createdAt) {
 
 function formatDate(dateStr) {
   if (!dateStr) return "—";
-  const d = new Date(dateStr);
-  if (isNaN(d)) return dateStr;
-  return d.toLocaleDateString("en-GB");
+
+  const date = new Date(dateStr);
+  if (isNaN(date)) return dateStr;
+
+  const day = date.getDate().toString().padStart(2, "0");
+
+  let month = date.toLocaleString("en-US", { month: "short" });
+  if (month === "Sep") month = "Sept";
+
+  const year = date.getFullYear();
+
+  return `${day} ${month} ${year}`;
 }
 
 /** visa display info based on visaExpiringOn date.*/
@@ -298,6 +307,7 @@ export default function EmployeesPage() {
       queryClient.invalidateQueries(["attendance"]);
     },
   });
+
   /*  UI  */
 
   return (
@@ -468,7 +478,9 @@ export default function EmployeesPage() {
                 className="w-full text-[13px] border-separate"
                 style={{ borderSpacing: "0 5px" }}
               >
-                <thead style={{ background: "#FAFAFA" }}>
+                <thead
+                  style={{ background: "#FAFAFA", fontFamily: "AirbnbCereal" }}
+                >
                   <tr className=" text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
                     <th className="font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
                       EMPLOYEE NAME

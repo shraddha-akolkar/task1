@@ -113,8 +113,8 @@ const Login = () => {
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div className="w-[420px] bg-[#FFFFFF] backdrop-filter: blur(10px) rounded-2xl shadow-2xl p-10">
-        <div className="flex flex-col items-center mb-6">
+      <div className="w-[420px] bg-[#FFFFFF]/60 border border-white/20 rounded-2xl p-10">
+        <div className="flex flex-col items-center mb-4">
           <img src={logo} alt="Logo" className="h-10 mb-2" />
           <h2 className="text-xl font-semibold text-gray-800">
             Welcome to OPM
@@ -127,7 +127,7 @@ const Login = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <label className="text-sm text-gray-700 font-medium">
               Employee ID*
@@ -138,9 +138,9 @@ const Login = () => {
               value={formData.id}
               onChange={handleChange}
               placeholder="Enter ID (ADM1 / IN1)"
-              className={`w-full mt-1 bg-[#FFFFFF] border ${
+              className={`w-full mt-1 bg-[#F7F7F7] border ${
                 errors.id ? "border-red-500" : "border-gray-200"
-              } rounded-lg px-4 py-2 focus:outline-none focus:border-black uppercase`}
+              } rounded-lg px-4 py-2 focus:outline-none focus:border-black `}
               disabled={loading}
             />
             {errors.id && (
@@ -158,7 +158,7 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter password"
-              className={`w-full mt-1 bg-[#FFFFFF] border ${
+              className={`w-full mt-1  bg-[#F7F7F7] border ${
                 errors.password ? "border-red-500" : "border-gray-200"
               } rounded-lg px-4 py-2 focus:outline-none focus:border-black`}
               disabled={loading}
@@ -170,7 +170,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full mt-4 bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mt-4 bg-black text-white py-3 rounded-lg hover:bg-gray-800 cursor-p transition disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={loading}
           >
             {loading ? "Logging in..." : "Submit"}

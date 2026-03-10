@@ -190,6 +190,55 @@ export default function Leave() {
     }
   };
 
+  function formatDate(dateString) {
+    if (!dateString) return "-";
+
+    const date = new Date(dateString);
+
+    const day = date.getDate().toString().padStart(2, "0");
+
+    let month = date.toLocaleString("en-US", { month: "short" });
+
+    if (month === "Sep") month = "Sept";
+
+    const year = date.getFullYear();
+
+    return `${day} ${month} ${year}`;
+  }
+
+  function getVisaInfo(emp) {
+    const { visaExpiringOn } = emp || {};
+
+    if (!visaExpiringOn) {
+      return { type: "none", label: "—" };
+    }
+
+    const expiry = new Date(visaExpiringOn);
+    const today = new Date();
+
+    const diffMs = expiry - today;
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) {
+      return {
+        type: "expired",
+        label: formatDate(visaExpiringOn),
+      };
+    }
+
+    if (diffDays <= 30) {
+      return {
+        type: "expiring",
+        days: diffDays,
+      };
+    }
+
+    return {
+      type: "valid",
+      label: formatDate(visaExpiringOn),
+    };
+  }
+
   useEffect(() => {
     fetchLeaves();
   }, [user]);
@@ -326,7 +375,12 @@ export default function Leave() {
                   className="w-full text-[13px] border-separate"
                   style={{ borderSpacing: "0 8px" }}
                 >
-                  <thead style={{ background: "#FAFAFA" }}>
+                  <thead
+                    style={{
+                      background: "#FAFAFA",
+                      fontFamily: "AirbnbCereal",
+                    }}
+                  >
                     <tr className="text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
                       <th className="font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
                         APPLIED DATE
@@ -337,9 +391,9 @@ export default function Leave() {
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         DESIGNATION
                       </th>
-                      {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         VISA STATUS
-                      </th> */}
+                      </th>
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         FROM DATE
                       </th>
@@ -369,7 +423,7 @@ export default function Leave() {
                             {item.createdAt?.split("T")[0]}
                           </td>
 
-                          <td className="px-3 py-[6px] border border-gray-200">
+                          <td className="font-airbnb font-[400] px-3 py-[6px] border border-gray-200">
                             <div className="flex items-center gap-2">
                               <img
                                 src={
@@ -398,16 +452,49 @@ export default function Leave() {
                             </div>
                           </td>
 
-                          {/* <td className="px-3 py-[6px] border border-gray-200">
-                            {item.Employee?.visaStatus || "-"}
-                          </td> */}
+                          <td className="px-3 py-[4px] border border-gray-200">
+                            {(() => {
+                              const visaInfo = getVisaInfo(item.Employee);
 
-                          <td className="px-3 py-[6px] border border-gray-200">
-                            {item.fromDate}
+                              if (visaInfo.type === "valid") {
+                                return (
+                                  <span className="text-[#18CA00]">
+                                    {visaInfo.label}
+                                  </span>
+                                );
+                              }
+
+                              if (visaInfo.type === "expired") {
+                                return (
+                                  <span className="text-[#CA0000]">
+                                    {visaInfo.label}
+                                  </span>
+                                );
+                              }
+
+                              if (visaInfo.type === "expiring") {
+                                return (
+                                  <div className="flex items-center gap-2">
+                                    <span className="bg-orange-100 text-[#FF7700] text-xs px-2 py-0.5 rounded-md">
+                                      Expiring
+                                    </span>
+                                    <span className="text-gray-600 text-xs">
+                                      {visaInfo.days} Days
+                                    </span>
+                                  </div>
+                                );
+                              }
+
+                              return <span className="text-gray-400">—</span>;
+                            })()}
                           </td>
 
                           <td className="px-3 py-[6px] border border-gray-200">
-                            {item.toDate}
+                            {formatDate(item.fromDate)}
+                          </td>
+
+                          <td className="px-3 py-[6px] border border-gray-200">
+                            {formatDate(item.toDate)}
                           </td>
 
                           <td className="px-3 py-[6px] border border-gray-200">

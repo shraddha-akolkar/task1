@@ -5,4 +5,13 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
+
+  theme: {
+    extend: {
+      fontFamily: {
+        airbnb: ["AirbnbCereal", "sans-serif"],
+      },
+    },
+  },
 })
+

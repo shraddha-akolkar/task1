@@ -10,6 +10,7 @@ import calender from "../assets/calendar1.png";
 import person from "../assets/person.png";
 import edit from "../assets/edit.png";
 import del from "../assets/delete.png";
+import "../assets/fonts/fonts.css";
 import Navbar from "./Navbar";
 
 const API_BASE_URL = "http://localhost:5000/api";
@@ -33,6 +34,22 @@ export default function Meeting() {
       console.log(err);
     }
   }, []);
+
+  function formatDate(dateString) {
+    if (!dateString) return "-";
+
+    const date = new Date(dateString);
+
+    const day = date.getDate().toString().padStart(2, "0");
+
+    let month = date.toLocaleString("en-US", { month: "short" });
+
+    if (month === "Sep") month = "Sept";
+
+    const year = date.getFullYear();
+
+    return `${day} ${month} ${year}`;
+  }
 
   useEffect(() => {
     fetchMeetings();
@@ -128,7 +145,12 @@ export default function Meeting() {
                   className="w-full text-[13px] border-separate"
                   style={{ borderSpacing: "0 8px" }}
                 >
-                  <thead style={{ background: "#FAFAFA" }}>
+                  <thead
+                    style={{
+                      background: "#FAFAFA",
+                      fontFamily: "AirbnbCereal",
+                    }}
+                  >
                     <tr className="text-[12px] uppercase text-[#151515]">
                       <th className="px-3 py-[10px] text-left rounded-l-lg border border-gray-200 font-medium">
                         CLIENT NAME
@@ -156,7 +178,13 @@ export default function Meeting() {
                     </tr>
                   </thead>
 
-                  <tbody>
+                  <tbody
+                    style={{
+                      background: "#FAFAFA",
+                      fontFamily: "AirbnbCereal",
+                      fontWeight: 300,
+                    }}
+                  >
                     {meetings.map((item) => (
                       <tr key={item.id} className="bg-white">
                         <td className="px-3 py-[6px] border border-gray-200 rounded-l-lg">
@@ -168,7 +196,7 @@ export default function Meeting() {
                         </td>
 
                         <td className="px-3 py-[6px] border border-gray-200">
-                          {item.date}
+                          {formatDate(item.date)}
                         </td>
 
                         <td className="px-3 py-[6px] border border-gray-200">

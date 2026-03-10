@@ -225,7 +225,13 @@ export default function Leave() {
                   className="w-full text-[13px] border-separate"
                   style={{ borderSpacing: "0 8px" }}
                 >
-                  <thead style={{ background: "#FAFAFA" }}>
+                  <thead
+                    style={{
+                      background: "#FAFAFA",
+                      fontFamily: "AirbnbCereal",
+                      fontWeight: "500",
+                    }}
+                  >
                     <tr className=" text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
                       <th className="font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
                         APPLIED DATE
@@ -261,7 +267,10 @@ export default function Leave() {
                     </tr>
                   </thead>
 
-                  <tbody className="text-gray-700">
+                  <tbody
+                    className="text-gray-700"
+                    style={{ fontFamily: "AirbnbCereal", fontWeight: 300 }}
+                  >
                     {leaves.map((item) => {
                       const visaInfo = getVisaInfo(
                         item.Employee?.visaExpiringOn,

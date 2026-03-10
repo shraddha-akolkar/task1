@@ -181,39 +181,44 @@ export default function Meeting() {
                   className="w-full text-[13px] border-separate"
                   style={{ borderSpacing: "0 8px" }}
                 >
-                  <thead style={{ background: "#FAFAFA" }}>
-                    <tr className="text-[12px] uppercase text-[#151515]">
-                      <th className="px-3 py-[10px] text-left rounded-l-lg border border-gray-200 font-medium">
+                  <thead
+                    style={{
+                      background: "#FAFAFA",
+                      fontFamily: "AirbnbCereal",
+                    }}
+                  >
+                    <tr className="text-[12px] uppercase ">
+                      <th className="airbnb-font px-3 py-[10px] text-left rounded-l-lg border border-gray-200 font-normal">
                         CLIENT NAME
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200 font-medium">
+                      <th className="px-3 py-[10px] text-left border border-gray-200 font-normal">
                         EMPLOYEE NAME
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200 font-medium">
+                      <th className="px-3 py-[10px] text-left border border-gray-200 font-normal">
                         DATE
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200 font-medium">
+                      <th className="px-3 py-[10px] text-left border border-gray-200 font-normal">
                         SERVICE
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200 font-medium">
+                      <th className="px-3 py-[10px] text-left border border-gray-200 font-normal">
                         DAY TYPE
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200 font-medium">
+                      <th className="px-3 py-[10px] text-left border border-gray-200 font-normal">
                         ADDRESS
                       </th>
 
-                      <th className="px-3 py-[10px] text-left rounded-r-lg border border-gray-200 font-medium">
+                      <th className="px-3 py-[10px] text-left rounded-r-lg border border-gray-200 font-normal">
                         ACTION
                       </th>
                     </tr>
                   </thead>
 
-                  <tbody>
+                  <tbody className="font-airbnb">
                     {meetings.map((item) => (
                       <tr key={item.id} className="bg-white">
                         <td className="px-3 py-[6px] border border-gray-200 rounded-l-lg">

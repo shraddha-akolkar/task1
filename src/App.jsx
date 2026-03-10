@@ -15,7 +15,7 @@ import EmployeeAttendance from "./components/EmployeeAttendance";
 import EmployeeLeave from "./components/EmployeeLeave";
 
 import { Toaster } from "react-hot-toast";
-
+import "./assets/fonts/fonts.css";
 /* PROTECTED ROUTE */
 
 const ProtectedRoute = ({ children }) => {

@@ -11,6 +11,7 @@ import Navbar from "./Navbar";
 import admin1 from "../assets/admin1.png";
 import admin2 from "../assets/admin2.png";
 import admin3 from "../assets/admin3.png";
+import admin4 from "../assets/admin4.png";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
@@ -32,8 +33,26 @@ function formatTime(time) {
   });
 }
 
+function formatDate(dateString) {
+  if (!dateString) return "-";
+
+  const date = new Date(dateString);
+
+  const day = date.getDate().toString().padStart(2, "0");
+
+  let month = date.toLocaleString("en-US", { month: "short" });
+
+  if (month === "Sep") month = "Sept";
+
+  const year = date.getFullYear();
+
+  return `${day} ${month} ${year}`;
+}
+
 export default function Dashboard() {
   const [inTime, setInTime] = useState(null);
+  const [activeLeaveTab, setActiveLeaveTab] = useState("On Leave");
+
   const [isScannedIn, setIsScannedIn] = useState(false);
   const [duration, setDuration] = useState("0h 0m");
   const [attendanceData, setAttendanceData] = useState([]);
@@ -233,6 +252,37 @@ export default function Dashboard() {
 
     return `${h}h ${m}m`;
   };
+
+  function formatTime(time) {
+    if (!time) return "-";
+
+    const [h, m] = time.split(":");
+
+    const date = new Date();
+    date.setHours(h);
+    date.setMinutes(m);
+
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
+
+  function formatLeaveDate(fromDate, toDate) {
+    const start = new Date(fromDate);
+    const end = new Date(toDate);
+
+    const startDay = start.getDate().toString().padStart(2, "0");
+    const endDay = end.getDate().toString().padStart(2, "0");
+
+    const startMonth = start.toLocaleString("default", { month: "short" });
+    const endMonth = end.toLocaleString("default", { month: "short" });
+
+    const year = end.getFullYear();
+
+    return `${startDay} ${startMonth} - ${endDay} ${endMonth}, ${year}`;
+  }
   return (
     <div>
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
@@ -292,66 +342,96 @@ export default function Dashboard() {
 
           {/* DASHBOARD CARD */}
 
-          <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 px-4 py-4">
-            <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 px-6 py-5 flex items-center justify-between">
+          <div className="grid grid-cols-1 lg:grid-cols-7 gap-3 px-4 pt-1 pb-3">
+            <div className="lg:col-span-2 h-[150px]  bg-white rounded-xl shadow-sm  px-4 py-4 flex items-center justify-between">
+              {/* LEFT SIDE */}
               <div>
-                <p className="text-gray-400 text-xs">In Time</p>
+                <p className="text-gray-400 text-[11px]">In Time</p>
 
-                <h2 className="text-3xl font-bold mt-1">
+                <h2 className="text-2xl font-bold mt-1">
                   {inTime ? formatTime(inTime) : "--:--"}
                 </h2>
-                {/* SCAN BUTTON */}
 
                 <button
                   onClick={handleScan}
-                  className="mt-6 bg-black text-white px-6 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 transition"
+                  className="mt-3 bg-black text-white px-4 py-1.5 rounded-lg text-xs font-medium hover:bg-gray-800 transition"
                 >
                   {isScannedIn ? "Scan Out" : "Scan In"}
                 </button>
               </div>
 
-              <div className="w-[150px] flex flex-col items-center">
-                <p className="text-sm font-semibold mt-1">{duration}</p>
+              {/* RIGHT SIDE SEMI CIRCLE */}
+              <div className="relative w-[130px] h-[70px] flex items-center justify-center">
+                <svg viewBox="0 0 200 100" className="w-full h-full">
+                  <path
+                    d="M10 100 A90 90 0 0 1 190 100"
+                    fill="none"
+                    stroke="#E5E7EB"
+                    strokeWidth="14"
+                    strokeLinecap="round"
+                  />
+
+                  <path
+                    d="M10 100 A90 90 0 0 1 170 40"
+                    fill="none"
+                    stroke="#22C55E"
+                    strokeWidth="14"
+                    strokeLinecap="round"
+                  />
+
+                  <path
+                    d="M170 40 A90 90 0 0 1 190 100"
+                    fill="none"
+                    stroke="#6D28D9"
+                    strokeWidth="14"
+                    strokeLinecap="round"
+                  />
+                </svg>
+
+                <div className="absolute text-sm font-semibold text-gray-900">
+                  {duration}
+                </div>
               </div>
             </div>
-
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-5 py-4 flex flex-col justify-between">
-              <img src={admin1} className="w-7 h-7" />
+            <div className="bg-white rounded-[10px] shadow-sm w-[180px] h-[135px] px-4 py-4 flex flex-col justify-between mt-4">
+              <img src={admin1} className="w-7 h-7 mt-1" />
               <div>
-                <p className="text-gray-500 text-sm mt-2">Total Employee</p>
-                <h3 className="text-2xl font-semibold">
-                  {employeeStats.total}
-                </h3>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-5 py-4 flex flex-col justify-between">
-              <img src={admin1} className="w-7 h-7" />
-              <div>
-                <p className="text-gray-500 text-sm mt-2">Payroll Employee</p>
-                <h3 className="text-2xl font-semibold">
-                  {employeeStats.payroll}
-                </h3>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-5 py-4 flex flex-col justify-between">
-              <img src={admin2} className="w-7 h-7" />
-              <div>
-                <p className="text-gray-500 text-sm mt-2">Contract Employee</p>
+                <p className="text-[#151515] text-sm">Assigned Employee</p>
                 <h3 className="text-2xl font-semibold">
                   {employeeStats.contract}
                 </h3>
               </div>
             </div>
-
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-5 py-4 flex flex-col justify-between">
-              <img src={admin3} className="w-7 h-7" />
+            <div className="bg-white rounded-[10px] shadow-sm w-[180px] h-[135px] px-4 py-4 flex flex-col justify-between mt-4">
+              <img src={admin1} className="w-7 h-7 mt-1" />
               <div>
-                <p className="text-gray-500 text-sm mt-2">Staff</p>
-                <h3 className="text-2xl font-semibold">
-                  {employeeStats.staff}
+                <p className="text-[#151515] text-sm mt-1">Payroll Employee</p>
+                <h3 className="text-xl font-semibold">
+                  {employeeStats.payroll}
                 </h3>
+              </div>
+            </div>
+            <div className="bg-white rounded-[10px] shadow-sm w-[180px] h-[135px] px-4 py-4 flex flex-col justify-between mt-4">
+              <img src={admin2} className="w-7 h-7 mt-1" />
+              <div>
+                <p className="text-[#151515] text-sm mt-1">Contract Employee</p>
+                <h3 className="text-xl font-semibold">
+                  {employeeStats.contract}
+                </h3>
+              </div>
+            </div>
+            <div className="bg-white rounded-[10px] shadow-sm w-[180px] h-[135px] px-4 py-4 flex flex-col justify-between mt-4">
+              <img src={admin3} className="w-7 h-7 mt-1" />
+              <div>
+                <p className="text-[#151515] text-sm mt-1">Staff</p>
+                <h3 className="text-xl font-semibold">{employeeStats.staff}</h3>
+              </div>
+            </div>
+            <div className="bg-white rounded-[10px] shadow-sm  px-4 py-3 flex flex-col justify-between mt-4">
+              <img src={admin4} className="w-6 h-6 mt-3" />
+              <div>
+                <p className="text-[#151515] text-sm mt-1">In Factory</p>
+                <h3 className="text-xl font-semibold">6</h3>
               </div>
             </div>
           </div>
@@ -359,7 +439,7 @@ export default function Dashboard() {
           {/* MAIN SECTION */}
           <div className="grid grid-cols-1 lg:grid-cols-[70%_30%] gap-4 px-4 pb-6">
             {/* TABLE */}
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-4">
+            <div className=" bg-white rounded-[10px] shadow-sm p-4">
               <div className="overflow-x-auto">
                 <table
                   className="w-full text-[13px] border-separate"
@@ -367,37 +447,41 @@ export default function Dashboard() {
                 >
                   <thead style={{ background: "#FAFAFA" }}>
                     <tr className="text-[12px] uppercase text-[#151515]">
-                      <th className="px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
+                      <th className=" font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
                         EMPLOYEE NAME
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                        DESIGNATION
+                      </th>
+
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         DATE
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         IN-TIME
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         OUT-TIME
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         OVERTIME
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         DURATION
                       </th>
 
-                      <th className="px-3 py-[10px] text-left border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         TYPE
                       </th>
 
-                      {/* <th className="px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
+                      <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
                         Remark
-                      </th> */}
+                      </th>
                     </tr>
                   </thead>
 
@@ -440,7 +524,11 @@ export default function Dashboard() {
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.date}
+                          {item.Employee?.designation}
+                        </td>
+
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {formatDate(item.date)}
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
@@ -467,6 +555,16 @@ export default function Dashboard() {
                           </span>
                         </td>
 
+                        <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg">
+                          {item.remark ? (
+                            <span className="px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-xs">
+                              {item.remark}
+                            </span>
+                          ) : (
+                            "Remark"
+                          )}
+                        </td>
+
                         {/* <td className="px-3 py-[10px] border border-gray-200">
                           -
                         </td> */}
@@ -478,15 +576,21 @@ export default function Dashboard() {
             </div>
 
             {/* ON LEAVE */}
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5">
+            <div className=" bg-white rounded-[10px] shadow-sm mr-2 p-5">
+              {/* Header */}
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-base font-semibold">On Leave</h2>
 
-                <div className="flex gap-2 text-xs">
-                  {leaveTabs.map((tab) => (
+                <div className="flex gap-1.5 text-xs">
+                  {["On Leave", "On Site", "In Factory", "New"].map((tab) => (
                     <button
                       key={tab}
-                      className="px-3 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      onClick={() => setActiveLeaveTab(tab)}
+                      className={`px-2 py-1 cursor-pointer  rounded-full border transition-all duration-200 ${
+                        activeLeaveTab === tab
+                          ? "bg-black text-white border-black"
+                          : "bg-white text-gray-600 border-gray-200 hover:bg-gray-100"
+                      }`}
                     >
                       {tab}
                     </button>
@@ -494,34 +598,44 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="space-y-4">
-                {Array.isArray(leaveData) &&
-                  leaveData.map((p, i) => (
-                    <div key={i} className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={
-                            p.Employee?.employeePicture
-                              ? `http://localhost:5000/uploads/${p.Employee.employeePicture}`
-                              : user1
-                          }
-                          className="w-10 h-10 rounded-full object-cover"
-                        />
+              {/* List */}
+              <div className="space-y-5">
+                {leaveData.map((p, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    {/* LEFT SIDE */}
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={
+                          p.Employee?.employeePicture
+                            ? `http://localhost:5000/uploads/${p.Employee.employeePicture}`
+                            : user1
+                        }
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
 
-                        <div>
-                          <p className="text-sm font-semibold text-gray-800">
-                            {p.Employee?.name}
-                          </p>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-800">
+                          {p.Employee?.name || "-"}
+                        </p>
 
-                          <p className="text-xs text-gray-400">{p.leaveType}</p>
-                        </div>
+                        <p className="text-xs text-[#151515]">
+                          {p.Employee?.designation || "-"}
+                        </p>
                       </div>
-
-                      <p className="text-xs text-gray-400 whitespace-nowrap">
-                        {p.fromDate} - {p.toDate}
-                      </p>
                     </div>
-                  ))}
+
+                    {/* RIGHT SIDE DATE */}
+                    <p className="text-xs text-gray-400 whitespace-nowrap">
+                      {formatLeaveDate(p.fromDate, p.toDate)}
+                    </p>
+                  </div>
+                ))}
+
+                {leaveData?.length === 0 && (
+                  <p className="text-center text-gray-400 text-sm">
+                    No upcoming leaves
+                  </p>
+                )}
               </div>
             </div>
           </div>
