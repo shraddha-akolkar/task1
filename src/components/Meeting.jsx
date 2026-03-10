@@ -62,6 +62,18 @@ export default function Meeting() {
     setShowModal(true);
   };
 
+  function formatDate(dateStr) {
+    if (!dateStr) return "-";
+
+    const date = new Date(dateStr);
+
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  }
+
   return (
     <div className="border-lg">
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
@@ -78,35 +90,35 @@ export default function Meeting() {
               {/* ICONS */}
               <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 lg:pb-0">
                 <div
-                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
+                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer"
                   onClick={() => navigate("/adminportal")}
                 >
                   <img src={window} className="w-4 h-4" />
                 </div>
 
                 <div
-                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
+                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer"
                   onClick={() => navigate("/attendance")}
                 >
                   <img src={person} className="w-4 h-4" />
                 </div>
 
                 <div
-                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
+                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer"
                   onClick={() => navigate("/dashboard")}
                 >
                   <img src={employee} className="w-4 h-4" />
                 </div>
 
                 <div
-                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
+                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer"
                   onClick={() => navigate("/leave")}
                 >
                   <img src={calender} className="w-4 h-4" />
                 </div>
 
                 <div
-                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
+                  className="h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer"
                   onClick={() => navigate("/holidays")}
                 >
                   <img src={umbrella} className="w-4 h-4" />
@@ -124,16 +136,15 @@ export default function Meeting() {
           <div className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2 pt-2">
             {/* SEARCH */}
             <div className="flex items-center justify-between gap-3 px-4 pb-2">
-              <div className="flex items-center w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
+              <div className="flex items-center w-full sm:w-full md:w-full lg:w-[210px] lg:h-[30px] border border-gray-200 rounded-md px-3 py-1.5 bg-[#FAFAFA]">
                 <input
                   type="text"
                   placeholder="Search employee"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="flex-1 bg-transparent outline-none text-sm"
+                  className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400"
                 />
-
-                <div className="w-4 h-4 border-2 border-gray-500 rounded-full relative">
+                <div className="w-3.5 h-3.5 border-2 border-gray-500 rounded-full relative">
                   <span className="absolute w-2 h-[2px] bg-gray-500 right-[-5px] bottom-[-3px] rotate-45"></span>
                 </div>
               </div>
@@ -141,12 +152,12 @@ export default function Meeting() {
               <div className="flex items-center gap-2">
                 <div
                   onClick={() => setShowFilters(!showFilters)}
-                  className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
+                  className="w-8 h-8  rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer"
                 >
                   <img src={filter} className="w-4 h-4" />
                 </div>
 
-                <div className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer">
+                <div className="w-8 h-8  rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer">
                   <img src={file} className="w-4 h-4" />
                 </div>
 
@@ -157,7 +168,7 @@ export default function Meeting() {
                   }}
                   className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm"
                 >
-                  <img src={plus} className="w-4 h-4" />
+                  <img src={plus} className="w-3 h-3" />
                   New
                 </button>
               </div>
@@ -214,7 +225,7 @@ export default function Meeting() {
                         </td>
 
                         <td className="px-3 py-[6px] border border-gray-200">
-                          {item.date}
+                          {formatDate(item.date)}
                         </td>
 
                         <td className="px-3 py-[6px] border border-gray-200">
@@ -243,7 +254,7 @@ export default function Meeting() {
                               }}
                             />
 
-                            <img
+                            {/* <img
                               src={del}
                               alt="Delete"
                               className="w-4 h-4 cursor-pointer"
@@ -251,7 +262,7 @@ export default function Meeting() {
                                 e.stopPropagation();
                                 handleDelete(item.id);
                               }}
-                            />
+                            /> */}
                           </div>
                         </td>
                       </tr>

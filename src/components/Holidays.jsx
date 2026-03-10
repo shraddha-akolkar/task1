@@ -27,28 +27,26 @@ export default function Holiday() {
   const navigate = useNavigate();
   const [holidays, setHolidays] = useState([]);
   const [selectedHoliday, setSelectedHoliday] = useState(null);
-  const tabs = [
-    "Self",
-    "All Employee",
-    "InFactory",
-    "On Site",
-    "Payroll",
-    "Contract",
-  ];
+  const tabs = ["Self", "All Employee", "Payroll", "Contract", "Staff"];
+  const [month, setMonth] = useState("All");
 
   const fetchHolidays = useCallback(async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/holidays`);
+      const res = await fetch(
+        `${API_BASE_URL}/holidays?month=${month}&search=${search}`,
+      );
+
       const data = await res.json();
       setHolidays(data.holidays);
     } catch (err) {
       console.log("Fetch error:", err);
     }
-  }, []);
+  }, [month, search]);
 
   useEffect(() => {
     fetchHolidays();
   }, [fetchHolidays]);
+
   const handleEdit = (holiday) => {
     setSelectedHoliday(holiday);
     setShowModal(true);
@@ -88,7 +86,7 @@ export default function Holiday() {
 
               {/* RIGHT SIDE ICONS */}
               <div className=" flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 lg:pb-0">
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={windowIcon}
                     className="w-4 h-4"
@@ -96,7 +94,7 @@ export default function Holiday() {
                   />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={person}
                     className="w-4 h-4"
@@ -105,7 +103,7 @@ export default function Holiday() {
                   />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={employee}
                     className="w-4 h-4"
@@ -114,11 +112,11 @@ export default function Holiday() {
                   />
                 </div>
 
-                {/* <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                {/* <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img src={user} className="w-4 h-4" />
                 </div> */}
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={calender}
                     className="w-4 h-4"
@@ -132,7 +130,7 @@ export default function Holiday() {
                   <span className="text-sm">Holidays</span>
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={building}
                     className="w-4 h-4"
@@ -145,88 +143,74 @@ export default function Holiday() {
 
           {/*  TABLE  */}
           <div
-            className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2
+            className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2 pt-2
            "
           >
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between pt-2 pb-2 px-4">
-              <div className="flex flex-wrap gap-2 ">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`px-4 py-1 rounded-md text-sm cursor-pointer  ${
-                      activeTab === tab
-                        ? "bg-black text-white"
-                        : "text-gray-600 bg-[#FAFAFA]"
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
+            <div className="flex flex-wrap items-center justify-end gap-2 pt-2 pb-2 px-4">
+              {/* Search */}
+              <div className="flex items-center bg-[#FAFAFA] w-[210px] lg:w-[260px] border border-gray-200 rounded-md px-3 py-1.5">
+                <input
+                  type="text"
+                  placeholder="Search employee"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400"
+                />
+                <div className="w-4 h-4 border-2 border-gray-500 rounded-full relative">
+                  <span className="absolute w-2 h-[2px] bg-gray-500 right-[-5px] bottom-[-3px] rotate-45"></span>
+                </div>
               </div>
 
-              {/* RIGHT SIDE ICON  */}
-              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto pt-2">
-                {/* Search pill */}
-                <div className="flex items-center w-full sm:w-full md:w-full lg:w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
-                  <input
-                    type="text"
-                    placeholder="Search employee"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 bg-[#FAFAFA]"
-                  />
-                  <div className="w-4 h-4 border-2 border-gray-500 rounded-full relative">
-                    <span className="absolute w-2 h-[2px] bg-gray-500 right-[-5px] bottom-[-3px] rotate-45"></span>
-                  </div>
-                </div>
+              {/* Filter */}
+              {/* <div
+                onClick={() => setShowFilters(!showFilters)}
+                className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-lg bg-[#FAFAFA] cursor-pointer hover:bg-gray-50 transition"
+              >
+                <img src={filter} className="w-4 h-4" />
+              </div> */}
 
-                {/* Filter */}
-                <div
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition"
-                >
-                  <img src={filter} className="w-4 h-4" />
-                </div>
+              {/* File */}
+              {/* <div className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-lg bg-[#FAFAFA] cursor-pointer hover:bg-gray-50 transition">
+                <img src={file} className="w-4 h-4" />
+              </div> */}
 
-                {/* File */}
-                <div className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                  <img src={file} className="w-4 h-4" />
-                </div>
-
-                {/* New button */}
-                <button
-                  onClick={() => setShowModal(true)}
-                  className="  flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800 cursor-pointer"
-                >
-                  <img src={plus} className="w-4 h-4" />
-                  New
-                </button>
-              </div>
+              {/* New */}
+              <button
+                onClick={() => setShowModal(true)}
+                className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-md text-sm hover:bg-gray-800 cursor-pointer"
+              >
+                <img src={plus} className="w-3 h-3" />
+                New
+              </button>
             </div>
             <div className="p-4 rounded-xl">
               {/* Month Tabs */}
-              <div className="flex gap-2 mb-4  overflow-x-auto">
+              <div className="flex gap-2 mb-4 overflow-x-auto ">
                 {[
-                  "All",
-                  "Jan",
-                  "Feb",
-                  "Mar",
-                  "Apr",
-                  "May",
-                  "Jun",
-                  "Jul",
-                  "Aug",
-                  "Sep",
-                  "Oct",
-                  "Nov",
-                  "Dec",
+                  { label: "All", value: "All" },
+                  { label: "Jan", value: "01" },
+                  { label: "Feb", value: "02" },
+                  { label: "Mar", value: "03" },
+                  { label: "Apr", value: "04" },
+                  { label: "May", value: "05" },
+                  { label: "Jun", value: "06" },
+                  { label: "Jul", value: "07" },
+                  { label: "Aug", value: "08" },
+                  { label: "Sep", value: "09" },
+                  { label: "Oct", value: "10" },
+                  { label: "Nov", value: "11" },
+                  { label: "Dec", value: "12" },
                 ].map((m) => (
                   <button
-                    key={m}
-                    className="px-3 py-1 text-xs rounded-md bg-[#FAFAFA] hover:bg-black hover:text-white"
+                    key={m.value}
+                    onClick={() => setMonth(m.value)}
+                    className={`px-3 py-1 text-xs rounded-md transition ${
+                      month === m.value
+                        ? "bg-black text-white"
+                        : "bg-[#FAFAFA] hover:bg-black hover:text-white"
+                    }`}
                   >
-                    {m}
+                    {m.label}
                   </button>
                 ))}
               </div>
@@ -253,7 +237,7 @@ export default function Holiday() {
                         />
                       </div>
 
-                      <div className="px-4 py-3">
+                      <div className="px-4 pb-2">
                         <div className="text-[16px] font-semibold text-gray-900">
                           {h.title}
                         </div>

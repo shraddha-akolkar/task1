@@ -10,9 +10,11 @@ import employee from "../assets/employees 1.png";
 import calender from "../assets/calendar1.png";
 import edit from "../assets/edit.png";
 import del from "../assets/delete.png";
-import attendence from "../assets/attendance.png";
+import cross from "../assets/cross.png";
+import mark from "../assets/check.png";
+import time from "../assets/in-time.png";
 import plus from "../assets/plus.png";
-import pencil from "../assets/pencil.png";
+import attendence from "../assets/attendance.png";
 import user1 from "../assets/user1.png";
 import Navbar from "./Navbar";
 
@@ -67,6 +69,16 @@ function formatTime(time) {
   });
 }
 
+function formatDate(date) {
+  if (!date) return "-";
+
+  return new Date(date).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 export default function Leave() {
   const [activeTab, setActiveTab] = useState("All Employee");
   const [search, setSearch] = useState("");
@@ -78,6 +90,7 @@ export default function Leave() {
   const [attendanceData, setAttendanceData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [editData, setEditData] = useState(null);
+
   useEffect(() => {
     fetchAttendance();
   }, []);
@@ -100,6 +113,7 @@ export default function Leave() {
 
     return `${h}h ${m}m`;
   };
+
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Delete this attendance?");
     if (!confirmDelete) return;
@@ -116,7 +130,6 @@ export default function Leave() {
         throw new Error("Failed to delete attendance");
       }
 
-      // Refresh table after deletion
       fetchAttendance();
     } catch (error) {
       console.error("Delete error:", error);
@@ -126,10 +139,8 @@ export default function Leave() {
   return (
     <div className="border-lg">
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
-        {/*  NAVBAR */}
         <Navbar />
 
-        {/*  TOP HEADER */}
         <div className="bg-white border-l border-r border-b border-gray-100 rounded-b-xl pb-3 mb-2 -mt-[0.1rem] relative z-10">
           <div className="mx-6 mt-2">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
@@ -137,28 +148,21 @@ export default function Leave() {
                 Employee Attendance
               </h1>
 
-              {/* RIGHT SIDE ICONS */}
-              <div
-                className="
-        flex items-center gap-2
-        overflow-x-auto scrollbar-hide
-        pb-2
-        lg:pb-0
-      "
-              >
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+              <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 lg:pb-0">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={windowIcon}
                     className="w-4 h-4"
                     onClick={() => navigate("/adminportal")}
                   />
                 </div>
-                <div className=" lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
+
+                <div className="lg:mb-2 inline-flex items-center gap-2 bg-black text-white px-4 h-9 rounded-full cursor-pointer whitespace-nowrap">
                   <img src={attendence} className="w-4 h-4" />
                   <span className="text-sm">Attendance</span>
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={employee}
                     className="w-4 h-4"
@@ -167,7 +171,7 @@ export default function Leave() {
                   />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={calender}
                     className="w-4 h-4"
@@ -175,12 +179,7 @@ export default function Leave() {
                   />
                 </div>
 
-                {/* 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
-                  <img src={user} className="w-4 h-4" />
-                </div> */}
-
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={umbrella}
                     className="w-4 h-4"
@@ -188,7 +187,7 @@ export default function Leave() {
                   />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={building}
                     className="w-4 h-4"
@@ -199,101 +198,110 @@ export default function Leave() {
             </div>
           </div>
 
-          {/*  TABLE  */}
-          <div
-            className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2 pt-2
-           "
-          >
+          <div className="bg-white rounded-xl shadow overflow-hidden mx-4 pb-2 pt-2">
             <div className="flex items-center justify-between gap-3 pt-2 pb-2 px-4 flex-nowrap">
               <div className="flex flex-wrap gap-2 ">
                 {tabs.map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-4 py-1 rounded-md text-sm cursor-pointer  ${
+                    className={`px-4 py-1 rounded-md text-sm cursor-pointer ${
                       activeTab === tab
                         ? "bg-black text-white"
-                        : "text-gray-600 bg-[#FAFAFA]"
+                        : "text-gray-600 bg-[FFFFFF]"
                     }`}
                   >
                     {tab}
                   </button>
                 ))}
               </div>
-              {/* RIGHT SIDE ICON  */}
+
               <div className="flex items-center gap-2 whitespace-nowrap">
-                {/* Search pill */}
-                <div className="flex items-center w-full sm:w-full md:w-full lg:w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
+                {/* Bulk Update */}
+                <button className="flex items-center gap-2 border border-gray-300 px-3 py-1 rounded-md text-sm hover:bg-gray-50">
+                  <img src={edit} className="w-3.5 h-3.5" />
+                  Bulk Update
+                </button>
+
+                {/* Search */}
+                <div className="flex items-center w-full sm:w-full md:w-full lg:w-[210px] lg:h-[30px] border border-gray-200 rounded-md px-3 py-1.5 bg-[#FAFAFA]">
                   <input
                     type="text"
                     placeholder="Search employee"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 bg-[#FAFAFA]"
+                    className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400"
                   />
-                  <div className="w-4 h-4 border-2 border-gray-500 rounded-full relative">
+                  <div className="w-3.5 h-3.5 border-2 border-gray-500 rounded-full relative">
                     <span className="absolute w-2 h-[2px] bg-gray-500 right-[-5px] bottom-[-3px] rotate-45"></span>
                   </div>
                 </div>
+
                 {/* Filter */}
                 <div
                   onClick={() => setShowFilters(!showFilters)}
-                  className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition"
+                  className="w-8 h-8 rounded-lg bg-[#FAFAFA] border border-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition"
                 >
-                  <img src={filter} className="w-4 h-4" />
+                  <img src={filter} className="w-3.5 h-3.5" />
                 </div>
+
                 {/* File */}
-                <div className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                  <img src={file} className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg bg-[#FAFAFA] border border-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <img src={file} className="w-3.5 h-3.5" />
                 </div>
-                {/* New button */}
-                {/* <button
+
+                {/* New */}
+                <button
                   onClick={() => setShowModal(true)}
-                  className="  flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800 cursor-pointer"
+                  className="flex items-center gap-1 bg-black text-white px-3 py-1 rounded-md text-sm hover:bg-gray-800 cursor-pointer"
                 >
-                  <img src={plus} className="w-4 h-4" />
+                  <img src={plus} className="w-3.5 h-3.5" />
                   New
-                </button> */}
+                </button>
               </div>
             </div>
+
             <div className="pb-4 px-4 rounded-xl">
-              <div className="overflow-x-auto">
-                <table
-                  className="w-full text-[13px] border-separate"
-                  style={{ borderSpacing: "0 8px" }}
-                >
-                  <thead style={{ background: "#FAFAFA" }}>
+              <div className="overflow-x-auto bg-white px-[5px]">
+                <table className="w-full text-[13px] border-separate border-spacing-y-[5px]">
+                  <thead className="bg-[#FAFAFA]">
                     <tr className="text-[12px] leading-[100%] tracking-[0%] uppercase text-[#151515]">
                       <th className="font-medium px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
                         EMPLOYEE NAME
                       </th>
+
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         DESIGNATION
                       </th>
+
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         DATE
                       </th>
+
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         IN-TIME
                       </th>
+
                       <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
                         OUT-TIME
                       </th>
-                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
-                        OVERTIME
-                      </th>
-                      {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+
+                      <th className="font-medium px-3 py-[10px] text-center border border-gray-200">
                         REDUCTION
-                      </th> */}
-                      <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      </th>
+
+                      <th className="font-medium px-3 py-[10px] text-center border border-gray-200">
                         DURATION
                       </th>
-                      {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+
+                      <th className="font-medium px-3 py-[10px] text-center border border-gray-200">
                         TYPE
-                      </th> */}
-                      {/* <th className="font-medium px-3 py-[10px] text-left border border-gray-200">
+                      </th>
+
+                      <th className="font-medium px-3 py-[10px] text-center border border-gray-200">
                         REMARK
-                      </th> */}
+                      </th>
+
                       <th className="font-medium px-3 py-[10px] text-left rounded-r-lg border border-gray-200">
                         ACTION
                       </th>
@@ -319,7 +327,7 @@ export default function Leave() {
                             <EmployeeAvatar emp={item.Employee} />
 
                             <div>
-                              <div className="font-medium text-gray-800">
+                              <div className=" text-gray-800">
                                 {item.Employee?.name || "-"}
                               </div>
 
@@ -331,6 +339,7 @@ export default function Leave() {
                             </div>
                           </div>
                         </td>
+
                         <td className="px-3 py-[10px] border border-gray-200">
                           <div>{item.Employee?.designation || "-"}</div>
                           <div className="text-[11px] text-gray-400">
@@ -339,33 +348,70 @@ export default function Leave() {
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {item.date}
+                          {formatDate(item.date)}
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {formatTime(item.inTime)}
-                        </td>
-                        <td className="px-3 py-[10px] border border-gray-200">
-                          {item.outTime && item.outTime !== "00:00:00"
-                            ? formatTime(item.outTime)
-                            : "-"}
+                          <div className="flex items-center gap-2">
+                            <img src={time} className="w-4 h-4 opacity-70" />
+                            {formatTime(item.inTime)}
+                          </div>
                         </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
-                          {formatDuration(item.overtime)}
+                          <div className="flex items-center gap-2">
+                            <img src={time} className="w-4 h-4 opacity-70" />
+
+                            {item.outTime && item.outTime !== "00:00:00"
+                              ? formatTime(item.outTime)
+                              : "-"}
+                          </div>
                         </td>
 
-                        {/* <td className="px-3 py-[10px] border border-gray-200">
-                          -
-                        </td> */}
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          <div className="flex items-center gap-2">
+                            {formatDuration(item.overtime)}
+
+                            <img
+                              src={mark}
+                              className="w-4 h-4 cursor-pointer"
+                            />
+                            <img
+                              src={cross}
+                              className="w-4 h-4 cursor-pointer"
+                            />
+                          </div>
+                        </td>
 
                         <td className="px-3 py-[10px] border border-gray-200">
                           {formatDuration(item.duration)}
                         </td>
 
-                        {/* <td className="px-3 py-[10px] border border-gray-200">
-                          -
-                        </td> */}
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          <span
+                            className={`px-3 py-1 rounded-md text-xs ${
+                              item.Employee?.type === "Payroll"
+                                ? "bg-purple-100 text-purple-700"
+                                : item.Employee?.type === "Contract"
+                                  ? "bg-green-100 text-green-700"
+                                  : item.Employee?.type === "Staff"
+                                    ? "bg-yellow-100 text-yellow-700"
+                                    : "bg-gray-100 text-gray-600"
+                            }`}
+                          >
+                            {item.Employee?.type}
+                          </span>
+                        </td>
+
+                        <td className="px-3 py-[10px] border border-gray-200">
+                          {item.remark ? (
+                            <span className="px-3 py-1 bg-gray-100 text-[#151515] rounded-full text-xs">
+                              {item.remark}
+                            </span>
+                          ) : (
+                            "Remark"
+                          )}
+                        </td>
 
                         <td className="px-3 py-[20px] border border-gray-200 rounded-r-lg">
                           <div className="flex gap-3">
@@ -378,6 +424,7 @@ export default function Leave() {
                                 setShowModal(true);
                               }}
                             />
+
                             <img
                               src={del}
                               className="w-4 h-4 cursor-pointer"
@@ -393,7 +440,6 @@ export default function Leave() {
               </div>
             </div>
 
-            {/*   MODAL */}
             {showModal && (
               <AttendanceModal
                 onClose={() => {

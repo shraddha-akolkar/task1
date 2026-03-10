@@ -113,7 +113,7 @@ const Login = () => {
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div className="w-[420px] bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl p-10">
+      <div className="w-[420px] bg-[#FFFFFF] backdrop-filter: blur(10px) rounded-2xl shadow-2xl p-10">
         <div className="flex flex-col items-center mb-6">
           <img src={logo} alt="Logo" className="h-10 mb-2" />
           <h2 className="text-xl font-semibold text-gray-800">
@@ -138,7 +138,7 @@ const Login = () => {
               value={formData.id}
               onChange={handleChange}
               placeholder="Enter ID (ADM1 / IN1)"
-              className={`w-full mt-1 bg-gray-100 border ${
+              className={`w-full mt-1 bg-[#FFFFFF] border ${
                 errors.id ? "border-red-500" : "border-gray-200"
               } rounded-lg px-4 py-2 focus:outline-none focus:border-black uppercase`}
               disabled={loading}
@@ -158,7 +158,7 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter password"
-              className={`w-full mt-1 bg-gray-100 border ${
+              className={`w-full mt-1 bg-[#FFFFFF] border ${
                 errors.password ? "border-red-500" : "border-gray-200"
               } rounded-lg px-4 py-2 focus:outline-none focus:border-black`}
               disabled={loading}

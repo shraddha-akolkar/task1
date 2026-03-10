@@ -7,7 +7,6 @@ import umbrella from "../assets/umbrella.png";
 import employee from "../assets/employees 1.png";
 import person from "../assets/person.png";
 import calender from "../assets/calendar1.png";
-import graphImg from "../assets/time.png";
 import user1 from "../assets/user1.png";
 import Navbar from "./Navbar";
 import admin1 from "../assets/admin1.png";
@@ -29,15 +28,82 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [inTime, setInTime] = useState(null);
+  const [isScannedIn, setIsScannedIn] = useState(false);
+  const [duration, setDuration] = useState("0h 0m");
   const [attendanceData, setAttendanceData] = useState([]);
   const [leaveData, setLeaveData] = useState([]);
   const navigate = useNavigate();
+
+  const adminId = 2;
 
   useEffect(() => {
     fetchEmployeeStats();
     fetchAttendance();
     fetchLeave();
+    fetchAdminAttendance();
   }, []);
+
+  useEffect(() => {
+    if (!inTime) return;
+
+    const updateDuration = () => {
+      const now = new Date();
+
+      const [h, m, s] = inTime.split(":");
+
+      const start = new Date();
+      start.setHours(h);
+      start.setMinutes(m);
+      start.setSeconds(s);
+
+      const diff = now - start;
+
+      const hrs = Math.floor(diff / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+
+      setDuration(`${hrs}h ${mins}m`);
+    };
+
+    updateDuration(); // calculate immediately
+
+    const interval = setInterval(updateDuration, 60000);
+
+    return () => clearInterval(interval);
+  }, [inTime]);
+
+  function formatDuration(minutes) {
+    if (!minutes) return "-";
+
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+
+    return `${h}h ${m}m`;
+  }
+
+  const fetchAdminAttendance = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/admin-attendance/${adminId}`);
+      const data = await res.json();
+
+      const today = new Date().toISOString().split("T")[0];
+
+      const todayRecord = data.find((a) => a.date === today);
+
+      if (todayRecord) {
+        setInTime(todayRecord.inTime);
+
+        if (!todayRecord.outTime) {
+          setIsScannedIn(true);
+        } else {
+          setIsScannedIn(false);
+          setDuration(formatDuration(todayRecord.duration));
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // const tabs = ["Self", "All Employee", "Staff", "Payroll", "Contract"];
 
@@ -49,25 +115,28 @@ export default function Dashboard() {
 
   const handleScan = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/attendance/scan`, {
+      const url = isScannedIn
+        ? `${API_BASE_URL}/admin-attendance/scan-out`
+        : `${API_BASE_URL}/admin-attendance/scan-in`;
+
+      const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          employeeId: 14,
-        }),
+        body: JSON.stringify({ adminId }),
       });
 
       const data = await res.json();
 
       alert(data.message);
-      console.log(data);
+
+      await fetchAdminAttendance();
     } catch (error) {
       console.error(error);
-      alert("Scan failed");
     }
   };
+  // logged in admin
 
   // const data = [
   //   {
@@ -160,10 +229,8 @@ export default function Dashboard() {
 
       const today = new Date().toISOString().split("T")[0];
 
-      // today's attendance
       const todayRecords = data.filter((item) => item.date === today);
 
-      // if today empty show recent
       const finalData =
         todayRecords.length > 0 ? todayRecords : data.slice(0, 10);
 
@@ -209,6 +276,10 @@ export default function Dashboard() {
     });
   }
 
+  // const handleScan  = async ()= {
+  //   const res = await fetch
+  // }
+
   return (
     <div>
       <div className="min-h-screen bg-white rounded-[20px] mx-2 relative">
@@ -227,7 +298,7 @@ export default function Dashboard() {
                   <span className="text-sm">Dashboard</span>
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={person}
                     className="w-4 h-4"
@@ -235,7 +306,7 @@ export default function Dashboard() {
                   />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={employee}
                     className="w-4 h-4"
@@ -243,7 +314,7 @@ export default function Dashboard() {
                   />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={calender}
                     className="w-4 h-4"
@@ -251,7 +322,7 @@ export default function Dashboard() {
                   />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={umbrella}
                     className="w-4 h-4"
@@ -259,7 +330,7 @@ export default function Dashboard() {
                   />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={building}
                     className="w-4 h-4"
@@ -277,20 +348,23 @@ export default function Dashboard() {
               <div>
                 <p className="text-gray-400 text-xs">In Time</p>
 
-                <h2 className="text-3xl font-bold mt-1">09:43 AM</h2>
-
+                <h2 className="text-3xl font-bold mt-1">
+                  {inTime ? formatTime(inTime) : "--:--"}
+                </h2>
                 {/* SCAN BUTTON */}
 
-                <button
-                  onClick={handleScan}
-                  className="mt-6 bg-black text-white px-6 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 transition"
-                >
-                  Scan Out
-                </button>
+                <div className="flex gap-3 mt-6">
+                  <button
+                    onClick={handleScan}
+                    className="mt-6 bg-black text-white px-6 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 transition"
+                  >
+                    {isScannedIn ? "Scan Out" : "Scan In"}
+                  </button>
+                </div>
               </div>
 
-              <div className="w-[150px]">
-                <img src={graphImg} className="w-full object-contain" />
+              <div className="w-[150px] flex flex-col items-center">
+                <p className="text-sm font-semibold mt-1">{duration}</p>
               </div>
             </div>
 
@@ -352,7 +426,7 @@ export default function Dashboard() {
                   className="w-full text-[13px] border-separate"
                   style={{ borderSpacing: "0 8px" }}
                 >
-                  <thead style={{ background: "#FAFAFA" }}>
+                  <thead style={{ background: "FFFFFF" }}>
                     <tr className="text-[12px] uppercase text-[#151515]">
                       <th className="px-3 py-[10px] text-left rounded-l-lg border border-gray-200">
                         EMPLOYEE NAME
@@ -461,7 +535,11 @@ export default function Dashboard() {
                             className="w-4 h-4 cursor-pointer"
                             onClick={() => navigate("/attendance")}
                           />
-                          <img src={del} className="w-4 h-4 cursor-pointer" />
+                          <img
+                            src={del}
+                            className="w-4 h-4 cursor-pointer"
+                            onClick={() => navigate("/attendance")}
+                          />
                         </td>
                       </tr>
                     ))}

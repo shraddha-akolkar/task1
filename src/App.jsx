@@ -1,27 +1,23 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
-import Employees from "./components/Employees";
 import Dashboard from "./components/Dashboard";
-import Holidays from "./components/Holidays";
-import RegisterEmployeeModal from "./components/RegisterEmployeeModal";
-import EmployeesPage from "./components/EmployeeDashboard";
 import AdminPanel from "./components/AdminPortal";
 import Attendance from "./components/Attendance";
-import AttendanceModal from "./components/AttendanceModal";
-import LeaveModal from "./components/LeaveModal";
-import HolidaysModal from "./components/HolidaysModal";
+import EmployeesPage from "./components/EmployeeDashboard";
+import Holidays from "./components/Holidays";
 import Meeting from "./components/Meeting";
-import MeetingModal from "./components/MeetingModal";
-import Demo from "./components/Demo";
 import Leave from "./components/Leave";
+
 import EmployeeHoliday from "./components/EmployeeHoliday";
 import EmployeeMeeting from "./components/EmployeeMeeting";
 import EmployeeAttendance from "./components/EmployeeAttendance";
 import EmployeeLeave from "./components/EmployeeLeave";
+
 import { Toaster } from "react-hot-toast";
 
-// Protected Route Component
+/* PROTECTED ROUTE */
+
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
 
@@ -36,21 +32,12 @@ function App() {
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
+
       <Routes>
-        {/* Default route */}
+        {/* LOGIN */}
         <Route path="/" element={<Login />} />
-        <Route
-          path="/RegisterEmployeeModal"
-          element={<RegisterEmployeeModal />}
-        />
-        <Route
-          path="/holidays"
-          element={
-            <ProtectedRoute>
-              <Holidays />
-            </ProtectedRoute>
-          }
-        />
+
+        {/* ADMIN ROUTES */}
         <Route
           path="/dashboard"
           element={
@@ -59,6 +46,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/adminportal"
           element={
@@ -67,6 +55,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/attendance"
           element={
@@ -75,6 +64,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/holidays"
+          element={
+            <ProtectedRoute>
+              <Holidays />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/meeting"
           element={
@@ -83,19 +82,17 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/" element={<Login />} />
-        <Route path="/AttendanceModal" element={<AttendanceModal />} />
-        <Route path="/LeaveModal" element={<LeaveModal />} />
-        <Route path="/HolidayModal" element={<HolidaysModal />} />
-        <Route path="/MeetingModal" element={<MeetingModal />} />
-        <Route path="/Leave" element={<Leave />} />
-        <Route path="/register" element={<RegisterEmployeeModal />} />
 
-        {/*  */}
-        <Route path="/employee-holiday" element={<EmployeeHoliday />} />
-        <Route path="/employee-meeting" element={<EmployeeMeeting />} />
-        <Route path="/employee-leave" element={<EmployeeLeave />} />
-        <Route path="/employee-attendance" element={<EmployeeAttendance />} />
+        <Route
+          path="/leave"
+          element={
+            <ProtectedRoute>
+              <Leave />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* EMPLOYEE ROUTES */}
 
         <Route
           path="/employee-dashboard"
@@ -105,6 +102,45 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/employee-attendance"
+          element={
+            <ProtectedRoute>
+              <EmployeeAttendance />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employee-leave"
+          element={
+            <ProtectedRoute>
+              <EmployeeLeave />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employee-holiday"
+          element={
+            <ProtectedRoute>
+              <EmployeeHoliday />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employee-meeting"
+          element={
+            <ProtectedRoute>
+              <EmployeeMeeting />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* FALLBACK */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
   );

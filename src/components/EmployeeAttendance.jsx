@@ -169,8 +169,14 @@ export default function Leave() {
                       <tr key={item.id} className="bg-white">
                         <td className="px-3 py-[10px] border border-gray-200 rounded-l-lg">
                           <div className="flex items-center gap-3">
-                            <img src={user1} className="w-8 h-8 rounded-full" />
-
+                            <img
+                              src={
+                                item.Employee?.employeePicture
+                                  ? `http://localhost:5000/uploads/${item.Employee.employeePicture}`
+                                  : user1
+                              }
+                              className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                            />
                             <div>
                               <div className="font-medium text-gray-800">
                                 {item.Employee?.name || "-"}

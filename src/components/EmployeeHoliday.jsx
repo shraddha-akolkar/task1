@@ -22,24 +22,20 @@ export default function Holiday() {
   const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
   const [holidays, setHolidays] = useState([]);
-  const tabs = [
-    "Self",
-    "All Employee",
-    "InFactory",
-    "On Site",
-    "Payroll",
-    "Contract",
-  ];
+  const [month, setMonth] = useState("All");
+  const tabs = ["Self", "All Employee", "Payroll", "Contract", "Staff"];
 
   const fetchHolidays = useCallback(async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/holidays`);
+      const res = await fetch(
+        `${API_BASE_URL}/holidays?month=${month}&search=${search}`,
+      );
       const data = await res.json();
       setHolidays(data.holidays);
     } catch (err) {
       console.log("Fetch error:", err);
     }
-  }, []);
+  }, [month, search]);
 
   useEffect(() => {
     fetchHolidays();
@@ -161,27 +157,32 @@ export default function Holiday() {
             </div>
             <div className="p-4 rounded-xl">
               {/* Month Tabs */}
-              <div className="flex gap-2 mb-4  overflow-x-auto">
+              <div className="flex gap-2 mb-4 overflow-x-auto">
                 {[
-                  "All",
-                  "Jan",
-                  "Feb",
-                  "Mar",
-                  "Apr",
-                  "May",
-                  "Jun",
-                  "Jul",
-                  "Aug",
-                  "Sep",
-                  "Oct",
-                  "Nov",
-                  "Dec",
+                  { label: "All", value: "All" },
+                  { label: "Jan", value: "01" },
+                  { label: "Feb", value: "02" },
+                  { label: "Mar", value: "03" },
+                  { label: "Apr", value: "04" },
+                  { label: "May", value: "05" },
+                  { label: "Jun", value: "06" },
+                  { label: "Jul", value: "07" },
+                  { label: "Aug", value: "08" },
+                  { label: "Sep", value: "09" },
+                  { label: "Oct", value: "10" },
+                  { label: "Nov", value: "11" },
+                  { label: "Dec", value: "12" },
                 ].map((m) => (
                   <button
-                    key={m}
-                    className="px-3 py-1 text-xs rounded-md bg-[#FAFAFA] hover:bg-black hover:text-white"
+                    key={m.value}
+                    onClick={() => setMonth(m.value)}
+                    className={`px-3 py-1 text-xs rounded-md ${
+                      month === m.value
+                        ? "bg-black text-white"
+                        : "bg-[#FAFAFA] hover:bg-black hover:text-white"
+                    }`}
                   >
-                    {m}
+                    {m.label}
                   </button>
                 ))}
               </div>

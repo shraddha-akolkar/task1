@@ -20,33 +20,33 @@ const API_BASE_URL = "http://localhost:5000/api";
 
 /*  ICONS  */
 
-const EditIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#1976D2"
-    strokeWidth="2"
-  >
-    <path d="M12 20h9" />
-    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-  </svg>
-);
+// const EditIcon = () => (
+//   <svg
+//     width="16"
+//     height="16"
+//     viewBox="0 0 24 24"
+//     fill="none"
+//     stroke="#1976D2"
+//     strokeWidth="2"
+//   >
+//     <path d="M12 20h9" />
+//     <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+//   </svg>
+// );
 
-const DeleteIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#D32F2F"
-    strokeWidth="2"
-  >
-    <polyline points="3 6 5 6 21 6" />
-    <path d="M19 6l-1 14H6L5 6m5 0V4h4v2" />
-  </svg>
-);
+// const DeleteIcon = () => (
+//   <svg
+//     width="16"
+//     height="16"
+//     viewBox="0 0 24 24"
+//     fill="none"
+//     stroke="#D32F2F"
+//     strokeWidth="2"
+//   >
+//     <polyline points="3 6 5 6 21 6" />
+//     <path d="M19 6l-1 14H6L5 6m5 0V4h4v2" />
+//   </svg>
+// );
 
 const EyeIcon = () => (
   <svg
@@ -108,30 +108,35 @@ function getVisaInfo(emp) {
   const { visaExpiringOn } = emp;
 
   if (!visaExpiringOn) {
-    return { label: "—", colorClass: "text-gray-500" };
+    return { type: "none", label: "—" };
   }
 
   const expiry = new Date(visaExpiringOn);
-  const now = new Date();
+  const today = new Date();
 
-  const diffMs = expiry - now;
+  const diffMs = expiry - today;
   const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-  // Format date
-  const formattedDate = formatDate(visaExpiringOn);
-
-  if (diffDays <= 30 && diffDays >= 0) {
+  // Already expired
+  if (diffDays < 0) {
     return {
-      label: formattedDate,
-      subLabel: "Expiring Soon",
-      colorClass: "text-orange-500",
+      type: "expired",
+      label: formatDate(visaExpiringOn),
     };
   }
 
+  // Expiring soon (30 days)
+  if (diffDays <= 30) {
+    return {
+      type: "expiring",
+      days: diffDays,
+    };
+  }
+
+  // Valid visa (long time remaining)
   return {
-    label: formattedDate,
-    subLabel: null,
-    colorClass: "text-gray-700",
+    type: "valid",
+    label: formatDate(visaExpiringOn),
   };
 }
 
@@ -319,7 +324,7 @@ export default function EmployeesPage() {
         lg:pb-0
       "
               >
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={window}
                     className="w-4 h-4"
@@ -327,7 +332,7 @@ export default function EmployeesPage() {
                   />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={person}
                     className="w-4 h-4"
@@ -341,11 +346,11 @@ export default function EmployeesPage() {
                   <span className="text-sm">Employees</span>
                 </div>
 
-                {/* <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                {/* <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img src={user} className="w-4 h-4" />
                 </div> */}
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={calender}
                     className="w-4 h-4"
@@ -353,7 +358,7 @@ export default function EmployeesPage() {
                   />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={umbrella}
                     className="w-4 h-4"
@@ -361,7 +366,7 @@ export default function EmployeesPage() {
                   />
                 </div>
 
-                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+                <div className="lg:mb-2 h-8 w-8 rounded-xl border border-gray-200 bg-[#FFFFFF] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition">
                   <img
                     src={building}
                     className="w-4 h-4"
@@ -386,7 +391,7 @@ export default function EmployeesPage() {
                     className={`px-4 py-1 rounded-md text-sm cursor-pointer  ${
                       activeTab === tab
                         ? "bg-black text-white"
-                        : "text-gray-600 bg-[#FAFAFA]"
+                        : "text-gray-600 bg-[#FFFFFF]"
                     }`}
                   >
                     {tab}
@@ -396,13 +401,13 @@ export default function EmployeesPage() {
               {/* RIGHT SIDE ICON  */}
               <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto pt-2">
                 {/* Search pill */}
-                <div className="flex items-center w-full sm:w-full md:w-full lg:w-[260px] border border-gray-200 rounded-full px-4 py-2 bg-[#FAFAFA]">
+                <div className="flex bg-[#FAFAFA] items-center w-[210px] h-[30px] sm:w-full md:w-full lg:w-[260px] border border-gray-200 rounded-md px-4 py-2 ">
                   <input
                     type="text"
                     placeholder="Search employee"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 bg-[#FAFAFA]"
+                    className="flex-1 bg-[#FAFAFA] outline-none text-sm text-gray-700 placeholder-gray-400 bg-[#FFFFFF]"
                   />
                   <div className="w-4 h-4 border-2 border-gray-500 rounded-full relative">
                     <span className="absolute w-2 h-[2px] bg-gray-500 right-[-5px] bottom-[-3px] rotate-45"></span>
@@ -411,20 +416,20 @@ export default function EmployeesPage() {
                 {/* Filter */}
                 <div
                   onClick={() => setShowFilters(!showFilters)}
-                  className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition"
+                  className="w-8 h-8 bg-[#FAFAFA] rounded-md border border-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition"
                 >
-                  <img src={filter} className="w-4 h-4" />
+                  <img src={filter} className="w-4 h-4 bg-[#FAFAFA]" />
                 </div>
                 {/* File */}
-                <div className="w-9 h-9 rounded-xl border border-gray-200 bg-[#FAFAFA] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                <div className="w-8 h-8 bg-[#FAFAFA] rounded-md border border-gray-200  flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
                   <img src={file} className="w-4 h-4" />
                 </div>
                 {/* New button */}
                 <button
                   onClick={() => setShowModal(true)}
-                  className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800"
+                  className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-md text-sm hover:bg-gray-800"
                 >
-                  <img src={plus} className="w-4 h-4" />
+                  <img src={plus} className="w-4 h-3" />
                   New
                 </button>
               </div>
@@ -515,13 +520,15 @@ export default function EmployeesPage() {
 
                       return (
                         <tr key={emp.id} className="bg-white">
-                          <td className="px-3 py-[4px] border border-[1px] border-gray-200 rounded-l-lg">
+                          <td className="px-3 py-[4px] border border-[1px] border-gray-200 leading-tight">
                             <div className="flex items-center gap-1.5">
                               <EmployeeAvatar emp={emp} />
+
                               <div>
-                                <div className="font-medium text-gray-800 leading-tight">
+                                <div className="text-gray-800 leading-tight">
                                   {emp.name}
                                 </div>
+
                                 <div className="text-[11px] text-gray-400 leading-tight">
                                   IN{emp.id}
                                 </div>
@@ -541,18 +548,33 @@ export default function EmployeesPage() {
                           </td>
 
                           <td className="px-3 py-[4px] border border-[1px] border-gray-200">
-                            <div
-                              className={`${visaInfo.colorClass} leading-tight`}
-                            >
-                              {visaInfo.label}
-                            </div>
-                            {visaInfo.subLabel && (
-                              <div className="text-[11px] text-orange-500 leading-tight">
-                                {visaInfo.subLabel}
+                            {visaInfo.type === "valid" && (
+                              <span className="text-[#18CA00] font-sm">
+                                {visaInfo.label}
+                              </span>
+                            )}
+
+                            {visaInfo.type === "expired" && (
+                              <span className="text-[#CA0000] font-sm">
+                                {visaInfo.label}
+                              </span>
+                            )}
+
+                            {visaInfo.type === "expiring" && (
+                              <div className="flex items-center gap-2">
+                                <span className="bg-orange-100 text-[#FF7700] text-xs px-2 py-0.5 rounded-md">
+                                  Expiring
+                                </span>
+                                <span className="text-gray-600 text-xs">
+                                  {visaInfo.days} Days
+                                </span>
                               </div>
                             )}
-                          </td>
 
+                            {visaInfo.type === "none" && (
+                              <span className="text-gray-400">—</span>
+                            )}
+                          </td>
                           <td className="px-3 py-[4px] border border-[1px] border-gray-200">
                             {calcExperience(emp.createdAt)}
                           </td>
@@ -572,7 +594,7 @@ export default function EmployeesPage() {
                           </td>
 
                           <td className="px-3 py-[4px] border border-[1px] border-gray-200 rounded-r-lg">
-                            <div className="flex gap-2">
+                            <div className="flex gap-4">
                               <button onClick={() => handleEdit(emp)}>
                                 <img
                                   src={edit}
